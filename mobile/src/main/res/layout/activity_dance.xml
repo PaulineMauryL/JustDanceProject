@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".DanceActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/UpButton"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:onClick="UpButton"
+            android:text="@string/Up" />
+
+        <Button
+            android:id="@+id/MiddleButton"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:onClick="MiddleButton"
+            android:text="@string/Middle" />
+
+        <Button
+            android:id="@+id/DownButton"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:onClick="DownButton"
+            android:text="@string/Down" />
+
+        <Button
+            android:id="@+id/ResumeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_weight="1"
+            android:onClick="ResumeMusic"
+            android:text="@string/Resume" />
+
+        <ImageView
+            android:id="@+id/UpView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:state_activated="false"
+            app:srcCompat="@drawable/arrowbackground" />
+
+        <ImageView
+            android:id="@+id/MiddleView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:rotation="90"
+            android:scaleX="0.55"
+            android:state_activated="false"
+            app:srcCompat="@drawable/arrowbackground" />
+
+        <ImageView
+            android:id="@+id/BottomView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:rotation="180"
+            android:state_activated="false"
+            app:srcCompat="@drawable/arrowbackground" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

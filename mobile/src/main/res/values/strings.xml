@@ -91,4 +91,10 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_dance">Dance</string>
+    <string name="Up">Go up !</string>
+    <string name="Down">Go down !</string>
+    <string name="Middle">Stay in the middle !</string>
+    <string name="Resume">Pause the music</string>
+    <string name="Restart">Restart the music</string>
 </resources>
