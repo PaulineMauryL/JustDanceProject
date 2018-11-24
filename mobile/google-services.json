@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "963586559052",
+    "firebase_url": "https://justdanceproject-5e276.firebaseio.com",
+    "project_id": "justdanceproject-5e276",
+    "storage_bucket": "justdanceproject-5e276.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:963586559052:android:550bf335e22363a0",
+        "android_client_info": {
+          "package_name": "com.pauli.justdanceproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "963586559052-3p58g5qgr3plgl9euosn33km6fjhtgta.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pauli.justdanceproject",
+            "certificate_hash": "2142152297e35ce2875a857a792483f0d7952417"
+          }
+        },
+        {
+          "client_id": "963586559052-r4f59vu943rple1nij3db6nujoeule7a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfaAsnV38U1NwjqGwKOo3-jRvtSpUiqls"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "963586559052-r4f59vu943rple1nij3db6nujoeule7a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
