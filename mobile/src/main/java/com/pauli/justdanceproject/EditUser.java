@@ -9,8 +9,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -53,7 +56,6 @@ public class EditUser extends AppCompatActivity {
     private File imageFile;
     private Profile userProfile;
     private String userID;
-    private String username;
     private Uri savedImageUri;
 
     private static final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -85,7 +87,7 @@ public class EditUser extends AppCompatActivity {
             userID = intent.getStringExtra(LaunchActivity.USER_ID);
             fetchDataFromFirebase();
         } else if (intent.hasExtra(LaunchActivity.USERNAME)) {
-            username = intent.getStringExtra(LaunchActivity.USERNAME);
+            String username = intent.getStringExtra(LaunchActivity.USERNAME);
             edit_username.setText(username);
         }
 
@@ -165,8 +167,25 @@ public class EditUser extends AppCompatActivity {
     ////////////////////////////////////////////////////////////////////////////////////////////
     public void edit_ok(View view) {
         // change info in database with username, photo and language
-        editUser();
-        addProfileToFirebaseDB();
+        boolean checked = false;
+        checked = checkProfile(checked);
+        if(checked) {
+            editUser();
+            addProfileToFirebaseDB();
+        }
+    }
+
+    private boolean checkProfile(boolean checked) {
+        final String username = ((EditText) findViewById(R.id.editUsername)).getText().toString();
+        if(username.equals("")) {           //if no name then not ok
+            Toast.makeText(this, R.string.nameEmpty, Toast.LENGTH_SHORT).show();
+        } else if (s_english.isChecked() == s_french.isChecked()) {  // (!XOR) to check only 1 language selected
+            Toast.makeText(this, R.string.noSelectedLanguages, Toast.LENGTH_SHORT).show();
+        } else {
+            checked = true;
+        }
+
+        return checked;
     }
 
     private void editUser() {
@@ -350,5 +369,23 @@ public class EditUser extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_edit_finish, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.txt_change_user:
+                Intent intent_change = new Intent(this, LaunchActivity.class);
+                startActivity(intent_change);
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

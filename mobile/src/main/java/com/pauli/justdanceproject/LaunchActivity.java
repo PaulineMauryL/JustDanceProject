@@ -45,42 +45,43 @@ public class LaunchActivity extends AppCompatActivity {
             TextView empty_name_txt = findViewById(R.id.txt_name_empty);
             empty_name_txt.setText(R.string.nameEmpty);
         }
+        else {
+            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+            final DatabaseReference profileRef = database.getReference("profiles");
 
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference profileRef = database.getReference("profiles");
+            profileRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    //if (snapshot.child(username).exists()) {
+                    for (final DataSnapshot user : dataSnapshot.getChildren()) {
 
-        profileRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                //if (snapshot.child(username).exists()) {
-                for (final DataSnapshot user : dataSnapshot.getChildren()) {
-
-                     String usernameDatabase = user.child("username").getValue(String.class);
-                    if (username.equals(usernameDatabase)) {
-                        userID = user.getKey();
-                        notMember = false;
-                        break;
+                        String usernameDatabase = user.child("username").getValue(String.class);
+                        if (username.equals(usernameDatabase)) {
+                            userID = user.getKey();
+                            notMember = false;
+                            break;
+                        }
+                    }
+                    if (notMember) {       // user exist, go to mainActivity to select a dance
+                        Toast.makeText(LaunchActivity.this, getString(R.string.welcome) + username + getString(R.string.createProfile), Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(LaunchActivity.this, EditUser.class);
+                        intent.putExtra(USERNAME, username);
+                        startActivity(intent);
+                        finish();
+                    } else {              // go to edit user to create a new profile
+                        //Toast.makeText(LaunchActivity.this, "Victory", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(LaunchActivity.this, MainActivity.class);
+                        intent.putExtra(USER_ID, userID);
+                        startActivity(intent);
+                        finish();
                     }
                 }
-                if(notMember) {       // user exist, go to mainActivity to select a dance
-                    Toast.makeText(LaunchActivity.this, getString(R.string.welcome) + username + getString(R.string.createProfile), Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(LaunchActivity.this, EditUser.class);
-                    intent.putExtra(USERNAME, username);
-                    startActivity(intent);
-                    finish();
-                } else {              // go to edit user to create a new profile
-                    Toast.makeText(LaunchActivity.this, "Victory", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(LaunchActivity.this, MainActivity.class);
-                    intent.putExtra(USER_ID, userID);
-                    startActivity(intent);
-                    finish();
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
                 }
-            }
+            });
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {  }
-        });
-
-
+        }
     }
 }

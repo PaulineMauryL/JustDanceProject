@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,6 +21,9 @@
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".EditUser" />
-        <activity android:name=".DanceActivity">        </activity>
+        <activity android:name=".DanceActivity" />
+        <activity android:name=".FinishActivity" />
+        <activity android:name=".ShowProfile"></activity>
     </application>
+
 </manifest>

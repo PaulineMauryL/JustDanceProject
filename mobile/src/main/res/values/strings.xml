@@ -120,4 +120,21 @@
     <string name="germanChoice">Wurst und Kartoffeln</string>
     <string name="spanishChoice">Tapas y paella</string>
     <string name="nameEmpty">You must enter your name to play</string>
+    <string name="noSelectedLanguages">You should eat something !</string>
+    <string name="edit_button">edit_Button</string>
+    <string name="do_not_edit_button">do_Not_Edit_Button</string>
+    <string name="attribute_picture">attribute_picture</string>
+    <string name="hallOfFame">Hall of fame</string>
+    <string name="dance_again">Dance again !</string>
+    <string name="see_profile">See profile</string>
+    <string name="level">You are a</string>
+    <string name="dance">Dance</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="change_user">Change user</string>
+    <string name="my_profile">My Profile</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="number_of_points">Number of points</string>
+    <string name="level_user_dance">Level</string>
 </resources>

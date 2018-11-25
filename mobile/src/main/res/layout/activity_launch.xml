@@ -16,6 +16,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:adjustViewBounds="false"
+        android:contentDescription="appWelcomePicture"
         app:layout_constraintBottom_toTopOf="@+id/txt_welcome"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
