@@ -20,7 +20,24 @@
         </activity>
         <activity android:name=".LaunchActivity" />
         <activity android:name=".EditUser" />
-        <activity android:name=".DanceActivity">        </activity>
+        <activity android:name=".DanceActivity"></activity>
+
+        <service android:name=".WearService"> <!-- Needed for the communication with the watch -->
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />
+                <data
+                    android:host="*"
+                    android:pathPrefix=""
+                    android:scheme="wear" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+                <data
+                    android:host="*"
+                    android:pathPrefix=""
+                    android:scheme="wear" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
