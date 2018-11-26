@@ -1,5 +1,6 @@
 package com.pauli.justdanceproject;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -43,6 +45,7 @@ import java.io.OutputStream;
 public class EditUser extends AppCompatActivity {
 
     private final String TAG = this.getClass().getSimpleName();
+    AlertDialog.Builder builder;  //Choose a version by chance here.
 
     TextView edit_username;
     String language;  //default language
@@ -268,8 +271,36 @@ public class EditUser extends AppCompatActivity {
     /////////////////////////// Return to launch, nothing kept /////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////
     public void do_not_edit(View view) {  //return to launch activity
-        Intent intent = new Intent(this, LaunchActivity.class);
-        startActivity(intent);
+        // Check if user really wants to change
+        builder = new AlertDialog.Builder(this);
+
+        //Uncomment the below code to Set the message and title from the strings.xml file
+        builder.setMessage("Change user").setTitle("userChange");
+
+        //Setting message manually and performing action on button click
+        builder.setMessage("Was it the wrong name ?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Leave
+                        Intent intent = new Intent(EditUser.this, LaunchActivity.class);
+                        startActivity(intent);
+                        finish();
+
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //  Action for 'NO' Button
+                        dialog.cancel();
+                    }
+                });
+        //Creating dialog box
+        AlertDialog alert = builder.create();
+        //Setting the title manually
+        alert.setTitle("Change of dancer");
+        alert.show();
+
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////
@@ -335,12 +366,11 @@ public class EditUser extends AppCompatActivity {
     private void fetchDataFromFirebase() {
         final TextView usernameTextView = findViewById(R.id.editUsername);
 
-        profileGetRef.child(userID);
-        profileGetRef.addValueEventListener(new ValueEventListener() {
+        profileGetRef.child(userID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String user_db = dataSnapshot.child("username").getValue(String.class);
-                String photo = dataSnapshot.child("photo").getValue(String.class);
+                String photo_db = dataSnapshot.child("photo").getValue(String.class);
                 String language_db = dataSnapshot.child("language").getValue(String.class);
 
                 usernameTextView.setText(user_db);
@@ -352,7 +382,7 @@ public class EditUser extends AppCompatActivity {
                 }
 
                 //  Reference to an image file in Firebase Storage
-                StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(photo);
+                StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(photo_db);
                 storageRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                     @Override
                     public void onSuccess(byte[] bytes) {
@@ -380,10 +410,42 @@ public class EditUser extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.txt_change_user:
-                Intent intent_change = new Intent(this, LaunchActivity.class);
-                startActivity(intent_change);
-                finish();
+            case R.id.txt_change_user:                            // to copy in main activity and the three fragments
+                // Check if user really wants to change
+                builder = new AlertDialog.Builder(this);
+
+                //Uncomment the below code to Set the message and title from the strings.xml file
+                builder.setMessage("Change user").setTitle("userChange");
+
+                //Setting message manually and performing action on button click
+                builder.setMessage("Do you really want to change user ?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                finish();
+                                Toast.makeText(getApplicationContext(),"Ok ! See you another time",
+                                        Toast.LENGTH_SHORT).show();
+                                // Leave
+                                Intent intent_change = new Intent(getApplication(), LaunchActivity.class);
+                                startActivity(intent_change);
+                                finish();
+
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                //  Action for 'NO' Button
+                                dialog.cancel();
+                                Toast.makeText(getApplicationContext(),"Good choice",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                //Creating dialog box
+                AlertDialog alert = builder.create();
+                //Setting the title manually
+                alert.setTitle("Change of dancer");
+                alert.show();
+
                 break;
         }
         return super.onOptionsItemSelected(item);

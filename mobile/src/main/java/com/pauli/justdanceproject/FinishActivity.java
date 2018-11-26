@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 public class FinishActivity extends AppCompatActivity {
 
+    private String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +18,8 @@ public class FinishActivity extends AppCompatActivity {
         setContentView(R.layout.activity_finish);
 
         Intent intent = getIntent();
+        userID = intent.getStringExtra(LaunchActivity.USER_ID);
+
         int nb_points = intent.getIntExtra(DanceActivity.NUMBER_POINTS, 0);
         String user_level = "to do";   //TODO: set user level depending on nb points (see Profile)
 
@@ -31,12 +34,14 @@ public class FinishActivity extends AppCompatActivity {
 
     public void dance_again(View view) {
         Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra(LaunchActivity.USER_ID, userID);
         startActivity(intent);
         finish();
     }
 
     public void see_profile(View view) {
         Intent intent = new Intent(this, ShowProfile.class);
+        intent.putExtra(LaunchActivity.USER_ID, userID);
         startActivity(intent);
         finish();
     }

@@ -7,8 +7,8 @@ public class Profile implements Serializable {
     String username;
     String language;
     String photoPath;
-
-    String[] level = {
+    String level;
+    /*String[] level = {
             "1st year student",
             "Raw recruit",
             "Basic soldier",
@@ -18,7 +18,7 @@ public class Profile implements Serializable {
             "Warrior Queen/King",
             "Dancer",
             "Bachata dancer",
-    };
+    };*/
     //String[] mStrings = new String[level.length];
 
     public Profile(String username, String language) {

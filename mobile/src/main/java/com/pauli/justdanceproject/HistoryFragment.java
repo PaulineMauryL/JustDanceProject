@@ -1,6 +1,7 @@
 package com.pauli.justdanceproject;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,14 +32,14 @@ import java.util.Locale;
 public class HistoryFragment extends Fragment {
 
     private final String TAG = this.getClass().getSimpleName();
-
+    AlertDialog.Builder builder;
     private OnFragmentInteractionListener mListener;
     private ListView listView;
     private View fragmentView;
     private RecordingAdapter adapter;
     //private MyFirebaseRecordingListener mFirebaseRecordingListener;
     private DatabaseReference databaseRef;
-    private String idUser;
+    private String userID;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,11 +63,45 @@ public class HistoryFragment extends Fragment {
                 break;
             case R.id.txt_edit_profile:
                 Intent intent_edit = new Intent(getActivity(), EditUser.class);
+                intent_edit.putExtra(LaunchActivity.USER_ID, userID);
                 startActivity(intent_edit);
                 break;
-            case R.id.txt_change_user:
-                Intent intent_change = new Intent(getActivity(), LaunchActivity.class);
-                startActivity(intent_change);
+            case R.id.txt_change_user:                            // to copy in main activity and the three fragments
+                // Check if user really wants to change
+                builder = new AlertDialog.Builder(getActivity());
+
+                //Uncomment the below code to Set the message and title from the strings.xml file
+                builder.setMessage("Change user").setTitle("userChange");
+
+                //Setting message manually and performing action on button click
+                builder.setMessage("Do you really want to change user ?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                getActivity().finish();
+                                Toast.makeText(getActivity().getApplicationContext(),"Ok ! See you another time",
+                                        Toast.LENGTH_SHORT).show();
+                                // Leave
+                                Intent intent_change = new Intent(getActivity().getApplication(), LaunchActivity.class);
+                                startActivity(intent_change);
+                                getActivity().finish();
+
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                //  Action for 'NO' Button
+                                dialog.cancel();
+                                Toast.makeText(getActivity().getApplicationContext(),"Good choice",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                //Creating dialog box
+                AlertDialog alert = builder.create();
+                //Setting the title manually
+                alert.setTitle("Change of dancer");
+                alert.show();
+
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -86,7 +122,10 @@ public class HistoryFragment extends Fragment {
         adapter = new RecordingAdapter(getActivity(), R.layout.row_history_layout);
         listView.setAdapter(adapter);
 
-        //idUser = getActivity().getIntent().getExtras().getString(LaunchActivity.USER_ID);
+        Intent intent = getActivity().getIntent();
+        if (intent.hasExtra(LaunchActivity.USER_ID)) {
+            userID = intent.getStringExtra(LaunchActivity.USER_ID);
+        }
 
         return fragmentView;
     }
