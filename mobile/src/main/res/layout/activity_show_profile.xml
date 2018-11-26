@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/profileViewPager"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v4.view.PagerTabStrip
+        android:id="@+id/pagerTabStrip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:background="#20B2AA"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:textColor="#fff" />
+
+</android.support.v4.view.ViewPager>
