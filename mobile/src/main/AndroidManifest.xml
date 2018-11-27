@@ -6,9 +6,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/logo_just_dance_now"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/logo_just_dance_now"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
@@ -20,7 +20,8 @@
         </activity>
         <activity android:name=".LaunchActivity" />
         <activity android:name=".EditUser" />
-        <activity android:name=".DanceActivity"></activity>
+        <activity android:name=".DanceActivity"/>
+        <activity android:name = "TestWatchActivity"></activity>
 
         <service android:name=".WearService"> <!-- Needed for the communication with the watch -->
             <intent-filter>

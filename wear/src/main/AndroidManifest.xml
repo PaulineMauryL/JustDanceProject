@@ -8,7 +8,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/logo_just_dance_now"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.DeviceDefault">
@@ -36,6 +36,7 @@
         <service android:name=".WearService"> <!-- Needed for the communication with the watch -->
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />
+
                 <data
                     android:host="*"
                     android:pathPrefix=""
@@ -43,6 +44,7 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+
                 <data
                     android:host="*"
                     android:pathPrefix=""
@@ -50,6 +52,7 @@
             </intent-filter>
         </service>
 
+        <activity android:name=".SleepActivity"></activity>
     </application>
 
 </manifest>

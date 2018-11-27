@@ -27,6 +27,8 @@ import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,6 +58,22 @@ public class WearService extends WearableListenerService {
                 String message = intent.getStringExtra(MESSAGE);
                 if (message == null) message = "";
                 sendMessage(message, intent.getStringExtra(PATH));
+                break;
+            case SEND_IMAGE:
+                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_path_image);
+                String imagePath = intent.getStringExtra(IMAGE);
+                // Create an Asset to send the image
+                final InputStream imageStream;
+                try {
+                    imageStream = new FileInputStream(imagePath);
+                    final Bitmap imageBitmap = BitmapFactory.decodeStream(imageStream);
+                    Asset asset = WearService.createAssetFromBitmap(imageBitmap);
+                    putDataMapRequest.getDataMap().putAsset(BuildConfig.W_image_key, asset);
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                sendPutDataMapRequest(putDataMapRequest);
                 break;
             case EXAMPLE_DATAMAP:
                 putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_example_path_datamap);
@@ -324,6 +342,6 @@ public class WearService extends WearableListenerService {
 
     // Constants
     public enum ACTION_SEND {
-        STARTACTIVITY, MESSAGE, EXAMPLE_DATAMAP, EXAMPLE_ASSET
+        STARTACTIVITY, MESSAGE, EXAMPLE_DATAMAP, EXAMPLE_ASSET, SEND_IMAGE
     }
 }

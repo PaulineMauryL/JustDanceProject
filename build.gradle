@@ -26,6 +26,8 @@ allprojects {
         constants = [
                 path_start_activity : "/START_ACTIVITY",
                 path_acknowledge    : "/ACKNOWLEDGE",
+                path_message        : "/MESSAGE",
+                path_image          : "/IMAGE",
 
                 example_path_asset  : "/ASSET",
                 example_path_text   : "/TEXT",
@@ -33,9 +35,11 @@ allprojects {
 
                 mainactivity        : "MainActivity",
                 watchmainactivity   : "WatchMainActivity",
+                sleepactivity       :  "SleepActivity",
 
                 a_key               : "a_value",
                 some_other_key      : "some_other_value",
+                image_key           : "image_key"
         ]
     }
 }

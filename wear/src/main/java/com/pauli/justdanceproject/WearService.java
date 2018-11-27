@@ -18,6 +18,7 @@ import com.google.android.gms.wearable.DataClient;
 import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataItem;
+import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Node;
@@ -171,6 +172,11 @@ public class WearService extends WearableListenerService {
                         intent.putExtra("REPLACE_THIS_WITH_A_STRING_OF_ARRAYLIST_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY", arraylist);
                         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
                         break;
+                    case BuildConfig.W_path_image:
+                        Asset imageAsset = dataMapItem.getDataMap().getAsset(BuildConfig.W_image_key);
+                        intent = new Intent(WatchMainActivity.ACTION_RECEIVE_IMAGE);
+                        bitmapFromAsset(imageAsset,intent,WatchMainActivity.IMAGE);
+                        break;
                     default:
                         Log.v(TAG, "Data changed for unhandled path: " + uri);
                         break;
@@ -207,6 +213,12 @@ public class WearService extends WearableListenerService {
                     case BuildConfig.W_mainactivity:
                         startIntent = new Intent(this, WatchMainActivity.class);
                         break;
+                    case BuildConfig.W_watchmainactivity:
+                        startIntent = new Intent(this, WatchMainActivity.class);
+                        break;
+                    case BuildConfig.W_sleepactivity:
+                        startIntent = new Intent(this, SleepActivity.class);
+                        break;
                 }
 
                 if (startIntent == null) {
@@ -218,6 +230,12 @@ public class WearService extends WearableListenerService {
                 break;
             case BuildConfig.W_path_acknowledge:
                 Log.v(TAG, "Received acknowledgment");
+                break;
+            case BuildConfig.W_path_message:
+                Log.v(TAG,"Message received: " + data);
+                Intent intent = new Intent(WatchMainActivity.ACTION_RECEIVE_MESSAGE);
+                intent.putExtra(WatchMainActivity.MESSAGE,data);
+                LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
                 break;
             case BuildConfig.W_example_path_text:
                 Log.v(TAG, "Message contained text. Return a datamap for demo purpose");
