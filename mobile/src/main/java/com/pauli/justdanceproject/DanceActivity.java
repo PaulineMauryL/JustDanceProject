@@ -9,6 +9,8 @@ import android.widget.ImageView;
 
 public class DanceActivity extends AppCompatActivity {
 
+    public static final String NUMBER_POINTS = "Number_points";  //Added by Pauline for finish activity
+
     private MediaPlayer mySound = null;
     private int Idmusictodisplay = 0;
     private Boolean resume = true;
