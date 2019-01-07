@@ -111,7 +111,7 @@
             android:textColor="@color/colorAccent"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:background="@color/button_color"
+            android:background="@drawable/round_shape"
             app:fontFamily="@font/simplehandwrittingregular" />
 
         <Button
@@ -124,7 +124,7 @@
             android:textColor="@color/colorAccent"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:background="@color/button_color"
+            android:background="@drawable/round_shape"
             app:fontFamily="@font/simplehandwrittingregular"/>
     </LinearLayout>
 

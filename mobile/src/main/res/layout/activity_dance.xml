@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@color/button_color"
+            android:background="@drawable/round_shape"
             android:onClick="UpButton"
             android:text="@string/Up"
             android:textColor="@color/colorAccent"
@@ -53,7 +53,7 @@
             app:fontFamily="@font/simplehandwrittingregular"
             android:textSize="30sp"
             android:textStyle="bold"
-            android:background="@color/button_color"/>
+            android:background="@drawable/round_shape"/>
 
         <Button
             android:id="@+id/DownButton"
@@ -66,7 +66,7 @@
             app:fontFamily="@font/simplehandwrittingregular"
             android:textSize="30sp"
             android:textStyle="bold"
-            android:background="@color/button_color"/>
+            android:background="@drawable/round_shape"/>
 
         <Button
             android:id="@+id/ResumeButton"
@@ -75,7 +75,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginLeft="24dp"
             android:layout_weight="1"
-            android:background="@color/button_color"
+            android:background="@drawable/round_shape"
             android:onClick="ResumeMusic"
             android:text="@string/Resume"
             android:textColor="@color/colorAccent"
