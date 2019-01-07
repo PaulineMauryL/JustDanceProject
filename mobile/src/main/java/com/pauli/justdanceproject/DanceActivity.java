@@ -12,6 +12,7 @@ public class DanceActivity extends AppCompatActivity {
     public static final String NUMBER_POINTS = "Number_points";  //Added by Pauline for finish activity
 
     private MediaPlayer mySound = null;
+    private MusicDance musical = null;
     private int Idmusictodisplay = 0;
     private Boolean resume = true;
     private ImageView imageButtonView = null;
@@ -24,8 +25,8 @@ public class DanceActivity extends AppCompatActivity {
         Bundle bunble = getIntent().getExtras();
         if (bunble!=null){
             Idmusictodisplay = bunble.getInt("musicchosen");
-            mySound = MediaPlayer.create(this, Idmusictodisplay);
-            mySound.start();
+            musical = new MusicDance("musicname", Idmusictodisplay,this);
+            musical.musicsound.start();
             resume = false;
         }
     }
@@ -34,11 +35,11 @@ public class DanceActivity extends AppCompatActivity {
         Button pauseButton = findViewById(R.id.ResumeButton);
         if (mySound !=null){
             if (resume){
-                mySound.start();
+                musical.musicsound.start();
                 resume = false;
                 pauseButton.setText(R.string.Resume);
             }else {
-                mySound.pause();
+                musical.musicsound.pause();
                 resume = true;
                 pauseButton.setText(R.string.Restart);
             }

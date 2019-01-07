@@ -52,6 +52,8 @@
         android:maxLines="1"
         android:singleLine="true"
         android:textSize="24sp"
+        android:textColor="@color/colorAccent"
+        app:fontFamily="@font/simplehandwrittingregular"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -67,8 +69,10 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:text="@string/chooseLanguage"
-            android:textSize="24sp"
+            android:textSize="30sp"
             android:textStyle="bold"
+            android:textColor="@color/colorAccent"
+            app:fontFamily="@font/simplehandwrittingregular"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editUsername" />
@@ -83,6 +87,7 @@
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/do_not_edit_button"
         android:onClick="do_not_edit"
+        android:background="@color/background_material_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@android:drawable/ic_delete" />
@@ -96,6 +101,7 @@
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/edit_button"
         android:onClick="edit_ok"
+        android:background="@color/background_material_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:drawable/checkbox_on_background" />
@@ -111,6 +117,7 @@
         android:layout_marginRight="8dp"
         android:checked="false"
         android:text="@string/englishChoice"
+        app:fontFamily="@font/simplehandwrittingregular"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_choose_language" />
@@ -122,6 +129,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        app:fontFamily="@font/simplehandwrittingregular"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/switch_english"
@@ -136,6 +144,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        app:fontFamily="@font/simplehandwrittingregular"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/switch_french"
@@ -151,6 +160,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="@string/spanishChoice"
+        app:fontFamily="@font/simplehandwrittingregular"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/switch_deutsch" />

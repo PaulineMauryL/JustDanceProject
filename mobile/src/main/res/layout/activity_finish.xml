@@ -29,8 +29,10 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Nb points"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textSize="50sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorAccent"
+            app:fontFamily="@font/simplehandwrittingregular" />
 
         <ImageView
             android:id="@+id/imageView"
@@ -45,7 +47,9 @@
             android:layout_height="wrap_content"
             android:text="@string/level"
             android:gravity="center"
-            android:textSize="18sp" />
+            android:textSize="40sp"
+            android:textColor="@color/colorAccent"
+            app:fontFamily="@font/simplehandwrittingregular" />
     </LinearLayout>
 
     <LinearLayout
@@ -70,8 +74,10 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/hallOfFame"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textSize="50sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorAccent"
+            app:fontFamily="@font/simplehandwrittingregular"/>
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
@@ -101,7 +107,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="dance_again"
-            android:text="@string/dance_again" />
+            android:text="@string/dance_again"
+            android:textColor="@color/colorAccent"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:background="@color/button_color"
+            app:fontFamily="@font/simplehandwrittingregular" />
 
         <Button
             android:id="@+id/button2"
@@ -109,7 +120,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="see_profile"
-            android:text="@string/see_profile" />
+            android:text="@string/see_profile"
+            android:textColor="@color/colorAccent"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:background="@color/button_color"
+            app:fontFamily="@font/simplehandwrittingregular"/>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
