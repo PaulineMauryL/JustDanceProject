@@ -57,10 +57,10 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
             android:layout_weight="1"
             android:onClick="ResumeMusic"
-            android:text="@string/Resume" />
+            android:text="@string/Resume"
+            android:layout_marginLeft="24dp" />
 
         <ImageView
             android:id="@+id/UpView"
