@@ -1,6 +1,5 @@
 package com.pauli.justdanceproject;
 
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,28 +13,21 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DanceActivity extends AppCompatActivity {
 
-    public static final String NUMBER_POINTS = "Number_points";  //Added by Pauline for finish activity
 
     private MusicDance musical = null;
     private Handler mHandler;
-    private int[] music = null;
+    //private int[] music = null;
     private Boolean resume = true;
     private ImageView imageButtonView = null;
     private int index = 0;
-    private int nextposition = 0;
-    private int askedposition = 0;
-    private int actualposition = 0;
-    private int score = 0;
-    private Button button1=null;
-    private Button button2=null;
-    private Button button3=null;
+    private int nextPosition = 0;
+    private int askedPosition = 0;
+    private int actualPosition = 0;
     private static final String PROGRESS_BAR_INCREMENT="ProgreesBarIncrementId";
-    static ProgressBar bar;
-    /**     * L'AtomicBoolean qui gère la destruction de la Thread de background     */
+    private ProgressBar bar;
     AtomicBoolean isRunning = new AtomicBoolean(false);
-    /**     * L'AtomicBoolean qui gère la mise en pause de la Thread de background     */
     AtomicBoolean isPausing = new AtomicBoolean(false);
-    static Handler handler = new Handler() {
+    Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             int progress=msg.getData().getInt(PROGRESS_BAR_INCREMENT);
@@ -50,20 +42,21 @@ public class DanceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dance);
-
+        int[] music;
         Bundle bunble = getIntent().getExtras();
         if (bunble!=null){
             music = bunble.getIntArray("musicchosen");
-            musical = new MusicDance("musicname", music,this);
-            musical.musicsound.start();
-            mHandler = new Handler();
-            resume = false;
-            index = 0;
-            score = 0;
-            askedposition = 0;
-            actualposition = 100;
-            bar = (ProgressBar) findViewById(R.id.progress);
-            bar.setMax(210);
+            if(music!=null) {
+                musical = new MusicDance("musicname", music, this);
+                musical.getSound().start();
+                mHandler = new Handler();
+                resume = false;
+                index = 0;
+                askedPosition = 0;
+                actualPosition = 100;
+                bar = findViewById(R.id.progress);
+                bar.setMax(210);
+            }
         }
     }
 
@@ -94,31 +87,32 @@ public class DanceActivity extends AppCompatActivity {
     }
 
     public void movementsOnMusic(){
-        int i=0;
-        int delay=0;
+        int i;
+        int delay;
         i=index*2;
         //Initialisation des AtomicBooleans
         isPausing.set(false);
-        while(i<musical.musictiming.length){
-            delay = musical.musictiming[i];
-            mHandler.postDelayed(r1,delay-musical.musicsound.getCurrentPosition());
-            mHandler.postDelayed(r2,delay-musical.musicsound.getCurrentPosition()+600);
-            mHandler.postDelayed(r3,delay-musical.musicsound.getCurrentPosition()+800);
+        while(i<musical.getTiming().length){
+            delay = musical.getTiming()[i];
+            mHandler.postDelayed(r1,delay-musical.getSound().getCurrentPosition());
+            mHandler.postDelayed(r2,delay-musical.getSound().getCurrentPosition()+600);
+            mHandler.postDelayed(r3,delay-musical.getSound().getCurrentPosition()+800);
             i=i+2;
         }
     }
 
     public void ResumeMusic(View view) {
         Button pauseButton = findViewById(R.id.ResumeButton);
-        if (musical.musicsound !=null){
+
+        if (musical.getSound() !=null){
             if (resume){
-                musical.musicsound.start();
+                musical.getSound().start();
                 resume = false;
                 pauseButton.setText(R.string.Resume);
                 movementsOnMusic();
                 isPausing.set(false);
             }else {
-                musical.musicsound.pause();
+                musical.getSound().pause();
                 mHandler.removeCallbacks(r1);
                 mHandler.removeCallbacks(r2);
                 mHandler.removeCallbacks(r3);
@@ -134,7 +128,7 @@ public class DanceActivity extends AppCompatActivity {
     public void UpButton(View view) {
         if (!resume){
             imageButtonView = findViewById(R.id.UpView);
-            actualposition = 1;
+            actualPosition = 1;
         }
     }
 
@@ -142,14 +136,14 @@ public class DanceActivity extends AppCompatActivity {
     public void MiddleButton(View view) {
         if (!resume){
             imageButtonView = findViewById(R.id.MiddleView);
-            actualposition = 2;
+            actualPosition = 2;
         }
     }
 
     public void DownButton(View view) {
         if (!resume){
             imageButtonView = findViewById(R.id.BottomView);
-            actualposition = 3;
+            actualPosition = 3;
         }
     }
 
@@ -179,9 +173,9 @@ public class DanceActivity extends AppCompatActivity {
                     //Instanciation du message (la bonne méthode):
                     myMessage=handler.obtainMessage();
                     //Ajouter des données à transmettre au Handler via le Bundle
-                    if(askedposition == actualposition) {
+                    if(askedPosition == actualPosition) {
                         messageBundle.putInt(PROGRESS_BAR_INCREMENT,10);
-                    }else if(nextposition == actualposition){
+                    }else if(nextPosition == actualPosition){
                         messageBundle.putInt(PROGRESS_BAR_INCREMENT,5);
                     }else{
                         messageBundle.putInt(PROGRESS_BAR_INCREMENT,0);
@@ -199,8 +193,8 @@ public class DanceActivity extends AppCompatActivity {
 
     final Runnable r1 = new Runnable() {
         public void run() {
-            nextposition = musical.musictiming[index*2+1];
-            switch (nextposition){
+            nextPosition = musical.getTiming()[index*2+1];
+            switch (nextPosition){
                 case 1:
                     imageButtonView = findViewById(R.id.UpView);
                     break;
@@ -213,24 +207,13 @@ public class DanceActivity extends AppCompatActivity {
             }
             imageButtonView.setActivated(true);
             imageButtonView.setEnabled(true);
-
-
-            button2 = findViewById(R.id.DownButton);
-            button2.setText("actualposition "+actualposition);
-
-
-            button1 = findViewById(R.id.MiddleButton);
-            button1.setText("nextposition "+nextposition);
         }
     };
     final Runnable r2 = new Runnable() {
         public void run() {
-            askedposition = nextposition;
+            askedPosition = nextPosition;
             imageButtonView.setActivated(true);
             imageButtonView.setEnabled(false);
-
-            button2 = findViewById(R.id.UpButton);
-            button2.setText("askedposition "+askedposition);
         }
     };
 
@@ -238,8 +221,8 @@ public class DanceActivity extends AppCompatActivity {
         public void run() {
             imageButtonView.setActivated(false);
             index = index+1;
-            nextposition = 0;
-            askedposition = 0;
+            nextPosition = 0;
+            askedPosition = 0;
         }
     };
 
@@ -248,10 +231,4 @@ public class DanceActivity extends AppCompatActivity {
             movementsOnMusic();
         }
     };
-    public void ToggleFilter(){
-        imageButtonView.setActivated(true);
-        imageButtonView.setEnabled(false);
-        imageButtonView.postDelayed(r1,600);
-        imageButtonView.postDelayed(r2,1200);
-    }
 }
