@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer-array name="hercule">
-        <item>1000</item>
-        <item>1</item>
         <item>2000</item>
-        <item>2</item>
-        <item>3000</item>
-        <item>3</item>
+        <item>1</item>
         <item>4000</item>
-        <item>3</item>
-        <item>5000</item>
         <item>2</item>
         <item>6000</item>
-        <item>1</item>
-        <item>7000</item>
-        <item>1</item>
+        <item>3</item>
         <item>8000</item>
+        <item>3</item>
+        <item>10000</item>
         <item>2</item>
-        <item>9000</item>
+        <item>12000</item>
+        <item>1</item>
+        <item>14000</item>
+        <item>1</item>
+        <item>16000</item>
+        <item>2</item>
+        <item>18000</item>
         <item>3</item>
     </integer-array>
     <integer-array name="frogprincess">
