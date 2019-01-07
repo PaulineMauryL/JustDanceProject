@@ -68,10 +68,6 @@ public class WatchMainActivity extends WearableActivity {
         setAmbientEnabled();
     }
 
-    public void ButtonSensorCallback(View view) {
-        Intent it = new Intent(this, DanceActivity.class);
-        startActivity(it);
-    }
 
 /*@Override
     public void onEnterAmbient(Bundle ambientDetails) {
