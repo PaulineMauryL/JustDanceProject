@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String RECORDING_ID = "recording_id";  //added by Pauline
     private String userID;
     private static final int PICK_MUSIC = 1;
-    private int chosenMusic=0;
+    private int[] chosenMusic=null;
     AlertDialog.Builder builder;
 
     @Override
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void StartDance(View view) {
-        if(chosenMusic != 0){
+        if(chosenMusic[0] != 0){
             Intent intentStartDance = new Intent(MainActivity.this,DanceActivity.class);
             intentStartDance.putExtra("musicchosen",chosenMusic);
             startActivity(intentStartDance);
@@ -61,11 +61,12 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void ChooseCreuse(View view) {
-        chosenMusic = R.raw.creuser;
+        chosenMusic = new int[]{R.raw.musicalinette, R.array.shortMusic};
     }
     public void ChooseHercule(View view) {
-        chosenMusic = R.raw.zero;
+        chosenMusic = new int[]{R.raw.zero,R.array.hercule};
     }
+
 
 
 
