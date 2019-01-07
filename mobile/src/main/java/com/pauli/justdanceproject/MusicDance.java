@@ -1,19 +1,39 @@
 package com.pauli.justdanceproject;
 
 import android.content.Context;
-import android.media.MediaPlayer;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.media.MediaPlayer;
 import java.io.Serializable;
 
 public class MusicDance implements Serializable {
-    private static final String TAG = "Music";
 
-    protected String musicname;
-    protected MediaPlayer musicsound;
+    private String musicName;
+    private MediaPlayer musicSound;
+    private int[] musicTiming;
 
-    public MusicDance(String musicname, int IdofMusic,Context context){
-        this.musicname = musicname;
-        this.musicsound = MediaPlayer.create(context,IdofMusic);
+    /**
+     * @param musicName
+     * @param music
+     * @param context
+     */
+    MusicDance(String musicName, int[] music,final Context context){
+        this.musicName = musicName;
+        this.musicSound = MediaPlayer.create(context,music[0]);
+        Resources res = context.getResources();
+        this.musicTiming = res.getIntArray(music[1]);
+    }
+
+    protected String getName(){
+        return this.musicName;
+    }
+
+    protected MediaPlayer getSound(){
+        return this.musicSound;
+    }
+
+    protected int[] getTiming(){
+        return this.musicTiming;
     }
 
 }

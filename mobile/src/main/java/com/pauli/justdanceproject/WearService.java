@@ -196,8 +196,8 @@ public class WearService extends WearableListenerService {
                     case BuildConfig.W_acc_rate_path:
                         float[] acc_rate = dataMapItem.getDataMap().getFloatArray(BuildConfig
                                 .W_acc_rate_key);
-                        intent = new Intent(testSensors.RECEIVE_ACC_RATE);
-                        intent.putExtra(testSensors.ACC_RATE, acc_rate);
+                        intent = new Intent(DanceActivity.RECEIVE_ACC_RATE);
+                        intent.putExtra(DanceActivity.ACC_RATE, acc_rate);
                         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
                         break;
                     default:
