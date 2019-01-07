@@ -33,7 +33,7 @@ public class WatchMainActivity extends WearableActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_watch_main);
         mLayout = findViewById(R.id.container);
-        mTextView = (TextView) findViewById(R.id.textViewMain);
+        //mTextView = (TextView) findViewById(R.id.textViewMain);
         mImageView = findViewById(R.id.imageViewMain);
 
         /* Check the permission for the sensors */
@@ -51,7 +51,7 @@ public class WatchMainActivity extends WearableActivity {
             @Override
             public void onReceive(Context context, Intent intent) {
                 String s_message = intent.getStringExtra(MESSAGE);
-                mTextView.setText("Message: " + s_message);
+                //mTextView.setText("Message: " + s_message);
             }
         }, new IntentFilter(ACTION_RECEIVE_MESSAGE));
         // Get image

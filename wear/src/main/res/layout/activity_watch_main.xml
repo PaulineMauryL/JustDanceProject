@@ -16,26 +16,15 @@
 
         <ImageView
             android:id="@+id/imageViewMain"
-            android:layout_width="130sp"
-            android:layout_height="130sp"
+            android:layout_width="170sp"
+            android:layout_height="170sp"
             android:cropToPadding="false"
-            android:src="@mipmap/logo_just_dance_now"
-            app:layout_constraintBottom_toTopOf="@+id/textViewMain"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textViewMain"
-            android:layout_width="130sp"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="Let's dance!"
-            android:textSize="24sp"
+            android:src="@mipmap/fat_round"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.571"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageViewMain" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 </android.support.wear.widget.BoxInsetLayout>
