@@ -185,27 +185,27 @@ public class DanceActivity extends AppCompatActivity {
         }
 
     }
-/*
+
     public void UpButton(View view) {
         if (!resume){
             imageButtonView = findViewById(R.id.UpView);
-            actualPosition = 1;
+            //actualPosition = 1;
         }
     }
 
     public void MiddleButton(View view) {
         if (!resume){
             imageButtonView = findViewById(R.id.MiddleView);
-            actualPosition = 2;
+            //actualPosition = 2;
         }
     }
 
     public void DownButton(View view) {
         if (!resume){
             imageButtonView = findViewById(R.id.BottomView);
-            actualPosition = 3;
+            //actualPosition = 3;
         }
-    }*/
+    }
 
     private Runnable progressRunnable = new Runnable() {
         /**
