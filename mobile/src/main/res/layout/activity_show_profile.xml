@@ -9,9 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
-        android:background="#20B2AA"
+        android:background="@color/background_material_light"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
-        android:textColor="#fff" />
+        android:textColor="@color/colorAccent"/>
 
 </android.support.v4.view.ViewPager>

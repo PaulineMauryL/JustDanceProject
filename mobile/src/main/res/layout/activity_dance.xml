@@ -33,8 +33,14 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:background="@color/button_color"
             android:onClick="UpButton"
-            android:text="@string/Up" />
+            android:text="@string/Up"
+            android:textColor="@color/colorAccent"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:fontFamily="@font/simplehandwrittingregular" />
+
 
         <Button
             android:id="@+id/MiddleButton"
@@ -42,7 +48,12 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:onClick="MiddleButton"
-            android:text="@string/Middle" />
+            android:text="@string/Middle"
+            android:textColor="@color/colorAccent"
+            app:fontFamily="@font/simplehandwrittingregular"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:background="@color/button_color"/>
 
         <Button
             android:id="@+id/DownButton"
@@ -50,17 +61,27 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:onClick="DownButton"
-            android:text="@string/Down" />
+            android:text="@string/Down"
+            android:textColor="@color/colorAccent"
+            app:fontFamily="@font/simplehandwrittingregular"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:background="@color/button_color"/>
 
         <Button
             android:id="@+id/ResumeButton"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
             android:layout_weight="1"
+            android:background="@color/button_color"
             android:onClick="ResumeMusic"
             android:text="@string/Resume"
-            android:layout_marginLeft="24dp" />
+            android:textColor="@color/colorAccent"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:fontFamily="@font/simplehandwrittingregular" />
 
         <ImageView
             android:id="@+id/UpView"

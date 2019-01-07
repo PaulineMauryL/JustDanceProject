@@ -37,6 +37,7 @@
         android:text="@string/appWelcome"
         android:textSize="30sp"
         android:textStyle="bold"
+        android:textColor="@color/colorAccent"
         app:fontFamily="@font/simplehandwrittingregular"
         app:layout_constraintBottom_toTopOf="@+id/txt_enter_name"
         app:layout_constraintEnd_toEndOf="parent"
