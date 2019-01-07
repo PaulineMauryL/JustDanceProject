@@ -30,6 +30,11 @@ public class TestWatchActivity extends AppCompatActivity {
     private static final boolean DEBUG_FLAG = true;
     private static final int PICK_IMAGE = 1;
 
+    public void bSensorCallBack(View view) {
+        Intent it = new Intent(this, testSensors.class);
+        startActivity(it);
+    }
+
     /* Enum */
     private enum Send2WatchAction {
         SEND_IMAGE, SEND_MESSAGE, START_ACTIVITY

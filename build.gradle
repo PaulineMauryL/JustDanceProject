@@ -37,10 +37,16 @@ allprojects {
                 mainactivity        : "MainActivity",
                 watchmainactivity   : "WatchMainActivity",
                 sleepactivity       :  "SleepActivity",
+                dance_activity      : "DanceActivity",
 
                 a_key               : "a_value",
                 some_other_key      : "some_other_value",
-                image_key           : "image_key"
+                image_key           : "image_key",
+
+                acc_rate_key        : "acc_rate_key",
+                acc_rate_path       : "/ACC_RATE",
+
+                path_stop_activity  : "/STOP_ACTIVITY"
         ]
     }
 }

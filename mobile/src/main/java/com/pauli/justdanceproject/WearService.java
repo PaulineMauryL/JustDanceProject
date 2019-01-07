@@ -54,6 +54,10 @@ public class WearService extends WearableListenerService {
                 String activity = intent.getStringExtra(ACTIVITY_TO_START);
                 sendMessage(activity, BuildConfig.W_path_start_activity);
                 break;
+            case STOPACTIVITY:
+                String activityStop = intent.getStringExtra(ACTIVITY_TO_STOP);
+                sendMessage(activityStop, BuildConfig.W_path_stop_activity);
+                break;
             case MESSAGE:
                 String message = intent.getStringExtra(MESSAGE);
                 if (message == null) message = "";
@@ -95,7 +99,7 @@ public class WearService extends WearableListenerService {
     }
 
     public static final String ACTIVITY_TO_START = "ACTIVITY_TO_START";
-
+    public static final String ACTIVITY_TO_STOP = "ACTIVITY_TO_STOP";
     public static final String MESSAGE = "MESSAGE";
     public static final String DATAMAP_INT = "DATAMAP_INT";
     public static final String DATAMAP_INT_ARRAYLIST = "DATAMAP_INT_ARRAYLIST";
@@ -187,6 +191,13 @@ public class WearService extends WearableListenerService {
                         intent = new Intent("REPLACE_THIS_WITH_A_STRING_OF_ANOTHER_ACTION_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY");
                         intent.putExtra("REPLACE_THIS_WITH_A_STRING_OF_INTEGER_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY", integer);
                         intent.putExtra("REPLACE_THIS_WITH_A_STRING_OF_ARRAYLIST_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY", arraylist);
+                        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+                        break;
+                    case BuildConfig.W_acc_rate_path:
+                        float[] acc_rate = dataMapItem.getDataMap().getFloatArray(BuildConfig
+                                .W_acc_rate_key);
+                        intent = new Intent(testSensors.RECEIVE_ACC_RATE);
+                        intent.putExtra(testSensors.ACC_RATE, acc_rate);
                         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
                         break;
                     default:
@@ -342,6 +353,6 @@ public class WearService extends WearableListenerService {
 
     // Constants
     public enum ACTION_SEND {
-        STARTACTIVITY, MESSAGE, EXAMPLE_DATAMAP, EXAMPLE_ASSET, SEND_IMAGE
+        STARTACTIVITY, MESSAGE, EXAMPLE_DATAMAP, EXAMPLE_ASSET, SEND_IMAGE,STOPACTIVITY;
     }
 }

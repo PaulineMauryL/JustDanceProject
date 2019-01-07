@@ -137,4 +137,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="number_of_points">Number of points</string>
     <string name="level_user_dance">Level</string>
+    <string name="title_activity_test_sensors">testSensors</string>
 </resources>
