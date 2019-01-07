@@ -8,21 +8,22 @@
 
     <ImageView
         android:id="@+id/pic_launch"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:adjustViewBounds="false"
         android:contentDescription="appWelcomePicture"
+        android:background="@drawable/round_shape"
         app:layout_constraintBottom_toTopOf="@+id/txt_welcome"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars[2]" />
+        app:srcCompat="@drawable/fat_dance_icon" />
 
     <TextView
         android:id="@+id/txt_welcome"
@@ -74,11 +75,11 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="32dp"
+        android:background="@drawable/round_shape"
         android:onClick="begin_game"
         android:text="@string/launchApp"
         android:textColor="@color/colorAccent"
         android:textSize="24sp"
-        android:background="@color/button_color"
         android:textStyle="bold"
         app:fontFamily="@font/simplehandwrittingregular"
         app:layout_constraintBottom_toBottomOf="parent"

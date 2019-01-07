@@ -16,7 +16,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
-            android:background="@android:color/holo_blue_light"
+            android:background="@drawable/round_shape"
             android:contentDescription="@string/user_profile_image"
             android:scaleType="centerCrop"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -87,7 +87,7 @@
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/do_not_edit_button"
         android:onClick="do_not_edit"
-        android:background="@color/background_material_light"
+        android:background="@drawable/round_shape"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@android:drawable/ic_delete" />
@@ -101,7 +101,7 @@
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/edit_button"
         android:onClick="edit_ok"
-        android:background="@color/background_material_light"
+        android:background="@drawable/round_shape"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:drawable/checkbox_on_background" />

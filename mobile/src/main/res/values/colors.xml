@@ -6,7 +6,7 @@
     <color name="highlight_color_filter">#A5FF0000</color>
     <color name="background_material_light">#efbaba</color>
     <color name="foreground_material_light">#fdfdfd</color>
-    <color name="text_color_primary">#dde36868</color>
+    <color name="text_color_primary">#fd020000</color>
     <color name="primary_text_material_dark">#f0d5d5</color>
     <color name="button_color">#FFE87B7B</color>
 </resources>
