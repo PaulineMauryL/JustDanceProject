@@ -2,6 +2,7 @@ package com.pauli.justdanceproject;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -11,11 +12,12 @@ public class DanceActivity extends AppCompatActivity {
 
     public static final String NUMBER_POINTS = "Number_points";  //Added by Pauline for finish activity
 
-    private MediaPlayer mySound = null;
     private MusicDance musical = null;
-    private int Idmusictodisplay = 0;
+    private Handler mHandler;
+    private int[] music = null;
     private Boolean resume = true;
     private ImageView imageButtonView = null;
+    private int index = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,22 +26,47 @@ public class DanceActivity extends AppCompatActivity {
 
         Bundle bunble = getIntent().getExtras();
         if (bunble!=null){
-            Idmusictodisplay = bunble.getInt("musicchosen");
-            musical = new MusicDance("musicname", Idmusictodisplay,this);
+            music= bunble.getIntArray("musicchosen");
+            musical = new MusicDance("musicname", music,this);
             musical.musicsound.start();
+            mHandler = new Handler();
             resume = false;
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        index=0;
+        mHandler.postDelayed(startMusic,1000);
+    }
+
+    public void movementsOnMusic(){
+        int i=0;
+        int delay=0;
+        i=index*2;
+        while(i<musical.musictiming.length){
+            delay = musical.musictiming[i];
+            mHandler.postDelayed(r1,delay-musical.musicsound.getCurrentPosition());
+            mHandler.postDelayed(r2,delay-musical.musicsound.getCurrentPosition()+300);
+            mHandler.postDelayed(r3,delay-musical.musicsound.getCurrentPosition()+600);
+            i=i+2;
         }
     }
 
     public void ResumeMusic(View view) {
         Button pauseButton = findViewById(R.id.ResumeButton);
-        if (mySound !=null){
+        if (musical.musicsound !=null){
             if (resume){
                 musical.musicsound.start();
                 resume = false;
                 pauseButton.setText(R.string.Resume);
+                movementsOnMusic();
             }else {
                 musical.musicsound.pause();
+                mHandler.removeCallbacks(r1);
+                mHandler.removeCallbacks(r2);
+                mHandler.removeCallbacks(r3);
                 resume = true;
                 pauseButton.setText(R.string.Restart);
             }
@@ -70,17 +97,43 @@ public class DanceActivity extends AppCompatActivity {
     }
     final Runnable r1 = new Runnable() {
         public void run() {
+            switch (musical.musictiming[index*2+1]){
+                case 1:
+                    imageButtonView = findViewById(R.id.UpView);
+                    break;
+                case 2:
+                    imageButtonView = findViewById(R.id.MiddleView);
+                    break;
+                case 3:
+                    imageButtonView = findViewById(R.id.BottomView);
+                    break;
+
+            }
+
             imageButtonView.setActivated(true);
             imageButtonView.setEnabled(true);
         }
     };
     final Runnable r2 = new Runnable() {
         public void run() {
-            imageButtonView.setActivated(false);
+
+            imageButtonView.setActivated(true);
             imageButtonView.setEnabled(false);
         }
     };
 
+    final Runnable r3 = new Runnable() {
+        public void run() {
+            imageButtonView.setActivated(false);
+            index = index+1;
+        }
+    };
+
+    final Runnable startMusic = new Runnable() {
+        public void run() {
+            movementsOnMusic();
+        }
+    };
     public void ToggleFilter(){
         imageButtonView.setActivated(true);
         imageButtonView.setEnabled(false);
