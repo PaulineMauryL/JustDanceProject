@@ -58,6 +58,7 @@
             android:maxLines="1"
             android:text="Name"
             android:textSize="30sp"
+            android:textColor="@color/colorAccent"
             app:fontFamily="@font/simplehandwrittingregular"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/userImage" />
@@ -73,6 +74,7 @@
             android:maxLines="1"
             android:text="Level"
             android:textSize="30sp"
+            android:textColor="@color/colorAccent"
             app:fontFamily="@font/simplehandwrittingregular"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/username" />

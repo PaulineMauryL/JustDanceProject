@@ -30,6 +30,7 @@
         android:layout_marginStart="163dp"
         android:layout_marginLeft="163dp"
         android:text="TextView"
+        android:textColor="@color/colorAccent"
         app:fontFamily="@font/simplehandwrittingregular"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/StartDance" />
