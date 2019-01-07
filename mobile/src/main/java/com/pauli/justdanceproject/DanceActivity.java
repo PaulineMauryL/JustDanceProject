@@ -32,6 +32,7 @@ public class DanceActivity extends AppCompatActivity {
     private int askedPosition = 0;
     private int actualPosition = 0;
     private int score=0;
+    final int error = 5;
     private static final String PROGRESS_BAR_INCREMENT="ProgressBarIncrementId";
     private ProgressBar bar;
     AtomicBoolean isRunning = new AtomicBoolean(false);
@@ -77,7 +78,7 @@ public class DanceActivity extends AppCompatActivity {
                 bar.setMax(210);
             }
         }
-        //startWatchActivity();
+        startWatchActivity();
     }
 
     @Override
@@ -91,10 +92,10 @@ public class DanceActivity extends AppCompatActivity {
         //Lancement de la Thread
         isPausing.set(true);
         isRunning.set(true);
-        /*background.start();// Get the accelerometer datas back from the watch
+        background.start();// Get the accelerometer datas back from the watch
         accRateBroadcastReceiver = new AccRateBroadcastReceiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(accRateBroadcastReceiver, new
-                IntentFilter(RECEIVE_ACC_RATE));*/
+                IntentFilter(RECEIVE_ACC_RATE));
     }
 
     @Override
@@ -120,12 +121,15 @@ public class DanceActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             // Show AR in a TextView
             float[] accRateWatch = intent.getFloatArrayExtra(ACC_RATE);
-            TextView mTextView1 = findViewById(R.id.textView1);
-            mTextView1.setText("Accx = " + accRateWatch[0]);
-            TextView mTextView2 = findViewById(R.id.textView2);
-            mTextView2.setText("Accy = " + accRateWatch[1]);
-            TextView mTextView3 = findViewById(R.id.textView3);
-            mTextView3.setText("Accz = " + accRateWatch[2]);
+            if(Math.abs(accRateWatch[0])<error && Math.abs(accRateWatch[1])<error) {
+                actualPosition = 2;
+            } else if(Math.abs(accRateWatch[1])<error && Math.abs(accRateWatch[2])<error && accRateWatch[0]>0){
+                actualPosition = 1;
+            } else if(Math.abs(accRateWatch[1])<error && Math.abs(accRateWatch[2])<error && accRateWatch[0]>0) {
+                actualPosition = 3;
+            } else{
+                actualPosition = 100;
+            }
         }
     }
 
@@ -181,7 +185,7 @@ public class DanceActivity extends AppCompatActivity {
         }
 
     }
-
+/*
     public void UpButton(View view) {
         if (!resume){
             imageButtonView = findViewById(R.id.UpView);
@@ -201,7 +205,7 @@ public class DanceActivity extends AppCompatActivity {
             imageButtonView = findViewById(R.id.BottomView);
             actualPosition = 3;
         }
-    }
+    }*/
 
     private Runnable progressRunnable = new Runnable() {
         /**
@@ -230,10 +234,10 @@ public class DanceActivity extends AppCompatActivity {
                     myMessage=handler.obtainMessage();
                     //Ajouter des données à transmettre au Handler via le Bundle
                     if(askedPosition == actualPosition) {
-                        messageBundle.putInt(PROGRESS_BAR_INCREMENT,10);
+                        messageBundle.putInt(PROGRESS_BAR_INCREMENT,3);
                         score = score+10;
                     }else if(nextPosition == actualPosition){
-                        messageBundle.putInt(PROGRESS_BAR_INCREMENT,5);
+                        messageBundle.putInt(PROGRESS_BAR_INCREMENT,1);
                         score=score+5;
                     }else{
                         messageBundle.putInt(PROGRESS_BAR_INCREMENT,0);
