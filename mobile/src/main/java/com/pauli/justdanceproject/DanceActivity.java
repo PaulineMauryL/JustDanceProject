@@ -18,6 +18,9 @@ public class DanceActivity extends AppCompatActivity {
     private Boolean resume = true;
     private ImageView imageButtonView = null;
     private int index = 0;
+    private int askedposition = 0;
+    private int actualposition = 0;
+    private int score = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +29,7 @@ public class DanceActivity extends AppCompatActivity {
 
         Bundle bunble = getIntent().getExtras();
         if (bunble!=null){
-            music= bunble.getIntArray("musicchosen");
+            music = bunble.getIntArray("musicchosen");
             musical = new MusicDance("musicname", music,this);
             musical.musicsound.start();
             mHandler = new Handler();
@@ -37,7 +40,8 @@ public class DanceActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        index=0;
+        index = 0;
+        score = 0;
         mHandler.postDelayed(startMusic,1000);
     }
 
@@ -77,7 +81,7 @@ public class DanceActivity extends AppCompatActivity {
     public void UpButton(View view) {
         if (!resume){
             imageButtonView = findViewById(R.id.UpView);
-            ToggleFilter();
+            actualposition = 1;
         }
     }
 
@@ -85,19 +89,20 @@ public class DanceActivity extends AppCompatActivity {
     public void MiddleButton(View view) {
         if (!resume){
             imageButtonView = findViewById(R.id.MiddleView);
-            ToggleFilter();
+            actualposition = 2;
         }
     }
 
     public void DownButton(View view) {
         if (!resume){
             imageButtonView = findViewById(R.id.BottomView);
-            ToggleFilter();
+            actualposition = 3;
         }
     }
     final Runnable r1 = new Runnable() {
         public void run() {
-            switch (musical.musictiming[index*2+1]){
+            askedposition = musical.musictiming[index*2+1];
+            switch (askedposition){
                 case 1:
                     imageButtonView = findViewById(R.id.UpView);
                     break;
@@ -107,9 +112,7 @@ public class DanceActivity extends AppCompatActivity {
                 case 3:
                     imageButtonView = findViewById(R.id.BottomView);
                     break;
-
             }
-
             imageButtonView.setActivated(true);
             imageButtonView.setEnabled(true);
         }
@@ -119,9 +122,18 @@ public class DanceActivity extends AppCompatActivity {
 
             imageButtonView.setActivated(true);
             imageButtonView.setEnabled(false);
+
+            getPosition();
         }
     };
-
+    private void getPosition() {
+        if (actualposition==askedposition)
+        {
+            score = score+1;
+        }
+        Button ButtonView=findViewById(R.id.MiddleButton);
+        ButtonView.setText(""+score);
+    }
     final Runnable r3 = new Runnable() {
         public void run() {
             imageButtonView.setActivated(false);
