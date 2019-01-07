@@ -20,7 +20,7 @@ public class FinishActivity extends AppCompatActivity {
         Intent intent = getIntent();
         userID = intent.getStringExtra(LaunchActivity.USER_ID);
 
-        int nb_points = intent.getIntExtra(MusicDance.NUMBER_POINTS, 0);
+        int nb_points = intent.getIntExtra(DanceActivity.NUMBER_POINTS, 0);
         String user_level = "to do";   //TODO: set user level depending on nb points (see Profile)
 
         TextView view_nb_points = findViewById(R.id.txt_nb_points);

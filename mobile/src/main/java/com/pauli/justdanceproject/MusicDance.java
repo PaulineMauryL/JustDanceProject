@@ -7,7 +7,6 @@ import android.media.MediaPlayer;
 import java.io.Serializable;
 
 public class MusicDance implements Serializable {
-    static final String NUMBER_POINTS = "Number_points";  //Added by Pauline for finish activity
 
     private String musicName;
     private MediaPlayer musicSound;

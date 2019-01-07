@@ -61,11 +61,12 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void ChooseCreuse(View view) {
-        chosenMusic = new int[]{R.raw.creuser, R.array.frogprincess};
+        chosenMusic = new int[]{R.raw.musicalinette, R.array.shortMusic};
     }
     public void ChooseHercule(View view) {
         chosenMusic = new int[]{R.raw.zero,R.array.hercule};
     }
+
 
 
 

@@ -1,18 +1,26 @@
 package com.pauli.justdanceproject;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DanceActivity extends AppCompatActivity {
 
+    static final String NUMBER_POINTS = "Number_points";  //Added by Pauline for finish activity
 
     private MusicDance musical = null;
     private Handler mHandler;
@@ -23,7 +31,8 @@ public class DanceActivity extends AppCompatActivity {
     private int nextPosition = 0;
     private int askedPosition = 0;
     private int actualPosition = 0;
-    private static final String PROGRESS_BAR_INCREMENT="ProgreesBarIncrementId";
+    private int score=0;
+    private static final String PROGRESS_BAR_INCREMENT="ProgressBarIncrementId";
     private ProgressBar bar;
     AtomicBoolean isRunning = new AtomicBoolean(false);
     AtomicBoolean isPausing = new AtomicBoolean(false);
@@ -37,6 +46,9 @@ public class DanceActivity extends AppCompatActivity {
 
         }
     };
+    public static final String RECEIVE_ACC_RATE = "RECEIVE_ACC_RATE";
+    public static final String ACC_RATE = "ACC_RATE";
+    private AccRateBroadcastReceiver accRateBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +61,13 @@ public class DanceActivity extends AppCompatActivity {
             if(music!=null) {
                 musical = new MusicDance("musicname", music, this);
                 musical.getSound().start();
+                musical.getSound().setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
+                    public void onCompletion(MediaPlayer mp){
+                        Intent intentFinishDance = new Intent(DanceActivity.this, FinishActivity.class);
+                        intentFinishDance.putExtra(NUMBER_POINTS,score);
+                        startActivity(intentFinishDance);
+                    }
+                });
                 mHandler = new Handler();
                 resume = false;
                 index = 0;
@@ -58,6 +77,7 @@ public class DanceActivity extends AppCompatActivity {
                 bar.setMax(210);
             }
         }
+        //startWatchActivity();
     }
 
     @Override
@@ -71,19 +91,57 @@ public class DanceActivity extends AppCompatActivity {
         //Lancement de la Thread
         isPausing.set(true);
         isRunning.set(true);
-        background.start();
+        /*background.start();// Get the accelerometer datas back from the watch
+        accRateBroadcastReceiver = new AccRateBroadcastReceiver();
+        LocalBroadcastManager.getInstance(this).registerReceiver(accRateBroadcastReceiver, new
+                IntentFilter(RECEIVE_ACC_RATE));*/
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         isPausing.set(true);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(accRateBroadcastReceiver);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         isPausing.set(false);
+        // Get the accelerometer datas back from the watch
+        accRateBroadcastReceiver = new AccRateBroadcastReceiver();
+        LocalBroadcastManager.getInstance(this).registerReceiver(accRateBroadcastReceiver, new
+                IntentFilter(RECEIVE_ACC_RATE));
+    }
+
+    private class AccRateBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Show AR in a TextView
+            float[] accRateWatch = intent.getFloatArrayExtra(ACC_RATE);
+            TextView mTextView1 = findViewById(R.id.textView1);
+            mTextView1.setText("Accx = " + accRateWatch[0]);
+            TextView mTextView2 = findViewById(R.id.textView2);
+            mTextView2.setText("Accy = " + accRateWatch[1]);
+            TextView mTextView3 = findViewById(R.id.textView3);
+            mTextView3.setText("Accz = " + accRateWatch[2]);
+        }
+    }
+
+    private void startWatchActivity(){
+        Intent intent = new Intent(DanceActivity.this, WearService.class);
+        intent.setAction(WearService.ACTION_SEND.STARTACTIVITY.name());
+        intent.putExtra(WearService.ACTIVITY_TO_START, BuildConfig.W_dance_activity);
+        startService(intent);
+    }
+
+    public void stopRecordingOnWear(View view) {
+        /* Store here the datas is needed */
+        Intent intentStopRec = new Intent(DanceActivity.this, WearService.class);
+        intentStopRec.setAction(WearService.ACTION_SEND.STOPACTIVITY.name());
+        intentStopRec.putExtra(WearService.ACTIVITY_TO_STOP, BuildConfig.W_dance_activity);
+        startService(intentStopRec);
     }
 
     public void movementsOnMusic(){
@@ -124,14 +182,12 @@ public class DanceActivity extends AppCompatActivity {
 
     }
 
-
     public void UpButton(View view) {
         if (!resume){
             imageButtonView = findViewById(R.id.UpView);
             actualPosition = 1;
         }
     }
-
 
     public void MiddleButton(View view) {
         if (!resume){
@@ -175,8 +231,10 @@ public class DanceActivity extends AppCompatActivity {
                     //Ajouter des données à transmettre au Handler via le Bundle
                     if(askedPosition == actualPosition) {
                         messageBundle.putInt(PROGRESS_BAR_INCREMENT,10);
+                        score = score+10;
                     }else if(nextPosition == actualPosition){
                         messageBundle.putInt(PROGRESS_BAR_INCREMENT,5);
+                        score=score+5;
                     }else{
                         messageBundle.putInt(PROGRESS_BAR_INCREMENT,0);
                     }
