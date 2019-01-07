@@ -1,7 +1,8 @@
 package com.pauli.justdanceproject;
 
+import android.content.Context;
 import android.media.MediaPlayer;
-
+import android.media.MediaPlayer;
 import java.io.Serializable;
 
 public class MusicDance implements Serializable {
@@ -9,9 +10,10 @@ public class MusicDance implements Serializable {
 
     protected String musicname;
     protected MediaPlayer musicsound;
-    public MusicDance(String musicname,MediaPlayer musicsound){
+
+    public MusicDance(String musicname, int IdofMusic,Context context){
         this.musicname = musicname;
-        this.musicsound = musicsound;
+        this.musicsound = MediaPlayer.create(context,IdofMusic);
     }
 
 }
