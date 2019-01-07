@@ -48,6 +48,11 @@
                     android:scheme="wear" />
             </intent-filter>
         </service>
+
+        <activity
+            android:name=".testSensors"
+            android:label="@string/title_activity_test_sensors"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

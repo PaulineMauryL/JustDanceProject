@@ -4,13 +4,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.wearable.activity.WearableActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,6 +36,15 @@ public class WatchMainActivity extends WearableActivity {
         mTextView = (TextView) findViewById(R.id.textViewMain);
         mImageView = findViewById(R.id.imageViewMain);
 
+        /* Check the permission for the sensors */
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                checkSelfPermission("android" + ""
+                        + ".permission.BODY_SENSORS") == PackageManager
+                        .PERMISSION_DENIED) {
+            requestPermissions(new String[]{"android.permission" +
+                    ".BODY_SENSORS"}, 0);
+        }
+
         /* For the communication with the tablet*/
         // Get Message
         LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver() {
@@ -54,6 +66,11 @@ public class WatchMainActivity extends WearableActivity {
 
         // Enables Always-on
         setAmbientEnabled();
+    }
+
+    public void ButtonSensorCallback(View view) {
+        Intent it = new Intent(this, DanceActivity.class);
+        startActivity(it);
     }
 
 /*@Override
