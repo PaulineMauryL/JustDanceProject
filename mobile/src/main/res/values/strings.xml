@@ -165,4 +165,7 @@
     <string name="save_change">Don\'t you want to save any change ?</string>
     <string name="no_saving">No saving</string>
     <string name="quit_without_save">Are you sure you want to quit without saving ?</string>
+    <string name="HerculeName">Hercule - From Zero to Hero</string>
+    <string name="FrogPrincessName">The Princess Frog - Digging</string>
+    <string name="musicalinette" translatable="false">Musicalinette</string>
 </resources>

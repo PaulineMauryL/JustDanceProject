@@ -56,5 +56,7 @@
     <string name="save_change">Ne veux-tu pas enregistrer les modifications ?</string>
     <string name="no_saving">Pas d\'enregistrement</string>
     <string name="quit_without_save">Es-tu sûr de vouloir quitter sans sauver ?</string>
+    <string name="HerculeName">Hercule - De Zéro en Héros</string>
+    <string name="FrogPrincessName">La Princesse et la Grenouille - Creuse</string>
 
 </resources>
