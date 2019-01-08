@@ -157,7 +157,7 @@
     <string name="medium">** Medium **</string>
     <string name="hard">*** Hard ***</string>
     <string name="easy">* Easy *</string>
-    <string name="title_activity_test_sensors">testSensors</string>
+    <string name="title_activity_test_sensors" translatable="false">testSensors</string>
     <string name="internet_connection_message">Please check your internet connection!</string>
     <string name="internet_connection_title">Internet connection</string>
     <string name="error_message_music_selected">You need to choose a music first!</string>
@@ -168,7 +168,9 @@
     <string name="HerculeName">Hercule - From Zero to Hero</string>
     <string name="FrogPrincessName">The Princess Frog - Digging</string>
     <string name="musicalinette" translatable="false">Musicalinette</string>
-    <string name="yourScore">Your score on this song are listed below</string>
+    <string name="yourScore">Your scores on this song are listed below</string>
     <string name="error_message_bluetooth">Please enable your bluetooth and pair your watch!</string>
     <string name="error_message_pair_watch">Please pair this device with your watch</string>
+    <string name="good" translatable="false">GOOD !</string>
+    <string name="ok" translatable="false">OK !</string>
 </resources>

@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
             // Start the dance Activity
             Intent intentStartDance = new Intent(MainActivity.this, DanceActivity.class);
             intentStartDance.putExtra("musicchosen", chosenMusic);
+            intentStartDance.putExtra(LaunchActivity.USER_ID, userID);
             startActivity(intentStartDance);
         }
     }
