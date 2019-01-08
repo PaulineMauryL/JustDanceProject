@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">JustDanceProject</string>
+    <string name="app_name">Clone Dance !</string>
     <string name="title_activity_scrolling" translatable="false">ScrollingActivity</string>
     <string name="large_text" translatable="false">
         "Material is the metaphor.\n\n"
@@ -149,6 +149,13 @@
     <string name="NoChangeUserPopUp">Good choice</string>
     <string name="No">No</string>
     <string name="ChangeOfDancerTitle">Change of dancer</string>
-    <string name="YesChangeUserPopUp">Ok ! See you later</string>
+    <string name="YesChangeUserPopUp">OK ! See you later</string>
     <string name="QuestionChangeUser">Do you really want to change user ?</string>
+    <string name="easy_land">Easy:</string>
+    <string name="medium_land">Medium:</string>
+    <string name="hard_land">Hard:</string>
+    <string name="select_a_song">Select a song !</string>
+    <string name="medium">** Medium **</string>
+    <string name="hard">*** Hard ***</string>
+    <string name="easy">* Easy *</string>
 </resources>

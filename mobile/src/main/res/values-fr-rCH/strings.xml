@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">JustDanceProject</string>
+    <string name="app_name">Clone Dance !</string>
     <string name="start_dance">Débuter la danse !</string>
     <string name="Up" translatable="false">Monte !</string>
     <string name="Down" translatable="false">Descends !</string>
@@ -12,7 +12,7 @@
     <string name="registrationSuccessful">Enregistrement réussi</string>
     <string name="registrationFailed">Enregistrement manqué. Merci de réessayer plus tard.</string>
     <string name="selectPicture">Sélectionne une image</string>
-    <string name="welcome">Bienvenu !</string>
+    <string name="welcome">Bienvenue !</string>
     <string name="createProfile">.   Merci de créer votre profil.</string>
     <string name="appWelcome">Bienvenu dans Just Dance !</string>
     <string name="enterUsername" translatable="false">Qui es-tu ?</string>
@@ -42,4 +42,12 @@
     <string name="ChangeOfDancerTitle">Changement de danseur</string>
     <string name="YesChangeUserPopUp">Ok ! On se voit plus tard</string>
     <string name="QuestionChangeUser">Veux-tu réellement changer d\'utilisateur ?</string>
+    <string name="easy_land">Facile:</string>
+    <string name="medium_land">Moyen:</string>
+    <string name="hard_land">Difficile:</string>
+    <string name="select_a_song">Choisis une chanson !</string>
+    <string name="easy">* Facile *</string>
+    <string name="medium">** Moyen **</string>
+    <string name="hard">*** Difficile ***</string>
+
 </resources>
