@@ -33,6 +33,7 @@ public class LaunchActivity extends AppCompatActivity {
 
     private final String TAG = this.getClass().getSimpleName();
 
+    public static final String ACTIVITY_NAME = "launch_activity";
     public static final String USER_ID = "USER_ID";
     public static final String USERNAME = "username";
     private Translation translation = new Translation();
@@ -86,6 +87,7 @@ public class LaunchActivity extends AppCompatActivity {
                         Toast.makeText(LaunchActivity.this, getString(R.string.welcome) + username + getString(R.string.createProfile), Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(LaunchActivity.this, EditUser.class);
                         intent.putExtra(USERNAME, username);
+                        intent.putExtra(EditUser.ACTIVITY_NAME,ACTIVITY_NAME);
                         startActivity(intent);
                         finish();
                     } else {              // user exist, go to mainActivity to select a dance

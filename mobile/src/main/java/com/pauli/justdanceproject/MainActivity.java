@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    public static final String ACTIVITY_NAME = "main_activity";
     public static final String RECORDING_ID = "recording_id";  //added by Pauline
     private String userID;
     private static final int PICK_MUSIC = 1;
@@ -91,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.txt_edit_profile:
                 Intent intent_edit = new Intent(this, EditUser.class);
                 intent_edit.putExtra(LaunchActivity.USER_ID, userID);
+                intent_edit.putExtra(EditUser.ACTIVITY_NAME,ACTIVITY_NAME);
                 startActivity(intent_edit);
                 finish();
                 break;

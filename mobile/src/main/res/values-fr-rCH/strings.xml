@@ -49,5 +49,12 @@
     <string name="easy">* Facile *</string>
     <string name="medium">** Moyen **</string>
     <string name="hard">*** Difficile ***</string>
+    <string name="internet_connection_message">Merci de vérifier votre connexion internet</string>
+    <string name="internet_connection_title">Connexion internet</string>
+    <string name="error_message_music_selected">Tu dois choisir une musique avant de jouer</string>
+    <string name="wrong_name">Etais-ce le mauvais nom ?</string>
+    <string name="save_change">Ne veux-tu pas enregistrer les modifications ?</string>
+    <string name="no_saving">Pas d\'enregistrement</string>
+    <string name="quit_without_save">Es-tu sûr de vouloir quitter sans sauver ?</string>
 
 </resources>
