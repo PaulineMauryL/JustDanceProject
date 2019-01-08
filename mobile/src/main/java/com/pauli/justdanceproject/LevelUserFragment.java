@@ -72,8 +72,8 @@ public class LevelUserFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String user_db = dataSnapshot.child("username").getValue(String.class);
                 String photo = dataSnapshot.child("photo").getValue(String.class);
-                String language = dataSnapshot.child("language").getValue(String.class);
-                userProfile = new Profile(user_db, language);
+                String Translation = dataSnapshot.child("Translation").getValue(String.class);
+                userProfile = new Profile(user_db, Translation);
 
                 userProfile.photoPath = photo;
 

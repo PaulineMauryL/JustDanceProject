@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,11 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginBottom="4dp"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -33,29 +34,10 @@
             android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
             android:layout_marginRight="32dp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="2dp"
             android:text="@string/select_a_song"
             android:textColor="@color/colorAccent"
-            android:textSize="50sp"
-            android:textStyle="bold"
-            app:fontFamily="@font/simplehandwrittingregular"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textView_easy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:text="@string/easy"
-            android:textColor="@color/colorAccent"
-            android:textSize="20sp"
+            android:textSize="40sp"
             android:textStyle="bold"
             app:fontFamily="@font/simplehandwrittingregular"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
@@ -66,8 +48,31 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="-15dp"
+            android:layout_marginRight="64dp"
+            android:layout_marginBottom="-10dp"
             android:orientation="horizontal">
 
+
+            <TextView
+                android:id="@+id/textView_easy"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:text="@string/easy_land"
+                android:textColor="@color/colorAccent"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:fontFamily="@font/simplehandwrittingregular"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/HerculeButton"
@@ -78,7 +83,7 @@
                 app:srcCompat="@drawable/bt_hercule" />
 
             <Space
-                android:layout_width="10dp"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content" />
 
             <ImageView
@@ -90,7 +95,7 @@
                 app:srcCompat="@drawable/bt_creuse" />
 
             <Space
-                android:layout_width="10dp"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content" />
 
             <ImageView
@@ -101,29 +106,33 @@
                 app:srcCompat="@drawable/bt_musicalinette" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/textView_medium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:text="@string/medium"
-            android:textColor="@color/colorAccent"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:fontFamily="@font/simplehandwrittingregular"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="-15dp"
+            android:layout_marginRight="64dp"
+            android:layout_marginBottom="-10dp"
             android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView_medium"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:text="@string/medium_land"
+                android:textColor="@color/colorAccent"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:fontFamily="@font/simplehandwrittingregular"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/imageView5"
@@ -134,7 +143,7 @@
                 app:srcCompat="@drawable/bt_locked1" />
 
             <Space
-                android:layout_width="10dp"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content" />
 
             <ImageView
@@ -146,7 +155,7 @@
                 app:srcCompat="@drawable/bt_locked2" />
 
             <Space
-                android:layout_width="10dp"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content" />
 
             <ImageView
@@ -158,29 +167,33 @@
                 app:srcCompat="@drawable/bt_locked3" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/textView_hard"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:text="@string/hard"
-            android:textColor="@color/colorAccent"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:fontFamily="@font/simplehandwrittingregular"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="-15dp"
+            android:layout_marginRight="64dp"
+            android:layout_marginBottom="0dp"
             android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView_hard"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:text="@string/hard_land"
+                android:textColor="@color/colorAccent"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:fontFamily="@font/simplehandwrittingregular"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/imageView8"
@@ -191,7 +204,7 @@
                 app:srcCompat="@drawable/bt_locked4" />
 
             <Space
-                android:layout_width="10dp"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content" />
 
             <ImageView
@@ -203,7 +216,7 @@
                 app:srcCompat="@drawable/bt_locked5" />
 
             <Space
-                android:layout_width="10dp"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content" />
 
             <ImageView
@@ -217,20 +230,20 @@
         </LinearLayout>
 
         <Space
-            android:layout_width="60dp"
+            android:layout_width="300dp"
             android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/StartDanceText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="TextView"
             android:textColor="@color/colorAccent"
             android:textSize="20sp"
             app:fontFamily="@font/simplehandwrittingregular"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="TextView" />
 
         <Button
             android:id="@+id/StartDance"
@@ -266,7 +279,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
     </LinearLayout>
-
 
 
 </android.support.constraint.ConstraintLayout>
