@@ -58,21 +58,8 @@ public class LaunchActivity extends AppCompatActivity {
         final String username = ((EditText) findViewById(R.id.txt_enter_name)).getText().toString();
         if(username.isEmpty()) {
             // No connection to internet
-            final Dialog dialog = new Dialog(LaunchActivity.this); // Context, this, etc.
-            LayoutInflater inflater = getLayoutInflater();
-            View layout = inflater.inflate(R.layout.dialog_ok, null);
-            dialog.setContentView(layout);
-            ((TextView) dialog.findViewById(R.id.dialog_info_ok)).setText(R.string.nameEmpty);
-            Button dialogButton = dialog.findViewById(R.id.buttonOkDialog);
-            // if button is clicked, close the custom dialog
-            dialogButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                }
-            });
-            dialog.show();
-
+            DialogOk dialogOk = new DialogOk(LaunchActivity.this,getString(R.string.nameEmpty));
+            dialogOk.creat();
         }
         else if(isNetworkAvailable())
         {
@@ -116,22 +103,8 @@ public class LaunchActivity extends AppCompatActivity {
             });
 
         } else{
-            final Dialog dialog = new Dialog(LaunchActivity.this); // Context, this, etc.
-            LayoutInflater inflater = getLayoutInflater();
-            View layout = inflater.inflate(R.layout.dialog_ok, null);
-            dialog.setContentView(layout);
-            ((TextView) dialog.findViewById(R.id.dialog_info_ok)).setText(R.string.internet_connection_message);
-            dialog.setTitle(R.string.internet_connection_title);
-            Button dialogButton = dialog.findViewById(R.id.buttonOkDialog);
-            // if button is clicked, close the custom dialog
-            dialogButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                }
-            });
-            dialog.show();
-
+            DialogOk dialogOk = new DialogOk(LaunchActivity.this,getString(R.string.internet_connection_message));
+            dialogOk.creat();
         }
     }
     // Check if the internet connection is available
