@@ -171,6 +171,6 @@
     <string name="yourScore">Your scores on this song are listed below</string>
     <string name="error_message_bluetooth">Please enable your bluetooth and pair your watch!</string>
     <string name="error_message_pair_watch">Please pair this device with your watch</string>
-    <string name="good" translatable="false">GOOD !</string>
+    <string name="good" translatable="false">TOP !</string>
     <string name="ok" translatable="false">OK !</string>
 </resources>

@@ -179,9 +179,9 @@ public class DanceActivity extends AppCompatActivity {
         isPausing.set(false);
         while(i<musical.getTiming().length){
             delay = musical.getTiming()[i];
-            mHandler.postDelayed(r1,delay-musical.getSound().getCurrentPosition());
-            mHandler.postDelayed(r2,delay-musical.getSound().getCurrentPosition()+600);
-            mHandler.postDelayed(r3,delay-musical.getSound().getCurrentPosition()+1100);
+            mHandler.postDelayed(r1,350*i+delay-musical.getSound().getCurrentPosition());
+            mHandler.postDelayed(r2,350*i+delay-musical.getSound().getCurrentPosition()+650);
+            mHandler.postDelayed(r3,350*i+delay-musical.getSound().getCurrentPosition()+1100);
             i=i+2;
         }
     }
