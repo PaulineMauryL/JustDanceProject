@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.TypedValue;
@@ -16,7 +15,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidplot.xy.BoundaryMode;
@@ -25,23 +23,16 @@ import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 import static android.graphics.Color.RED;
 import static android.graphics.Color.TRANSPARENT;
 
 
-public class PerformanceFragment extends Fragment {
+public class MusicalinetteFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private String userID;
@@ -76,17 +67,13 @@ public class PerformanceFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.txt_dance:
-                Intent intent_dance = new Intent(getActivity(), MainActivity.class);
-                startActivity(intent_dance);
-                break;
-
             case R.id.txt_edit_profile:
                 Intent intent_edit = new Intent(getActivity(), EditUser.class);
                 intent_edit.putExtra(LaunchActivity.USER_ID, userID);
+                intent_edit.putExtra(EditUser.ACTIVITY_NAME,MainActivity.ACTIVITY_NAME);
                 startActivity(intent_edit);
+                getActivity().finish();
                 break;
-
             case R.id.txt_change_user:                            // to copy in main activity and the three fragments
                 // Check if user really wants to change
                 builder = new AlertDialog.Builder(getActivity());
@@ -95,12 +82,11 @@ public class PerformanceFragment extends Fragment {
                 builder.setMessage("Change user").setTitle("userChange");
 
                 //Setting message manually and performing action on button click
-                builder.setMessage("Do you really want to change user ?")
+                builder.setMessage(R.string.QuestionChangeUser)
                         .setCancelable(false)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                getActivity().finish();
-                                Toast.makeText(getActivity().getApplicationContext(),"Ok ! See you another time",
+                                Toast.makeText(getActivity().getApplicationContext(),getString(R.string.YesChangeUserPopUp),
                                         Toast.LENGTH_SHORT).show();
                                 // Leave
                                 Intent intent_change = new Intent(getActivity().getApplication(), LaunchActivity.class);
@@ -109,18 +95,18 @@ public class PerformanceFragment extends Fragment {
 
                             }
                         })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 //  Action for 'NO' Button
                                 dialog.cancel();
-                                Toast.makeText(getActivity().getApplicationContext(),"Good choice",
+                                Toast.makeText(getActivity().getApplicationContext(),getString(R.string.NoChangeUserPopUp),
                                         Toast.LENGTH_SHORT).show();
                             }
                         });
                 //Creating dialog box
                 AlertDialog alert = builder.create();
                 //Setting the title manually
-                alert.setTitle("Change of dancer");
+                alert.setTitle(R.string.ChangeOfDancerTitle);
                 alert.show();
 
                 break;
@@ -128,7 +114,7 @@ public class PerformanceFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    public PerformanceFragment() {
+    public MusicalinetteFragment() {
         // Required empty public constructor
     }
 
@@ -137,7 +123,7 @@ public class PerformanceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        fragmentView = inflater.inflate(R.layout.fragment_performance, container, false);
+        fragmentView = inflater.inflate(R.layout.fragment_musicalinette, container, false);
 
         Intent intent = getActivity().getIntent();
         if (intent.hasExtra(LaunchActivity.USER_ID)) {
@@ -146,23 +132,6 @@ public class PerformanceFragment extends Fragment {
         if (intent.hasExtra(MainActivity.RECORDING_ID)) {
             recID = intent.getStringExtra(MainActivity.RECORDING_ID);
         }
-
-        // Android Plot
-        dancePlot = fragmentView.findViewById(R.id.dancePlot);
-        configurePlot();
-
-        // Initialize plot
-        xyPlotSeriesList = new XYplotSeriesList();
-        LineAndPointFormatter formatter = new LineAndPointFormatter(RED, TRANSPARENT,
-                TRANSPARENT, null);
-        formatter.getLinePaint().setStrokeWidth(8);
-        xyPlotSeriesList.initializeSeriesAndAddToList(POINTS_PLOT_WATCH, MIN_POINTS, NUMBER_OF_POINTS,
-                formatter);
-        XYSeries PointsSeries = new SimpleXYSeries(xyPlotSeriesList.getSeriesFromList(POINTS_PLOT_WATCH),
-                SimpleXYSeries.ArrayFormat.XY_VALS_INTERLEAVED, POINTS_PLOT_WATCH);
-        dancePlot.clear();
-        dancePlot.addSeries(PointsSeries, formatter);
-        dancePlot.redraw();
 
     /*
         // Get recording information from Firebase
