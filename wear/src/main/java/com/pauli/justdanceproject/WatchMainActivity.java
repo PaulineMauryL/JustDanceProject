@@ -51,10 +51,12 @@ public class WatchMainActivity extends WearableActivity {
             @Override
             public void onReceive(Context context, Intent intent) {
                 String s_message = intent.getStringExtra(MESSAGE);
-                //mTextView.setText("Message: " + s_message);
+                if(s_message.equals(BuildConfig.W_test_isPaired)){
+                    Communication.sendMessage(WatchMainActivity.this,BuildConfig.W_test_isPaired_true);
+                }
             }
         }, new IntentFilter(ACTION_RECEIVE_MESSAGE));
-        // Get image
+       /* // Get image
         LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -62,7 +64,7 @@ public class WatchMainActivity extends WearableActivity {
                 Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
                 mImageView.setImageBitmap(bmp);
             }
-        }, new IntentFilter(ACTION_RECEIVE_IMAGE));
+        }, new IntentFilter(ACTION_RECEIVE_IMAGE));*/
 
         // Enables Always-on
         setAmbientEnabled();

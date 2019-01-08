@@ -22,8 +22,6 @@ import android.widget.Toast;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DanceActivity extends AppCompatActivity {
-    /* Change to run on emulator */
-    static final Boolean flag_watch_enable = true;
 
     static final String NUMBER_POINTS = "Number_points";  //Added by Pauline for finish activity
 
@@ -83,7 +81,7 @@ public class DanceActivity extends AppCompatActivity {
                 bar.setMax(210);
             }
         }
-        if(flag_watch_enable){startWatchActivity();}
+        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){startWatchActivity();}
     }
 
     @Override

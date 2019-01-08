@@ -1,26 +1,19 @@
 package com.pauli.justdanceproject;
 
-import android.app.Dialog;
+import android.bluetooth.BluetoothAdapter;
+import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -29,15 +22,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import static com.pauli.justdanceproject.WearService.MESSAGE;
+
 public class LaunchActivity extends AppCompatActivity {
 
+    public static final String MESSAGE = "MESSAGE";
+    public static final String ACTION_RECEIVE_MESSAGE = "ACTION_RECEIVE_MESSAGE";
     private final String TAG = this.getClass().getSimpleName();
 
     public static final String USER_ID = "USER_ID";
     public static final String USERNAME = "username";
     private Translation translation = new Translation();
     private String language;
-
+    private Boolean isWatchPaired= false;
     private String userID;
     boolean notMember = true;
 
@@ -46,6 +43,19 @@ public class LaunchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
+
+        // Get acknowledge from the watch
+        LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.d(TAG, "Message received");
+                String s_message = intent.getStringExtra(MESSAGE);
+                Log.d(TAG,"Message receive: " + s_message);
+                if(s_message.equals(BuildConfig.W_test_isPaired_true)){
+                    isWatchPaired = true;
+                }
+            }
+        }, new IntentFilter(ACTION_RECEIVE_MESSAGE));
         //Intent intent = getIntent();
 
        // Log.d(TAG, "oncreate");
@@ -56,14 +66,30 @@ public class LaunchActivity extends AppCompatActivity {
     public void begin_game(View view) {  //if button is clicked
 
         final String username = ((EditText) findViewById(R.id.txt_enter_name)).getText().toString();
+        // Test if the watch is paired
+        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){testIfWatchPaired();}
         if(username.isEmpty()) {
             // No connection to internet
             DialogOk dialogOk = new DialogOk(LaunchActivity.this,getString(R.string.nameEmpty));
             dialogOk.creat();
         }
-        else if(isNetworkAvailable())
+        else if(!isBluetoothEnabled()){
+            // check if the bluetooth is on
+            DialogOk dialogOk = new DialogOk(LaunchActivity.this,getString(R.string.error_message_bluetooth));
+            dialogOk.creat();
+        }
+        else if (!isWatchPaired || !Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+            // Check if the watch is paired
+            DialogOk dialogOk = new DialogOk(LaunchActivity.this,getString(R.string.error_message_pair_watch));
+            dialogOk.creat();
+        }
+        else if(!isNetworkAvailable())
         {
-            // Connection to network work properly
+            // Check if the internet connection works
+            DialogOk dialogOk = new DialogOk(LaunchActivity.this,getString(R.string.internet_connection_message));
+            dialogOk.creat();
+        } else{
+            // Begin fire base transaction
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
             final DatabaseReference profileRef = database.getReference("profiles");
 
@@ -101,12 +127,9 @@ public class LaunchActivity extends AppCompatActivity {
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                 }
             });
-
-        } else{
-            DialogOk dialogOk = new DialogOk(LaunchActivity.this,getString(R.string.internet_connection_message));
-            dialogOk.creat();
         }
     }
+
     // Check if the internet connection is available
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
@@ -114,4 +137,18 @@ public class LaunchActivity extends AppCompatActivity {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+    // Check if the bluetooth is one
+    public boolean isBluetoothEnabled()
+    {
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        return mBluetoothAdapter.isEnabled();
+
+    }
+    // Check if the watch is paired
+    private void testIfWatchPaired() {
+        // need to be implemented
+        Communication.sendMessage(LaunchActivity.this,BuildConfig.W_test_isPaired);
+        Log.d(TAG, "Message send");
+    }
+
 }

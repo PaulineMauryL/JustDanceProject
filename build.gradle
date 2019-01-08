@@ -46,7 +46,12 @@ allprojects {
                 acc_rate_key        : "acc_rate_key",
                 acc_rate_path       : "/ACC_RATE",
 
-                path_stop_activity  : "/STOP_ACTIVITY"
+                path_stop_activity  : "/STOP_ACTIVITY",
+
+                test_isPaired       : "test_isPaired",
+                test_isPaired_true  : "test_isPaired_true",
+
+                flag_watch_enable   : "false"
         ]
     }
 }

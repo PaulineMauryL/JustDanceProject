@@ -9,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -48,13 +47,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void StartDance(View view) {
-        if(musicSelected){
-            Intent intentStartDance = new Intent(MainActivity.this,DanceActivity.class);
-            intentStartDance.putExtra("musicchosen",chosenMusic);
-            startActivity(intentStartDance);
-        }else {
+        if(!musicSelected){
+            // check if one music has been selected
             DialogOk dialogOk = new DialogOk(MainActivity.this,getString(R.string.error_message_music_selected));
             dialogOk.creat();
+        }
+        else {
+            // Start the dance Activity
+            Intent intentStartDance = new Intent(MainActivity.this, DanceActivity.class);
+            intentStartDance.putExtra("musicchosen", chosenMusic);
+            startActivity(intentStartDance);
         }
     }
 
