@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private String userID;
     private static final int PICK_MUSIC = 1;
     private int[] chosenMusic=null;
+    boolean musicSelected = false;
     AlertDialog.Builder builder;
 
     @Override
@@ -26,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Intent intent = getIntent();
-
+        musicSelected = false;
         if (intent.hasExtra(LaunchActivity.USER_ID)) {
             userID = intent.getStringExtra(LaunchActivity.USER_ID);
             //Toast.makeText(this, userID, Toast.LENGTH_SHORT).show();
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void StartDance(View view) {
-        if(chosenMusic[0] != 0){
+        if(musicSelected){
             Intent intentStartDance = new Intent(MainActivity.this,DanceActivity.class);
             intentStartDance.putExtra("musicchosen",chosenMusic);
             startActivity(intentStartDance);
@@ -60,9 +61,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void ChooseCreuse(View view) {
         chosenMusic = new int[]{R.raw.musicalinette, R.array.shortMusic};
+        musicSelected = true;
     }
     public void ChooseHercule(View view) {
         chosenMusic = new int[]{R.raw.zero,R.array.hercule};
+        musicSelected = true;
     }
 
 
