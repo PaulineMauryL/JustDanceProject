@@ -27,11 +27,10 @@ public class DanceActivity extends AppCompatActivity {
     static final String NUMBER_POINTS = "Number_points";  //Added by Pauline for finish activity
 
     //private CloneDanceRoomDatabase danceDB;
+    private String userID;
 
-    //private String userID;
     private MusicDance musical = null;
     private Handler mHandler;
-    //private int[] music = null;
     private Boolean resume = true;
     private ImageView imageButtonView = null;
     private int index = 0;
@@ -65,14 +64,14 @@ public class DanceActivity extends AppCompatActivity {
         // Create instance of Sport Tracker Room DB
         //danceDB = CloneDanceRoomDatabase.getDatabase(getApplicationContext());
 
-        //Get information
 
         int[] music;
         Bundle bunble = getIntent().getExtras();
         if (bunble!=null){
             music = bunble.getIntArray("musicchosen");
-            //userID = bunble.getString(LaunchActivity.USER_ID);
+            userID = bunble.getString(LaunchActivity.USER_ID);
             if(music!=null) {
+                Log.d("PAULINE", "music not null");
                 musical = new MusicDance("musicname", music, this);
                 musical.getSound().start();
                 musical.getSound().setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
@@ -85,6 +84,7 @@ public class DanceActivity extends AppCompatActivity {
                         Log.d("PAULINE", "After Asynk Task");
 
                         Intent intentFinishDance = new Intent(DanceActivity.this, FinishActivity.class);
+                        intentFinishDance.putExtra(LaunchActivity.USER_ID, userID);
                         intentFinishDance.putExtra(NUMBER_POINTS, score);
                         startActivity(intentFinishDance);
                     }

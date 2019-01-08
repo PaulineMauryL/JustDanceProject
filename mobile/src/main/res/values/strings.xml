@@ -168,7 +168,7 @@
     <string name="HerculeName">Hercule - From Zero to Hero</string>
     <string name="FrogPrincessName">The Princess Frog - Digging</string>
     <string name="musicalinette" translatable="false">Musicalinette</string>
-    <string name="yourScore">Your score on this song are listed below</string>
+    <string name="yourScore">Your scores on this song are listed below</string>
     <string name="error_message_bluetooth">Please enable your bluetooth and pair your watch!</string>
     <string name="error_message_pair_watch">Please pair this device with your watch</string>
 </resources>

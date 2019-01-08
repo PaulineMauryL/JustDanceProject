@@ -14,12 +14,10 @@ public abstract class CloneDanceRoomDatabase extends RoomDatabase {
     //Instance of the database that will be used later
     private static CloneDanceRoomDatabase INSTANCE;
 
-    //Constructor of the class. It's "synchronized" to avoid that concurrent
-    // threads corrupts the instance.
+    //Constructor of the class.
     public static synchronized CloneDanceRoomDatabase getDatabase(Context context) {
         if (INSTANCE == null) {
-            INSTANCE = Room.databaseBuilder(context, CloneDanceRoomDatabase
-                    .class, "CloneDanceDB").build();
+            INSTANCE = Room.databaseBuilder(context, CloneDanceRoomDatabase.class, "CloneDanceDB").build();
         }
         return INSTANCE;
     }
