@@ -28,60 +28,11 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/UpButton"
+
+        <Space
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@drawable/round_shape"
-            android:onClick="UpButton"
-            android:text="@string/Up"
-            android:textColor="@color/colorAccent"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            app:fontFamily="@font/simplehandwrittingregular" />
-
-
-        <Button
-            android:id="@+id/MiddleButton"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:onClick="MiddleButton"
-            android:text="@string/Middle"
-            android:textColor="@color/colorAccent"
-            app:fontFamily="@font/simplehandwrittingregular"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:background="@drawable/round_shape"/>
-
-        <Button
-            android:id="@+id/DownButton"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:onClick="DownButton"
-            android:text="@string/Down"
-            android:textColor="@color/colorAccent"
-            app:fontFamily="@font/simplehandwrittingregular"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:background="@drawable/round_shape"/>
-
-        <Button
-            android:id="@+id/ResumeButton"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
-            android:layout_weight="1"
-            android:background="@drawable/round_shape"
-            android:onClick="ResumeMusic"
-            android:text="@string/Resume"
-            android:textColor="@color/colorAccent"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            app:fontFamily="@font/simplehandwrittingregular" />
+            android:layout_weight="0.2" />
 
         <ImageView
             android:id="@+id/UpView"
@@ -90,7 +41,12 @@
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:state_activated="false"
-            app:srcCompat="@drawable/arrowbackground" />
+            app:srcCompat="@drawable/uparrowbackground" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.2" />
 
         <ImageView
             android:id="@+id/MiddleView"
@@ -98,10 +54,13 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:adjustViewBounds="true"
-            android:rotation="90"
-            android:scaleX="0.55"
             android:state_activated="false"
-            app:srcCompat="@drawable/arrowbackground" />
+            app:srcCompat="@drawable/middlearrowbackground" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.2" />
 
         <ImageView
             android:id="@+id/BottomView"
@@ -111,13 +70,33 @@
             android:adjustViewBounds="true"
             android:rotation="180"
             android:state_activated="false"
-            app:srcCompat="@drawable/arrowbackground" />
+            app:srcCompat="@drawable/uparrowbackground" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.2" />
 
         <ProgressBar android:id="@+id/progress"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="0.5"/>
+
+        <ImageButton
+            android:id="@+id/pausebutton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/ic_launcher_foreground"
+            android:saveEnabled="false"
+            android:onClick="ResumeMusic"
+            android:scaleType="fitEnd"
+            app:srcCompat="@drawable/pausebutton" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.2" />
 
     </LinearLayout>
 
