@@ -30,6 +30,7 @@ public class DanceActivity extends AppCompatActivity {
 
     private MusicDance musical = null;
     private Handler mHandler;
+    //private int[] music = null;
     private Boolean resume = true;
     private ImageView toCancelImageButtonView = null;
     private ImageView nextImageButtonView = null;
