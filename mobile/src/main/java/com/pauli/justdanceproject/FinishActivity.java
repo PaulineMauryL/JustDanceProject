@@ -11,6 +11,7 @@ import android.widget.TextView;
 public class FinishActivity extends AppCompatActivity {
 
     private String userID;
+    private int score;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

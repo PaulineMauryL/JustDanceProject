@@ -15,12 +15,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.util.Log;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DanceActivity extends AppCompatActivity {
 
     static final String NUMBER_POINTS = "Number_points";  //Added by Pauline for finish activity
+
+    //private CloneDanceRoomDatabase danceDB;
+    private String userID;
 
     private MusicDance musical = null;
     private Handler mHandler;
@@ -57,17 +63,31 @@ public class DanceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dance);
+        // Create instance of Sport Tracker Room DB
+        //danceDB = CloneDanceRoomDatabase.getDatabase(getApplicationContext());
+
+
         int[] music;
         Bundle bunble = getIntent().getExtras();
         if (bunble!=null){
             music = bunble.getIntArray("musicchosen");
+            userID = bunble.getString(LaunchActivity.USER_ID);
             if(music!=null) {
+                Log.d("PAULINE", "music not null");
                 musical = new MusicDance("musicname", music, this);
                 musical.getSound().start();
                 musical.getSound().setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
                     public void onCompletion(MediaPlayer mp){
+                        Log.d("PAULINE", "onCompletion");
+                        //Store in database
+                        //String music_name = musical.getName();
+                        //SaveInDatabase rowAsyncTask = new SaveInDatabase(danceDB);
+                        //rowAsyncTask.execute(userID, music_name, score);
+                        Log.d("PAULINE", "After Asynk Task");
+
                         Intent intentFinishDance = new Intent(DanceActivity.this, FinishActivity.class);
-                        intentFinishDance.putExtra(NUMBER_POINTS,score);
+                        intentFinishDance.putExtra(LaunchActivity.USER_ID, userID);
+                        intentFinishDance.putExtra(NUMBER_POINTS, score);
                         isRunning.set(false);
                         startActivity(intentFinishDance);
                     }
@@ -207,7 +227,6 @@ public class DanceActivity extends AppCompatActivity {
         alert.show();
 
     }
-
     private Runnable progressRunnable = new Runnable() {
         Bundle messageBundle=new Bundle();
         Message myMessage;
