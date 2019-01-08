@@ -41,7 +41,7 @@ import static android.graphics.Color.RED;
 import static android.graphics.Color.TRANSPARENT;
 
 
-public class PerformanceFragment extends Fragment {
+public class MusicalinetteFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private String userID;
@@ -76,17 +76,13 @@ public class PerformanceFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.txt_dance:
-                Intent intent_dance = new Intent(getActivity(), MainActivity.class);
-                startActivity(intent_dance);
-                break;
-
             case R.id.txt_edit_profile:
                 Intent intent_edit = new Intent(getActivity(), EditUser.class);
                 intent_edit.putExtra(LaunchActivity.USER_ID, userID);
+                intent_edit.putExtra(EditUser.ACTIVITY_NAME,MainActivity.ACTIVITY_NAME);
                 startActivity(intent_edit);
+                getActivity().finish();
                 break;
-
             case R.id.txt_change_user:                            // to copy in main activity and the three fragments
                 // Check if user really wants to change
                 builder = new AlertDialog.Builder(getActivity());
@@ -95,12 +91,11 @@ public class PerformanceFragment extends Fragment {
                 builder.setMessage("Change user").setTitle("userChange");
 
                 //Setting message manually and performing action on button click
-                builder.setMessage("Do you really want to change user ?")
+                builder.setMessage(R.string.QuestionChangeUser)
                         .setCancelable(false)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                getActivity().finish();
-                                Toast.makeText(getActivity().getApplicationContext(),"Ok ! See you another time",
+                                Toast.makeText(getActivity().getApplicationContext(),getString(R.string.YesChangeUserPopUp),
                                         Toast.LENGTH_SHORT).show();
                                 // Leave
                                 Intent intent_change = new Intent(getActivity().getApplication(), LaunchActivity.class);
@@ -109,18 +104,18 @@ public class PerformanceFragment extends Fragment {
 
                             }
                         })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 //  Action for 'NO' Button
                                 dialog.cancel();
-                                Toast.makeText(getActivity().getApplicationContext(),"Good choice",
+                                Toast.makeText(getActivity().getApplicationContext(),getString(R.string.NoChangeUserPopUp),
                                         Toast.LENGTH_SHORT).show();
                             }
                         });
                 //Creating dialog box
                 AlertDialog alert = builder.create();
                 //Setting the title manually
-                alert.setTitle("Change of dancer");
+                alert.setTitle(R.string.ChangeOfDancerTitle);
                 alert.show();
 
                 break;
@@ -128,7 +123,7 @@ public class PerformanceFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    public PerformanceFragment() {
+    public MusicalinetteFragment() {
         // Required empty public constructor
     }
 

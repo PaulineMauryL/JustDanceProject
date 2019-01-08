@@ -1,22 +1,19 @@
 package com.pauli.justdanceproject;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 
-public class ShowProfile extends AppCompatActivity implements PerformanceFragment
-        .OnFragmentInteractionListener, HistoryFragment.OnFragmentInteractionListener,
-        LevelUserFragment.OnFragmentInteractionListener{
+public class ShowProfile extends AppCompatActivity implements MusicalinetteFragment
+        .OnFragmentInteractionListener, CreuseFragment.OnFragmentInteractionListener,
+        HerculeFragment.OnFragmentInteractionListener{
 
     private final String TAG = this.getClass().getSimpleName();
 
-    private PerformanceFragment perfFragment;
-    private HistoryFragment historyFragment;
-    private LevelUserFragment levelFragment;
+    private MusicalinetteFragment perfFragment;
+    private CreuseFragment historyFragment;
+    private HerculeFragment levelFragment;
     private SectionsStatePagerAdapter mSectionStatePagerAdapter;
 
     @Override
@@ -27,9 +24,9 @@ public class ShowProfile extends AppCompatActivity implements PerformanceFragmen
         mSectionStatePagerAdapter = new SectionsStatePagerAdapter(getSupportFragmentManager());
 
         // Do this in case of detaching of Fragments
-        perfFragment = new PerformanceFragment();
-        historyFragment = new HistoryFragment();
-        levelFragment = new LevelUserFragment();
+        perfFragment = new MusicalinetteFragment();
+        historyFragment = new CreuseFragment();
+        levelFragment = new HerculeFragment();
 
         ViewPager mViewPager = findViewById(R.id.profileViewPager);
         setUpViewPager(mViewPager);
