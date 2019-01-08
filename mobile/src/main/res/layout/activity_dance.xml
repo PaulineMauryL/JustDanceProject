@@ -89,6 +89,7 @@
             android:layout_height="60dp"
             android:background="@drawable/ic_launcher_foreground"
             android:saveEnabled="false"
+            android:onClick="ResumeMusic"
             android:scaleType="fitEnd"
             app:srcCompat="@drawable/pausebutton" />
 
