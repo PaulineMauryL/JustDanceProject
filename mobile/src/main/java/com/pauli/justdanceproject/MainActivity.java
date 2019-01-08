@@ -52,8 +52,8 @@ public class MainActivity extends AppCompatActivity {
             intentStartDance.putExtra("musicchosen",chosenMusic);
             startActivity(intentStartDance);
         }else {
-            TextView textView =  findViewById(R.id.StartDanceText);
-            textView.setText("You need to choose a music first!");
+            DialogOk dialogOk = new DialogOk(MainActivity.this,getString(R.string.error_message_music_selected));
+            dialogOk.creat();
         }
     }
 
