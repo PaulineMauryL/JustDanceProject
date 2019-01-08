@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         if(chosenMusic[0] != 0){
             Intent intentStartDance = new Intent(MainActivity.this,DanceActivity.class);
             intentStartDance.putExtra("musicchosen",chosenMusic);
+            intentStartDance.putExtra(LaunchActivity.USER_ID, userID);
             startActivity(intentStartDance);
         }else {
             TextView textView =  findViewById(R.id.StartDanceText);

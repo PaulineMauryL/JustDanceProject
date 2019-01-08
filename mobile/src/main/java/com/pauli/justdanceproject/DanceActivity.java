@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.util.Log;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -25,6 +26,9 @@ public class DanceActivity extends AppCompatActivity {
 
     static final String NUMBER_POINTS = "Number_points";  //Added by Pauline for finish activity
 
+    //private CloneDanceRoomDatabase danceDB;
+
+    //private String userID;
     private MusicDance musical = null;
     private Handler mHandler;
     //private int[] music = null;
@@ -47,9 +51,9 @@ public class DanceActivity extends AppCompatActivity {
             // Incrémenter la ProgressBar, on est bien dans la Thread de l'IHM
             bar.incrementProgressBy(progress);
             // On peut faire toute action qui met à jour l'IHM
-
         }
     };
+
     public static final String RECEIVE_ACC_RATE = "RECEIVE_ACC_RATE";
     public static final String ACC_RATE = "ACC_RATE";
     private AccRateBroadcastReceiver accRateBroadcastReceiver;
@@ -58,17 +62,30 @@ public class DanceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dance);
-        int[] music;
+
+        // Create instance of Sport Tracker Room DB
+        //danceDB = CloneDanceRoomDatabase.getDatabase(getApplicationContext());
+
+        //Get information
         Bundle bunble = getIntent().getExtras();
         if (bunble!=null){
-            music = bunble.getIntArray("musicchosen");
-            if(music!=null) {
+            int[] music = bunble.getIntArray("musicchosen");
+            //userID = bunble.getString(LaunchActivity.USER_ID);
+            if(music !=null) {
                 musical = new MusicDance("musicname", music, this);
                 musical.getSound().start();
                 musical.getSound().setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
+                    @Override
                     public void onCompletion(MediaPlayer mp){
+                        Log.d("PAULINE", "onCompletion");
+                        //Store in database
+                        //String music_name = musical.getName();
+                        //SaveInDatabase rowAsyncTask = new SaveInDatabase(danceDB);
+                        //rowAsyncTask.execute(userID, music_name, score);
+                        Log.d("PAULINE", "After Asynk Task");
+
                         Intent intentFinishDance = new Intent(DanceActivity.this, FinishActivity.class);
-                        intentFinishDance.putExtra(NUMBER_POINTS,score);
+                        intentFinishDance.putExtra(NUMBER_POINTS, score);
                         startActivity(intentFinishDance);
                     }
                 });
@@ -81,7 +98,9 @@ public class DanceActivity extends AppCompatActivity {
                 bar.setMax(210);
             }
         }
+
         //startWatchActivity();
+
     }
 
     @Override
