@@ -205,6 +205,7 @@ public class DanceActivity extends AppCompatActivity {
                         isRunning.set(false);
                         // Leave
                         Intent intent_change = new Intent(getApplication(), MainActivity.class);
+                        intent_change.putExtra(LaunchActivity.USER_ID,userID);
                         startActivity(intent_change);
                         finish();
 

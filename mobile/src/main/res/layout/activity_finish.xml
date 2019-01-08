@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:contentDescription="@string/attribute_picture"
-            app:srcCompat="@mipmap/ic_launcher_round" />
+            app:srcCompat="@drawable/pausebutton" />
 
         <TextView
             android:id="@+id/txt_level"
