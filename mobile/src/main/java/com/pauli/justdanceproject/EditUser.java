@@ -48,7 +48,8 @@ public class EditUser extends AppCompatActivity {
     AlertDialog.Builder builder;  //Choose a version by chance here.
 
     TextView edit_username;
-    String language;  //default language
+    String languageString;  //default languageString
+    private Translation lang = new Translation();
 
     Switch s_english;
     Switch s_french;
@@ -60,6 +61,7 @@ public class EditUser extends AppCompatActivity {
     private Profile userProfile;
     private String userID;
     private Uri savedImageUri;
+
 
     private static final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private static final DatabaseReference profileGetRef = database.getReference("profiles");
@@ -82,7 +84,7 @@ public class EditUser extends AppCompatActivity {
         s_spanish.setChecked(false);
         s_german.setChecked(false);
 
-        language = getString(R.string.english);
+        languageString = getString(R.string.english);
 
         Intent intent = getIntent();
 
@@ -111,10 +113,11 @@ public class EditUser extends AppCompatActivity {
         s_english.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    language = getString(R.string.english);
+                    languageString = getString(R.string.english);
                     s_french.setChecked(false);
                     s_spanish.setChecked(false);
                     s_german.setChecked(false);
+                    lang.changeLanguage(getBaseContext(),languageString,userID);
                 } else {
                     s_english.setChecked(false);
                 }
@@ -124,10 +127,11 @@ public class EditUser extends AppCompatActivity {
         s_french.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    language = getString(R.string.french);
+                    languageString = getString(R.string.french);
                     s_english.setChecked(false);
                     s_spanish.setChecked(false);
                     s_german.setChecked(false);
+                    lang.changeLanguage(getBaseContext(),languageString,userID);
                 } else {
                     s_french.setChecked(false);
                 }
@@ -157,6 +161,7 @@ public class EditUser extends AppCompatActivity {
         });
     }
 
+
     // To keep image after config change
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -164,12 +169,11 @@ public class EditUser extends AppCompatActivity {
         outState.putParcelable("ImageUri", savedImageUri);
     }
 
-
     ////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////// Save editted data in Firebase /////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////
     public void edit_ok(View view) {
-        // change info in database with username, photo and language
+        // change info in database with username, photo and languageString
         boolean checked = false;
         checked = checkProfile(checked);
         if(checked) {
@@ -182,7 +186,7 @@ public class EditUser extends AppCompatActivity {
         final String username = ((EditText) findViewById(R.id.editUsername)).getText().toString();
         if(username.equals("")) {           //if no name then not ok
             Toast.makeText(this, R.string.nameEmpty, Toast.LENGTH_SHORT).show();
-        } else if (s_english.isChecked() == s_french.isChecked()) {  // (!XOR) to check only 1 language selected
+        } else if (s_english.isChecked() == s_french.isChecked()) {  // (!XOR) to check only 1 languageString selected
             Toast.makeText(this, R.string.noSelectedLanguages, Toast.LENGTH_SHORT).show();
         } else {
             checked = true;
@@ -194,7 +198,7 @@ public class EditUser extends AppCompatActivity {
     private void editUser() {
         TextView username = findViewById(R.id.editUsername);
 
-        userProfile = new Profile(username.getText().toString(), language);
+        userProfile = new Profile(username.getText().toString(), languageString);
 
         if (imageFile == null) {
             userProfile.photoPath = "";
@@ -451,3 +455,4 @@ public class EditUser extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 }
+
