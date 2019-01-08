@@ -51,9 +51,9 @@ public class DanceActivity extends AppCompatActivity {
             // Incrémenter la ProgressBar, on est bien dans la Thread de l'IHM
             bar.incrementProgressBy(progress);
             // On peut faire toute action qui met à jour l'IHM
+
         }
     };
-
     public static final String RECEIVE_ACC_RATE = "RECEIVE_ACC_RATE";
     public static final String ACC_RATE = "ACC_RATE";
     private AccRateBroadcastReceiver accRateBroadcastReceiver;
@@ -62,20 +62,20 @@ public class DanceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dance);
-
         // Create instance of Sport Tracker Room DB
         //danceDB = CloneDanceRoomDatabase.getDatabase(getApplicationContext());
 
         //Get information
+
+        int[] music;
         Bundle bunble = getIntent().getExtras();
         if (bunble!=null){
-            int[] music = bunble.getIntArray("musicchosen");
+            music = bunble.getIntArray("musicchosen");
             //userID = bunble.getString(LaunchActivity.USER_ID);
-            if(music !=null) {
+            if(music!=null) {
                 musical = new MusicDance("musicname", music, this);
                 musical.getSound().start();
                 musical.getSound().setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
-                    @Override
                     public void onCompletion(MediaPlayer mp){
                         Log.d("PAULINE", "onCompletion");
                         //Store in database
@@ -98,9 +98,7 @@ public class DanceActivity extends AppCompatActivity {
                 bar.setMax(210);
             }
         }
-
-        //startWatchActivity();
-
+        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){startWatchActivity();}
     }
 
     @Override

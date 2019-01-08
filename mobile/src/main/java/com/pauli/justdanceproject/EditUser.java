@@ -47,6 +47,8 @@ public class EditUser extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
     AlertDialog.Builder builder;  //Choose a version by chance here.
 
+    public static final String ACTIVITY_NAME = "activity_name";
+
     TextView edit_username;
     String languageString;  //default languageString
     private Translation lang = new Translation();
@@ -276,34 +278,67 @@ public class EditUser extends AppCompatActivity {
     ////////////////////////////////////////////////////////////////////////////////////////////
     public void do_not_edit(View view) {  //return to launch activity
         // Check if user really wants to change
-        builder = new AlertDialog.Builder(this);
+        if(getIntent().getStringExtra(ACTIVITY_NAME).equals(LaunchActivity.ACTIVITY_NAME)){
+            builder = new AlertDialog.Builder(this);
 
-        //Uncomment the below code to Set the message and title from the strings.xml file
-        builder.setMessage("Change user").setTitle("userChange");
+            //Uncomment the below code to Set the message and title from the strings.xml file
+            builder.setMessage("Change user").setTitle("userChange");
 
-        //Setting message manually and performing action on button click
-        builder.setMessage("Was it the wrong name ?")
-                .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // Leave
-                        Intent intent = new Intent(EditUser.this, LaunchActivity.class);
-                        startActivity(intent);
-                        finish();
+            //Setting message manually and performing action on button click
+            builder.setMessage(R.string.quit_without_save)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // Leave
+                            Intent intent = new Intent(EditUser.this, LaunchActivity.class);
+                            startActivity(intent);
+                            finish();
 
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //  Action for 'NO' Button
-                        dialog.cancel();
-                    }
-                });
-        //Creating dialog box
-        AlertDialog alert = builder.create();
-        //Setting the title manually
-        alert.setTitle("Change of dancer");
-        alert.show();
+                        }
+                    })
+                    .setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //  Action for 'NO' Button
+                            dialog.cancel();
+                        }
+                    });
+            //Creating dialog box
+            AlertDialog alert = builder.create();
+            //Setting the title manually
+            alert.setTitle(R.string.ChangeOfDancerTitle);
+            alert.show();
+        } else if(getIntent().getStringExtra(ACTIVITY_NAME).equals(MainActivity.ACTIVITY_NAME)){
+            builder = new AlertDialog.Builder(this);
+
+            //Uncomment the below code to Set the message and title from the strings.xml file
+            builder.setMessage("Change user").setTitle("userChange");
+
+            //Setting message manually and performing action on button click
+            builder.setMessage(R.string.quit_without_save)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // Leave
+                            Intent intent = new Intent(EditUser.this, MainActivity.class);
+                            intent.putExtra(LaunchActivity.USER_ID, userID);
+                            startActivity(intent);
+                            finish();
+
+                        }
+                    })
+                    .setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //  Action for 'NO' Button
+                            dialog.cancel();
+                        }
+                    });
+            //Creating dialog box
+            AlertDialog alert = builder.create();
+            //Setting the title manually
+            alert.setTitle(getString(R.string.no_saving));
+            alert.show();
+        }
+
 
     }
 

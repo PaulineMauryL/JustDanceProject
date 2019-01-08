@@ -3,11 +3,8 @@ package com.pauli.justdanceproject;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -16,27 +13,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link LevelUserFragment.OnFragmentInteractionListener} interface
+ * {@link HerculeFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  */
-public class LevelUserFragment extends Fragment {
+public class HerculeFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private String userID;
@@ -54,7 +40,7 @@ public class LevelUserFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        fragmentView = inflater.inflate(R.layout.fragment_level_user, container, false);
+        fragmentView = inflater.inflate(R.layout.fragment_hercule, container, false);
 
         Intent intent = getActivity().getIntent();
         if (intent.hasExtra(LaunchActivity.USER_ID)) {
@@ -121,12 +107,16 @@ public class LevelUserFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.txt_dance:
                 Intent intent_dance = new Intent(getActivity(), MainActivity.class);
+                intent_dance.putExtra(LaunchActivity.USER_ID, userID);
                 startActivity(intent_dance);
+                getActivity().finish();
                 break;
             case R.id.txt_edit_profile:
                 Intent intent_edit = new Intent(getActivity(), EditUser.class);
                 intent_edit.putExtra(LaunchActivity.USER_ID, userID);
+                intent_edit.putExtra(EditUser.ACTIVITY_NAME,MainActivity.ACTIVITY_NAME);
                 startActivity(intent_edit);
+                getActivity().finish();
                 break;
             case R.id.txt_change_user:                            // to copy in main activity and the three fragments
                 // Check if user really wants to change
@@ -136,12 +126,11 @@ public class LevelUserFragment extends Fragment {
                 builder.setMessage("Change user").setTitle("userChange");
 
                 //Setting message manually and performing action on button click
-                builder.setMessage("Do you really want to change user ?")
+                builder.setMessage(R.string.QuestionChangeUser)
                         .setCancelable(false)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                getActivity().finish();
-                                Toast.makeText(getActivity().getApplicationContext(),"Ok ! See you another time",
+                                Toast.makeText(getActivity().getApplicationContext(),getString(R.string.YesChangeUserPopUp),
                                         Toast.LENGTH_SHORT).show();
                                 // Leave
                                 Intent intent_change = new Intent(getActivity().getApplication(), LaunchActivity.class);
@@ -150,18 +139,18 @@ public class LevelUserFragment extends Fragment {
 
                             }
                         })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 //  Action for 'NO' Button
                                 dialog.cancel();
-                                Toast.makeText(getActivity().getApplicationContext(),"Good choice",
+                                Toast.makeText(getActivity().getApplicationContext(),getString(R.string.NoChangeUserPopUp),
                                         Toast.LENGTH_SHORT).show();
                             }
                         });
                 //Creating dialog box
                 AlertDialog alert = builder.create();
                 //Setting the title manually
-                alert.setTitle("Change of dancer");
+                alert.setTitle(R.string.ChangeOfDancerTitle);
                 alert.show();
 
                 break;
@@ -169,7 +158,7 @@ public class LevelUserFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    public LevelUserFragment() {
+    public HerculeFragment() {
         // Required empty public constructor
     }
 

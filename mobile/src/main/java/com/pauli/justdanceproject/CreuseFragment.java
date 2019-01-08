@@ -16,7 +16,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,7 +28,7 @@ import java.util.Date;
 import java.util.Locale;
 
 
-public class HistoryFragment extends Fragment {
+public class CreuseFragment extends Fragment {
 
     private final String TAG = this.getClass().getSimpleName();
     AlertDialog.Builder builder;
@@ -59,12 +58,16 @@ public class HistoryFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.txt_dance:
                 Intent intent_dance = new Intent(getActivity(), MainActivity.class);
+                intent_dance.putExtra(LaunchActivity.USER_ID, userID);
                 startActivity(intent_dance);
+                getActivity().finish();
                 break;
             case R.id.txt_edit_profile:
                 Intent intent_edit = new Intent(getActivity(), EditUser.class);
                 intent_edit.putExtra(LaunchActivity.USER_ID, userID);
+                intent_edit.putExtra(EditUser.ACTIVITY_NAME,MainActivity.ACTIVITY_NAME);
                 startActivity(intent_edit);
+                getActivity().finish();
                 break;
             case R.id.txt_change_user:                            // to copy in main activity and the three fragments
                 // Check if user really wants to change
@@ -74,12 +77,11 @@ public class HistoryFragment extends Fragment {
                 builder.setMessage("Change user").setTitle("userChange");
 
                 //Setting message manually and performing action on button click
-                builder.setMessage("Do you really want to change user ?")
+                builder.setMessage(R.string.QuestionChangeUser)
                         .setCancelable(false)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                getActivity().finish();
-                                Toast.makeText(getActivity().getApplicationContext(),"Ok ! See you another time",
+                                Toast.makeText(getActivity().getApplicationContext(),getString(R.string.YesChangeUserPopUp),
                                         Toast.LENGTH_SHORT).show();
                                 // Leave
                                 Intent intent_change = new Intent(getActivity().getApplication(), LaunchActivity.class);
@@ -88,18 +90,18 @@ public class HistoryFragment extends Fragment {
 
                             }
                         })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 //  Action for 'NO' Button
                                 dialog.cancel();
-                                Toast.makeText(getActivity().getApplicationContext(),"Good choice",
+                                Toast.makeText(getActivity().getApplicationContext(),getString(R.string.NoChangeUserPopUp),
                                         Toast.LENGTH_SHORT).show();
                             }
                         });
                 //Creating dialog box
                 AlertDialog alert = builder.create();
                 //Setting the title manually
-                alert.setTitle("Change of dancer");
+                alert.setTitle(R.string.ChangeOfDancerTitle);
                 alert.show();
 
                 break;
@@ -107,7 +109,7 @@ public class HistoryFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    public HistoryFragment() {
+    public CreuseFragment() {
         // Required empty public constructor
     }
 
@@ -116,11 +118,7 @@ public class HistoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
             savedInstanceState) {
         // Inflate the layout for this fragment
-        fragmentView = inflater.inflate(R.layout.fragment_history, container, false);
-
-        listView = fragmentView.findViewById(R.id.myHistoryList);
-        adapter = new RecordingAdapter(getActivity(), R.layout.row_history_layout);
-        listView.setAdapter(adapter);
+        fragmentView = inflater.inflate(R.layout.fragment_creuse, container, false);
 
         Intent intent = getActivity().getIntent();
         if (intent.hasExtra(LaunchActivity.USER_ID)) {

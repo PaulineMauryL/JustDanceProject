@@ -245,6 +245,12 @@ public class WearService extends WearableListenerService {
                 startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(startIntent);
                 break;
+            case BuildConfig.W_path_message:
+                Log.v(TAG,"Message received: " + data);
+                Intent intent = new Intent(LaunchActivity.ACTION_RECEIVE_MESSAGE);
+                intent.putExtra(LaunchActivity.MESSAGE,data);
+                LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+                break;
             case BuildConfig.W_path_acknowledge:
                 Log.v(TAG, "Received acknowledgment");
                 break;
