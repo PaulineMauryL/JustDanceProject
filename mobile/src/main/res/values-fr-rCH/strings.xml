@@ -59,5 +59,7 @@
     <string name="HerculeName">Hercule - De Zéro en Héros</string>
     <string name="FrogPrincessName">La Princesse et la Grenouille - Creuse</string>
     <string name="yourScore">Tes résultats sur cette danse sont listés ci-dessous</string>
+    <string name="error_message_bluetooth">Merci d\'activer ton bluetooth</string>
+    <string name="error_message_pair_watch">Merci d\'apairer ta montre à la tablette</string>
 
 </resources>
