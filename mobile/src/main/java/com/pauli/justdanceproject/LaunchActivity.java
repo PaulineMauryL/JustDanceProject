@@ -44,19 +44,21 @@ public class LaunchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
-
+        Log.d(TAG,"test :"+Boolean.parseBoolean(BuildConfig.W_flag_watch_enable));
         // Get acknowledge from the watch
-        LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Log.d(TAG, "Message received");
-                String s_message = intent.getStringExtra(MESSAGE);
-                Log.d(TAG,"Message receive: " + s_message);
-                if(s_message.equals(BuildConfig.W_test_isPaired_true)){
-                    isWatchPaired = true;
+        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)) {
+            LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    Log.d(TAG, "Message received");
+                    String s_message = intent.getStringExtra(MESSAGE);
+                    Log.d(TAG, "Message receive: " + s_message);
+                    if (s_message.equals(BuildConfig.W_test_isPaired_true)) {
+                        isWatchPaired = true;
+                    }
                 }
-            }
-        }, new IntentFilter(ACTION_RECEIVE_MESSAGE));
+            }, new IntentFilter(ACTION_RECEIVE_MESSAGE));
+        }
         //Intent intent = getIntent();
 
        // Log.d(TAG, "oncreate");
@@ -74,17 +76,17 @@ public class LaunchActivity extends AppCompatActivity {
             DialogOk dialogOk = new DialogOk(LaunchActivity.this,getString(R.string.nameEmpty));
             dialogOk.creat();
         }
-        else if(!isBluetoothEnabled()){
+        else if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable) && !isBluetoothEnabled()){
             // check if the bluetooth is on
             DialogOk dialogOk = new DialogOk(LaunchActivity.this,getString(R.string.error_message_bluetooth));
             dialogOk.creat();
         }
-        else if (!isWatchPaired || !Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+        else if (Boolean.parseBoolean(BuildConfig.W_flag_watch_enable) && !isWatchPaired){
             // Check if the watch is paired
             DialogOk dialogOk = new DialogOk(LaunchActivity.this,getString(R.string.error_message_pair_watch));
             dialogOk.creat();
         }
-        else if(!isNetworkAvailable())
+        else if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable) && !isNetworkAvailable())
         {
             // Check if the internet connection works
             DialogOk dialogOk = new DialogOk(LaunchActivity.this,getString(R.string.internet_connection_message));
