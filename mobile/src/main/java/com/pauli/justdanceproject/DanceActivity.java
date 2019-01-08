@@ -13,7 +13,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -32,7 +31,9 @@ public class DanceActivity extends AppCompatActivity {
     private MusicDance musical = null;
     private Handler mHandler;
     private Boolean resume = true;
-    private ImageView imageButtonView = null;
+    private ImageView toCancelImageButtonView = null;
+    private ImageView nextImageButtonView = null;
+    private ImageView actualImageButtonView = null;
     private int index = 0;
     private int nextPosition = 0;
     private int askedPosition = 0;
@@ -105,14 +106,11 @@ public class DanceActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         mHandler.postDelayed(startMusic,1000);
-        // initialisation de la ProgressBar
         bar.setProgress(0);
-        // Définition de la Thread (peut être effectuée dans une classe externe ou interne)
         Thread background = new Thread(progressRunnable);
-        //Lancement de la Thread
         isPausing.set(true);
         isRunning.set(true);
-        background.start();// Get the accelerometer datas back from the watch
+        background.start();
         accRateBroadcastReceiver = new AccRateBroadcastReceiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(accRateBroadcastReceiver, new
                 IntentFilter(RECEIVE_ACC_RATE));
@@ -177,8 +175,8 @@ public class DanceActivity extends AppCompatActivity {
         while(i<musical.getTiming().length){
             delay = musical.getTiming()[i];
             mHandler.postDelayed(r1,delay-musical.getSound().getCurrentPosition());
-            mHandler.postDelayed(r2,delay-musical.getSound().getCurrentPosition()+600);
-            mHandler.postDelayed(r3,delay-musical.getSound().getCurrentPosition()+800);
+            mHandler.postDelayed(r2,delay-musical.getSound().getCurrentPosition()+500);
+            mHandler.postDelayed(r3,delay-musical.getSound().getCurrentPosition()+1100);
             i=i+2;
         }
     }
@@ -227,54 +225,17 @@ public class DanceActivity extends AppCompatActivity {
         alert.show();
 
     }
-
-    public void UpButton(View view) {
-        if (!resume){
-            imageButtonView = findViewById(R.id.UpView);
-            //actualPosition = 1;
-        }
-    }
-
-    public void MiddleButton(View view) {
-        if (!resume){
-            imageButtonView = findViewById(R.id.MiddleView);
-            //actualPosition = 2;
-        }
-    }
-
-    public void DownButton(View view) {
-        if (!resume){
-            imageButtonView = findViewById(R.id.BottomView);
-            //actualPosition = 3;
-        }
-    }
-
     private Runnable progressRunnable = new Runnable() {
-        /**
-         * Le Bundle qui porte les données du Message et sera transmis au Handler
-         */
         Bundle messageBundle=new Bundle();
-        /**
-         * Le message échangé entre la Thread et le Handler
-         */
         Message myMessage;
-        // Surcharge de la méthode run
         public void run() {
             try {
-                // Si isRunning est à false, la méthode run doit s'arrêter
                 while (isRunning.get()) {
-                    // Si l'activité est en pause mais pas morte
                     while (isPausing.get() && (isRunning.get())) {
-                        // Faire une pause ou un truc qui soulage le CPU (dépend du traitement)
-                        Thread.sleep(2000);
+                        Thread.sleep(100);
                     }
-                    // Effectuer le traitement, pour l'exemple je dors une seconde
                     Thread.sleep(100);
-                    // Envoyer le message au Handler (la méthode handler.obtainMessage est plus efficace
-                    // que créer un message à partir de rien, optimisation du pool de message du Handler)
-                    //Instanciation du message (la bonne méthode):
                     myMessage=handler.obtainMessage();
-                    //Ajouter des données à transmettre au Handler via le Bundle
                     if(askedPosition == actualPosition) {
                         messageBundle.putInt(PROGRESS_BAR_INCREMENT,3);
                         score = score+3;
@@ -284,13 +245,10 @@ public class DanceActivity extends AppCompatActivity {
                     }else{
                         messageBundle.putInt(PROGRESS_BAR_INCREMENT,0);
                     }
-                    //Ajouter le Bundle au message
                     myMessage.setData(messageBundle);
-                    //Envoyer le message
                     handler.sendMessage(myMessage);
                 }
             } catch (Throwable t) {
-                // gérer l'exception et arrêter le traitement
             }
         }
     };
@@ -300,31 +258,35 @@ public class DanceActivity extends AppCompatActivity {
             nextPosition = musical.getTiming()[index*2+1];
             switch (nextPosition){
                 case 1:
-                    imageButtonView = findViewById(R.id.UpView);
+                    nextImageButtonView = findViewById(R.id.UpView);
                     break;
                 case 2:
-                    imageButtonView = findViewById(R.id.MiddleView);
+                    nextImageButtonView = findViewById(R.id.MiddleView);
                     break;
                 case 3:
-                    imageButtonView = findViewById(R.id.BottomView);
+                    nextImageButtonView = findViewById(R.id.BottomView);
                     break;
             }
-            imageButtonView.setActivated(true);
-            imageButtonView.setEnabled(true);
+            nextImageButtonView.setActivated(true);
+            nextImageButtonView.setEnabled(true);
+            index = index+1;
+
+            actualImageButtonView = nextImageButtonView;
         }
     };
     final Runnable r2 = new Runnable() {
         public void run() {
             askedPosition = nextPosition;
-            imageButtonView.setActivated(true);
-            imageButtonView.setEnabled(false);
+            actualImageButtonView.setActivated(true);
+            actualImageButtonView.setEnabled(false);
+
+            toCancelImageButtonView= actualImageButtonView;
         }
     };
 
     final Runnable r3 = new Runnable() {
         public void run() {
-            imageButtonView.setActivated(false);
-            index = index+1;
+            toCancelImageButtonView.setActivated(false);
             nextPosition = 0;
             askedPosition = 0;
         }
