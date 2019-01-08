@@ -37,6 +37,7 @@ public class DanceActivity extends AppCompatActivity {
     //private int[] music = null;
     private Boolean resume = true;
     private TextView goodOrBad = null;
+    private ImageView imageButtonView = null;
     private ImageView toCancelImageButtonView = null;
     private ImageView nextImageButtonView = null;
     private ImageView actualImageButtonView = null;
@@ -99,8 +100,8 @@ public class DanceActivity extends AppCompatActivity {
                         Intent intentFinishDance = new Intent(DanceActivity.this, FinishActivity.class);
                         intentFinishDance.putExtra(LaunchActivity.USER_ID, userID);
                         intentFinishDance.putExtra(NUMBER_POINTS, score);
-                        isRunning.set(false);
                         startActivity(intentFinishDance);
+                        isRunning.set(false);
                         finish();
                     }
                 });
@@ -205,13 +206,11 @@ public class DanceActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton(R.string.ButtonQuit, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        isRunning.set(false);
-                        // Leave
                         Intent intent_change = new Intent(getApplication(), MainActivity.class);
                         intent_change.putExtra(LaunchActivity.USER_ID,userID);
                         startActivity(intent_change);
                         finish();
-
+                        isRunning.set(false);
                     }
                 })
                 .setNegativeButton(R.string.ButtonResume, new DialogInterface.OnClickListener() {
@@ -238,7 +237,7 @@ public class DanceActivity extends AppCompatActivity {
             try {
                 while (isRunning.get()) {
                     while (isPausing.get() && (isRunning.get())) {
-                        Thread.sleep(100);
+                        Thread.sleep(2000);
                     }
                     Thread.sleep(100);
                     myMessage=handler.obtainMessage();
@@ -254,7 +253,7 @@ public class DanceActivity extends AppCompatActivity {
                         goodOrBad = findViewById(R.id.danceGoodOrOk);
                         goodOrBad.setText(getString(R.string.ok));
                     }else{
-                        messageBundle.putInt(PROGRESS_BAR_INCREMENT,0);
+                        messageBundle.putInt(PROGRESS_BAR_INCREMENT,1);
                     }
                     myMessage.setData(messageBundle);
                     handler.sendMessage(myMessage);
