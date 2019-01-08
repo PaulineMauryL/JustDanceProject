@@ -18,12 +18,17 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.util.Log;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DanceActivity extends AppCompatActivity {
 
     static final String NUMBER_POINTS = "Number_points";  //Added by Pauline for finish activity
+
+    //private CloneDanceRoomDatabase danceDB;
+    private String userID;
+
     // temp
     private int counter;
     private TextView mText;
@@ -31,7 +36,10 @@ public class DanceActivity extends AppCompatActivity {
     private Handler mHandler;
     //private int[] music = null;
     private Boolean resume = true;
-    private ImageView imageButtonView = null;
+    private TextView goodOrBad = null;
+    private ImageView toCancelImageButtonView = null;
+    private ImageView nextImageButtonView = null;
+    private ImageView actualImageButtonView = null;
     private int index = 0;
     private int nextPosition = 0;
     private int askedPosition = 0;
@@ -66,19 +74,33 @@ public class DanceActivity extends AppCompatActivity {
         mText = findViewById(R.id.textViewMovements);
         counter =0;
 
+        // Create instance of Sport Tracker Room DB
+        //danceDB = CloneDanceRoomDatabase.getDatabase(getApplicationContext());
+
+
         int[] music;
         Bundle bunble = getIntent().getExtras();
         if (bunble!=null){
             music = bunble.getIntArray("musicchosen");
+            userID = bunble.getString(LaunchActivity.USER_ID);
             if(music!=null) {
+                Log.d("PAULINE", "music not null");
                 musical = new MusicDance("musicname", music, this);
                 musical.getSound().start();
                 musical.getSound().setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
                     public void onCompletion(MediaPlayer mp){
+                        Log.d("PAULINE", "onCompletion");
+                        //Store in database
+                        //String music_name = musical.getName();
+                        //SaveInDatabase rowAsyncTask = new SaveInDatabase(danceDB);
+                        //rowAsyncTask.execute(userID, music_name, score);
+                        Log.d("PAULINE", "After Asynk Task");
+
                         Intent intentFinishDance = new Intent(DanceActivity.this, FinishActivity.class);
-                        intentFinishDance.putExtra(NUMBER_POINTS,score);
-                        startActivity(intentFinishDance);
+                        intentFinishDance.putExtra(LaunchActivity.USER_ID, userID);
+                        intentFinishDance.putExtra(NUMBER_POINTS, score);
                         isRunning.set(false);
+                        startActivity(intentFinishDance);
                         finish();
                     }
                 });
@@ -101,14 +123,11 @@ public class DanceActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         mHandler.postDelayed(startMusic,1000);
-        // initialisation de la ProgressBar
         bar.setProgress(0);
-        // Définition de la Thread (peut être effectuée dans une classe externe ou interne)
         Thread background = new Thread(progressRunnable);
-        //Lancement de la Thread
         isPausing.set(true);
         isRunning.set(true);
-        background.start();// Get the accelerometer datas back from the watch
+        background.start();
         accRateBroadcastReceiver = new AccRateBroadcastReceiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(accRateBroadcastReceiver, new
                 IntentFilter(RECEIVE_COUNTER));
@@ -120,7 +139,6 @@ public class DanceActivity extends AppCompatActivity {
         isPausing.set(true);
         Communication.stopRecordingOnWear(DanceActivity.this, BuildConfig.W_dance_activity);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(accRateBroadcastReceiver);
-
     }
 
     @Override
@@ -141,7 +159,7 @@ public class DanceActivity extends AppCompatActivity {
             actualPosition = intent.getIntExtra(COUNTER,0);
             counter++;
             mText.setText("mode: " + actualPosition+"\n"
-            +"counter: " + counter);
+                    +"counter: " + counter);
         }
     }
 
@@ -161,9 +179,9 @@ public class DanceActivity extends AppCompatActivity {
         isPausing.set(false);
         while(i<musical.getTiming().length){
             delay = musical.getTiming()[i];
-            mHandler.postDelayed(r1,delay-musical.getSound().getCurrentPosition());
-            mHandler.postDelayed(r2,delay-musical.getSound().getCurrentPosition()+600);
-            mHandler.postDelayed(r3,delay-musical.getSound().getCurrentPosition()+800);
+            mHandler.postDelayed(r1,350*i+delay-musical.getSound().getCurrentPosition());
+            mHandler.postDelayed(r2,350*i+delay-musical.getSound().getCurrentPosition()+650);
+            mHandler.postDelayed(r3,350*i+delay-musical.getSound().getCurrentPosition()+1100);
             i=i+2;
         }
     }
@@ -187,12 +205,13 @@ public class DanceActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton(R.string.ButtonQuit, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        isRunning.set(false);
+                        musical.getSound().stop();
+                        finish();
                         // Leave
                         Intent intent_change = new Intent(getApplication(), MainActivity.class);
+                        intent_change.putExtra(LaunchActivity.USER_ID,userID);
                         startActivity(intent_change);
-                        finish();
-                        isRunning.set(false);
-
                     }
                 })
                 .setNegativeButton(R.string.ButtonResume, new DialogInterface.OnClickListener() {
@@ -212,70 +231,35 @@ public class DanceActivity extends AppCompatActivity {
         alert.show();
 
     }
-
-    public void UpButton(View view) {
-        if (!resume){
-            imageButtonView = findViewById(R.id.UpView);
-            //actualPosition = 1;
-        }
-    }
-
-    public void MiddleButton(View view) {
-        if (!resume){
-            imageButtonView = findViewById(R.id.MiddleView);
-            //actualPosition = 2;
-        }
-    }
-
-    public void DownButton(View view) {
-        if (!resume){
-            imageButtonView = findViewById(R.id.BottomView);
-            //actualPosition = 3;
-        }
-    }
-
     private Runnable progressRunnable = new Runnable() {
-        /**
-         * Le Bundle qui porte les données du Message et sera transmis au Handler
-         */
         Bundle messageBundle=new Bundle();
-        /**
-         * Le message échangé entre la Thread et le Handler
-         */
         Message myMessage;
-        // Surcharge de la méthode run
         public void run() {
             try {
-                // Si isRunning est à false, la méthode run doit s'arrêter
                 while (isRunning.get()) {
-                    // Si l'activité est en pause mais pas morte
                     while (isPausing.get() && (isRunning.get())) {
-                        // Faire une pause ou un truc qui soulage le CPU (dépend du traitement)
-                        Thread.sleep(2000);
+                        Thread.sleep(100);
                     }
-                    // Effectuer le traitement, pour l'exemple je dors une seconde
                     Thread.sleep(100);
-                    // Envoyer le message au Handler (la méthode handler.obtainMessage est plus efficace
-                    // que créer un message à partir de rien, optimisation du pool de message du Handler)
-                    //Instanciation du message (la bonne méthode):
                     myMessage=handler.obtainMessage();
-                    //Ajouter des données à transmettre au Handler via le Bundle
                     if(askedPosition == actualPosition) {
                         messageBundle.putInt(PROGRESS_BAR_INCREMENT,3);
                         score = score+3;
+                        goodOrBad = findViewById(R.id.danceGoodOrOk);
+                        goodOrBad.setText(getString(R.string.good));
+
                     }else if(nextPosition == actualPosition){
                         messageBundle.putInt(PROGRESS_BAR_INCREMENT,1);
                         score=score+1;
+                        goodOrBad = findViewById(R.id.danceGoodOrOk);
+                        goodOrBad.setText(getString(R.string.ok));
                     }else{
-                        messageBundle.putInt(PROGRESS_BAR_INCREMENT,0);
+                        messageBundle.putInt(PROGRESS_BAR_INCREMENT,1);
                     }
-                    //Ajouter le Bundle au message
                     myMessage.setData(messageBundle);
-                    //Envoyer le message
                     handler.sendMessage(myMessage);
                 }
             } catch (Throwable t) {
-                // gérer l'exception et arrêter le traitement
             }
         }
     };
@@ -285,33 +269,40 @@ public class DanceActivity extends AppCompatActivity {
             nextPosition = musical.getTiming()[index*2+1];
             switch (nextPosition){
                 case 1:
-                    imageButtonView = findViewById(R.id.UpView);
+                    nextImageButtonView = findViewById(R.id.UpView);
                     break;
                 case 2:
-                    imageButtonView = findViewById(R.id.MiddleView);
+                    nextImageButtonView = findViewById(R.id.MiddleView);
                     break;
                 case 3:
-                    imageButtonView = findViewById(R.id.BottomView);
+                    nextImageButtonView = findViewById(R.id.BottomView);
                     break;
             }
-            imageButtonView.setActivated(true);
-            imageButtonView.setEnabled(true);
+            nextImageButtonView.setActivated(true);
+            nextImageButtonView.setEnabled(true);
+            index = index+1;
+
+            actualImageButtonView = nextImageButtonView;
         }
     };
     final Runnable r2 = new Runnable() {
         public void run() {
             askedPosition = nextPosition;
-            imageButtonView.setActivated(true);
-            imageButtonView.setEnabled(false);
+            actualImageButtonView.setActivated(true);
+            actualImageButtonView.setEnabled(false);
+
+            toCancelImageButtonView= actualImageButtonView;
         }
     };
 
     final Runnable r3 = new Runnable() {
         public void run() {
-            imageButtonView.setActivated(false);
-            index = index+1;
+            toCancelImageButtonView.setActivated(false);
             nextPosition = 0;
             askedPosition = 0;
+
+            goodOrBad = findViewById(R.id.danceGoodOrOk);
+            goodOrBad.setText("");
         }
     };
 
@@ -321,3 +312,4 @@ public class DanceActivity extends AppCompatActivity {
         }
     };
 }
+
