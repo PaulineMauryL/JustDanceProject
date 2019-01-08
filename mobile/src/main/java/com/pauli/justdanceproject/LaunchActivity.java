@@ -1,13 +1,22 @@
 package com.pauli.justdanceproject;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,7 +48,7 @@ public class LaunchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
-        Intent intent = getIntent();
+        //Intent intent = getIntent();
 
        // Log.d(TAG, "oncreate");
         //username = findViewById(R.id.txt_enter_name);
@@ -49,11 +58,27 @@ public class LaunchActivity extends AppCompatActivity {
     public void begin_game(View view) {  //if button is clicked
 
         final String username = ((EditText) findViewById(R.id.txt_enter_name)).getText().toString();
-        if(username.equals("")) {
-            TextView empty_name_txt = findViewById(R.id.txt_name_empty);
-            empty_name_txt.setText(R.string.nameEmpty);
+        if(username.isEmpty()) {
+            // No connection to internet
+            final Dialog dialog = new Dialog(LaunchActivity.this); // Context, this, etc.
+            LayoutInflater inflater = getLayoutInflater();
+            View layout = inflater.inflate(R.layout.dialog_ok, null);
+            dialog.setContentView(layout);
+            ((TextView) dialog.findViewById(R.id.dialog_info_ok)).setText(R.string.nameEmpty);
+            Button dialogButton = dialog.findViewById(R.id.buttonOkDialog);
+            // if button is clicked, close the custom dialog
+            dialogButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+
         }
-        else {
+        else if(isNetworkAvailable())
+        {
+            // Connection to network work properly
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
             final DatabaseReference profileRef = database.getReference("profiles");
 
@@ -89,7 +114,30 @@ public class LaunchActivity extends AppCompatActivity {
                 }
             });
 
+        } else{
+            final Dialog dialog = new Dialog(LaunchActivity.this); // Context, this, etc.
+            LayoutInflater inflater = getLayoutInflater();
+            View layout = inflater.inflate(R.layout.dialog_ok, null);
+            dialog.setContentView(layout);
+            ((TextView) dialog.findViewById(R.id.dialog_info_ok)).setText(R.string.internet_connection_message);
+            dialog.setTitle(R.string.internet_connection_title);
+            Button dialogButton = dialog.findViewById(R.id.buttonOkDialog);
+            // if button is clicked, close the custom dialog
+            dialogButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+
         }
     }
-
+    // Check if the internet connection is available
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
 }

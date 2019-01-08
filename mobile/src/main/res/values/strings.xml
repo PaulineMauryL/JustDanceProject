@@ -138,4 +138,6 @@
     <string name="number_of_points">Number of points</string>
     <string name="level_user_dance">Level</string>
     <string name="title_activity_test_sensors">testSensors</string>
+    <string name="internet_connection_message">Please check your internet connection!</string>
+    <string name="internet_connection_title">Internet connection</string>
 </resources>
