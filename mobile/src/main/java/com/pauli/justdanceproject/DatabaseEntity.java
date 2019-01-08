@@ -1,4 +1,4 @@
-package com.pauli.justdanceproject;
+/*package com.pauli.justdanceproject;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
@@ -19,4 +19,4 @@ public class DatabaseEntity {
     public String music;
     @ColumnInfo
     public int score;
-}
+}*/

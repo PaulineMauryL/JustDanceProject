@@ -46,6 +46,13 @@
                     android:layout_weight="1"
                     android:layout_gravity="bottom" />
 
+                <TextView
+                    android:id="@+id/textViewMovements"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="TextView" />
+
 
             </LinearLayout>
             <LinearLayout

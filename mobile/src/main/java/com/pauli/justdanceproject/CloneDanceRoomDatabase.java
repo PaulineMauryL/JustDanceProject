@@ -1,4 +1,4 @@
-package com.pauli.justdanceproject;
+/*package com.pauli.justdanceproject;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
@@ -27,3 +27,4 @@ public abstract class CloneDanceRoomDatabase extends RoomDatabase {
         INSTANCE = null;
     }
 }
+*/

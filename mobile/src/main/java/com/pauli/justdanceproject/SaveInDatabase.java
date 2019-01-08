@@ -1,4 +1,4 @@
-package com.pauli.justdanceproject;
+/*package com.pauli.justdanceproject;
 
 import android.os.AsyncTask;
 
@@ -22,4 +22,4 @@ public class SaveInDatabase extends AsyncTask<Object, Void, Void> {
         return null;
     }
 
-}
+}*/

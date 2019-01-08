@@ -1,4 +1,4 @@
-package com.pauli.justdanceproject;
+/*package com.pauli.justdanceproject;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
@@ -24,4 +24,4 @@ public interface DataDao {
 
     @Query("DELETE FROM DatabaseEntity")
     void deleteAll();
-}
+}*/
