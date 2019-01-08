@@ -68,6 +68,7 @@ public class DanceActivity extends AppCompatActivity {
                     public void onCompletion(MediaPlayer mp){
                         Intent intentFinishDance = new Intent(DanceActivity.this, FinishActivity.class);
                         intentFinishDance.putExtra(NUMBER_POINTS,score);
+                        isRunning.set(false);
                         startActivity(intentFinishDance);
                     }
                 });
@@ -181,7 +182,7 @@ public class DanceActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton(R.string.ButtonQuit, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        finish();
+                        isRunning.set(false);
                         // Leave
                         Intent intent_change = new Intent(getApplication(), MainActivity.class);
                         startActivity(intent_change);
@@ -206,6 +207,7 @@ public class DanceActivity extends AppCompatActivity {
         alert.show();
 
     }
+
     private Runnable progressRunnable = new Runnable() {
         Bundle messageBundle=new Bundle();
         Message myMessage;
