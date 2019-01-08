@@ -16,7 +16,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -113,7 +112,7 @@ public class CreuseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
             savedInstanceState) {
         // Inflate the layout for this fragment
-        fragmentView = inflater.inflate(R.layout.fragment_history, container, false);
+        fragmentView = inflater.inflate(R.layout.fragment_creuse, container, false);
 
         listView = fragmentView.findViewById(R.id.myHistoryList);
         adapter = new RecordingAdapter(getActivity(), R.layout.row_history_layout);
