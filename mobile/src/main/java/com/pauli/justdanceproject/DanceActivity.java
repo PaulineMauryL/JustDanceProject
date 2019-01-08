@@ -2,6 +2,7 @@ package com.pauli.justdanceproject;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.MediaPlayer;
@@ -9,12 +10,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -78,7 +81,7 @@ public class DanceActivity extends AppCompatActivity {
                 bar.setMax(210);
             }
         }
-        startWatchActivity();
+        //startWatchActivity();
     }
 
     @Override
@@ -164,25 +167,47 @@ public class DanceActivity extends AppCompatActivity {
     }
 
     public void ResumeMusic(View view) {
-        Button pauseButton = findViewById(R.id.ResumeButton);
+        musical.getSound().pause();
+        mHandler.removeCallbacks(r1);
+        mHandler.removeCallbacks(r2);
+        mHandler.removeCallbacks(r3);
+        resume = true;
+        isPausing.set(true);
 
-        if (musical.getSound() !=null){
-            if (resume){
-                musical.getSound().start();
-                resume = false;
-                pauseButton.setText(R.string.Resume);
-                movementsOnMusic();
-                isPausing.set(false);
-            }else {
-                musical.getSound().pause();
-                mHandler.removeCallbacks(r1);
-                mHandler.removeCallbacks(r2);
-                mHandler.removeCallbacks(r3);
-                resume = true;
-                isPausing.set(true);
-                pauseButton.setText(R.string.Restart);
-            }
-        }
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(this);
+
+        //Uncomment the below code to Set the message and title from the strings.xml file
+        builder.setMessage(R.string.TitleQuitOrPause).setTitle(R.string.IdQuitOrPause);
+
+        //Setting message manually and performing action on button click
+        builder.setMessage(R.string.QuitOrResumeText)
+                .setCancelable(false)
+                .setPositiveButton(R.string.ButtonQuit, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        finish();
+                        // Leave
+                        Intent intent_change = new Intent(getApplication(), MainActivity.class);
+                        startActivity(intent_change);
+                        finish();
+
+                    }
+                })
+                .setNegativeButton(R.string.ButtonResume, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //  Action for 'NO' Button
+                        dialog.cancel();
+                        musical.getSound().start();
+                        resume = false;
+                        movementsOnMusic();
+                        isPausing.set(false);
+                    }
+                });
+        //Creating dialog box
+        AlertDialog alert = builder.create();
+        //Setting the title manually
+        alert.setTitle(R.string.TitleQuitOrPause);
+        alert.show();
 
     }
 

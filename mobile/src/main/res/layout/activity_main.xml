@@ -243,7 +243,7 @@
             android:layout_marginBottom="8dp"
             android:background="@drawable/round_shape"
             android:onClick="StartDance"
-            android:text="Start dance !"
+            android:text="@string/start_dance"
             android:textColor="@color/colorAccent"
             android:textSize="24sp"
             android:textStyle="bold"

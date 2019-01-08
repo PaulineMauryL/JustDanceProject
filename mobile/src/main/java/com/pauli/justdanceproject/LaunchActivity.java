@@ -1,28 +1,19 @@
 package com.pauli.justdanceproject;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 public class LaunchActivity extends AppCompatActivity {
 
@@ -30,6 +21,8 @@ public class LaunchActivity extends AppCompatActivity {
 
     public static final String USER_ID = "USER_ID";
     public static final String USERNAME = "username";
+    private Translation translation = new Translation();
+    private String language;
 
     private String userID;
     boolean notMember = true;
@@ -64,6 +57,8 @@ public class LaunchActivity extends AppCompatActivity {
                     for (final DataSnapshot user : dataSnapshot.getChildren()) {
 
                         String usernameDatabase = user.child("username").getValue(String.class);
+                        language = user.child("language").getValue(String.class);
+
                         if (username.equals(usernameDatabase)) {
                             userID = user.getKey();
                             notMember = false;
@@ -77,6 +72,7 @@ public class LaunchActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     } else {              // user exist, go to mainActivity to select a dance
+                        translation.changeLanguage(getBaseContext(),language,userID);
                         Intent intent = new Intent(LaunchActivity.this, MainActivity.class);
                         intent.putExtra(USER_ID, userID);
                         startActivity(intent);
@@ -91,5 +87,7 @@ public class LaunchActivity extends AppCompatActivity {
 
         }
     }
+
+
 
 }

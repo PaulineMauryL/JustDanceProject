@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">JustDanceProject</string>
+    <string name="start_dance">Débuter la danse !</string>
+    <string name="Up" translatable="false">Monte !</string>
+    <string name="Down" translatable="false">Descends !</string>
+    <string name="Middle">Reste au centre !</string>
+    <string name="Resume">Pause</string>
+    <string name="Restart">Redémarre</string>
+    <string name="selectProfilePicture">Tu dois choisir une photo de profil !</string>
+    <string name="uploadPictureFailed">La photo n\'a pas pu être téléchargée</string>
+    <string name="registrationSuccessful">Enregistrement réussi</string>
+    <string name="registrationFailed">Enregistrement manqué. Merci de réessayer plus tard.</string>
+    <string name="selectPicture">Sélectionne une image</string>
+    <string name="welcome">Bienvenu !</string>
+    <string name="createProfile">.   Merci de créer votre profil.</string>
+    <string name="appWelcome">Bienvenu dans Just Dance !</string>
+    <string name="enterUsername" translatable="false">Qui es-tu ?</string>
+    <string name="launchApp">Dansons !</string>
+    <string name="enter_username">Entre ton nom d\'utilisateur</string>
+    <string name="chooseLanguage">Fais un choix existentiel.</string>
+    <string name="nameEmpty">Tu dois entrer ton nom pour jouer</string>
+    <string name="noSelectedLanguages">Tu devrais manger quelque chose !</string>
+    <string name="hallOfFame">Mur de la gloire</string>
+    <string name="dance_again">C\'est reparti !</string>
+    <string name="see_profile">Voir le profil</string>
+    <string name="level">Tu es un</string>
+    <string name="dance">Danse</string>
+    <string name="edit_profile">Editer le profil</string>
+    <string name="change_user">Changer d\'utilisateur</string>
+    <string name="my_profile">Mon profil</string>
+    <string name="hello_blank_fragment">"Salut fragment blanc "</string>
+    <string name="number_of_points">Nombre de point</string>
+    <string name="level_user_dance">Niveau</string>
+    <string name="QuitOrResumeText" translatable="false">Veux tu quitter la fête ou reprendre ? Si tu quittes, ton score sera perdu.</string>
+    <string name="TitleQuitOrPause">Pause du jeu</string>
+    <string name="ButtonQuit">Quitter</string>
+    <string name="ButtonResume">Reprendre</string>
+    <string name="Yes">Oui</string>
+    <string name="NoChangeUserPopUp">Bon choix</string>
+    <string name="No">Non</string>
+    <string name="ChangeOfDancerTitle">Changement de danseur</string>
+    <string name="YesChangeUserPopUp">Ok ! On se voit plus tard</string>
+    <string name="QuestionChangeUser">Veux-tu réellement changer d\'utilisateur ?</string>
+</resources>
