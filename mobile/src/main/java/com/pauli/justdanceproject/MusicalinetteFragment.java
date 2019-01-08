@@ -67,6 +67,12 @@ public class MusicalinetteFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.txt_dance:
+                Intent intent_dance = new Intent(getActivity(), MainActivity.class);
+                intent_dance.putExtra(LaunchActivity.USER_ID, userID);
+                startActivity(intent_dance);
+                getActivity().finish();
+                break;
             case R.id.txt_edit_profile:
                 Intent intent_edit = new Intent(getActivity(), EditUser.class);
                 intent_edit.putExtra(LaunchActivity.USER_ID, userID);
@@ -190,33 +196,6 @@ public class MusicalinetteFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-
-    private void configurePlot() {
-        // Get background color from Theme
-        TypedValue typedValue = new TypedValue();
-        //getTheme().resolveAttribute(android.R.attr.windowBackground, typedValue, true);
-        int backgroundColor = typedValue.data;
-        // Set background colors
-        dancePlot.setPlotMargins(0, 0, 0, 0);
-        dancePlot.getBorderPaint().setColor(backgroundColor);
-        dancePlot.getBackgroundPaint().setColor(backgroundColor);
-        dancePlot.getGraph().getBackgroundPaint().setColor(backgroundColor);
-        dancePlot.getGraph().getGridBackgroundPaint().setColor(backgroundColor);
-        // Set the grid color
-        dancePlot.getGraph().getRangeGridLinePaint().setColor(Color.DKGRAY);
-        dancePlot.getGraph().getDomainGridLinePaint().setColor(Color.DKGRAY);
-        // Set the origin axes colors
-        dancePlot.getGraph().getRangeOriginLinePaint().setColor(Color.DKGRAY);
-        dancePlot.getGraph().getDomainOriginLinePaint().setColor(Color.DKGRAY);
-        // Set the XY axis boundaries and step values
-        dancePlot.setRangeBoundaries(MIN_POINTS, MAX_POINTS, BoundaryMode.FIXED);
-        dancePlot.setDomainBoundaries(0, NUMBER_OF_POINTS - 1, BoundaryMode.FIXED);
-        dancePlot.setRangeStepValue(9); // 9 values 40 60 ... 200
-        dancePlot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT).setFormat(new
-                DecimalFormat("#")); // Force the Axis to be integer
-        dancePlot.setRangeLabel("Number of points");
     }
 
 }

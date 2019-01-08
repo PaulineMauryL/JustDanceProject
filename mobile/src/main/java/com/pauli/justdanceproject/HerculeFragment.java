@@ -105,6 +105,12 @@ public class HerculeFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.txt_dance:
+                Intent intent_dance = new Intent(getActivity(), MainActivity.class);
+                intent_dance.putExtra(LaunchActivity.USER_ID, userID);
+                startActivity(intent_dance);
+                getActivity().finish();
+                break;
             case R.id.txt_edit_profile:
                 Intent intent_edit = new Intent(getActivity(), EditUser.class);
                 intent_edit.putExtra(LaunchActivity.USER_ID, userID);
