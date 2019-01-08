@@ -51,7 +51,7 @@ allprojects {
                 test_isPaired       : "test_isPaired",
                 test_isPaired_true  : "test_isPaired_true",
 
-                flag_watch_enable   : "false"
+                flag_watch_enable   : "true"
         ]
     }
 }
