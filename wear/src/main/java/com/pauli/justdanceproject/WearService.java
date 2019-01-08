@@ -79,6 +79,12 @@ public class WearService extends WearableListenerService {
                 }
                 putDataMapRequest.getDataMap().putFloatArray(BuildConfig.W_acc_rate_key, accRate);
                 sendPutDataMapRequest(putDataMapRequest);
+            case COUNTER:
+                Log.d(TAG,"ACC_RATE: here");
+                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_counter_path);
+                int counter = intent.getIntExtra(COUNTER,0);
+                putDataMapRequest.getDataMap().putInt(BuildConfig.W_counter_key, counter);
+                sendPutDataMapRequest(putDataMapRequest);
                 break;
             default:
                 Log.w(TAG, "Unknown action");
@@ -96,6 +102,8 @@ public class WearService extends WearableListenerService {
     public static final String IMAGE = "IMAGE";
     public static final String PATH = "PATH";
     public static final String ACC_RATE = "ACC_RATE";
+    public static final String COUNTER = "COUNTER";
+
 
     public static Asset createAssetFromBitmap(Bitmap bitmap) {
         bitmap = resizeImage(bitmap, 390);
@@ -234,6 +242,9 @@ public class WearService extends WearableListenerService {
                     case BuildConfig.W_dance_activity:
                         startIntent = new Intent(this, DanceActivity.class);
                         break;
+                    case BuildConfig.W_counter_activity:
+                        startIntent = new Intent(this, CounterActivity.class);
+                        break;
                 }
 
                 if (startIntent == null) {
@@ -263,9 +274,15 @@ public class WearService extends WearableListenerService {
                 sendPutDataMapRequest(putDataMapRequest);
                 break;
             case BuildConfig.W_path_stop_activity:
+                Intent intentStop = null;
                 switch (data) {
                     case BuildConfig.W_dance_activity:
-                        Intent intentStop = new Intent();
+                        intentStop = new Intent();
+                        intentStop.setAction(DanceActivity.STOP_ACTIVITY);
+                        LocalBroadcastManager.getInstance(WearService.this).sendBroadcast(intentStop);
+                        break;
+                    case BuildConfig.W_counter_activity:
+                        intentStop = new Intent();
                         intentStop.setAction(DanceActivity.STOP_ACTIVITY);
                         LocalBroadcastManager.getInstance(WearService.this).sendBroadcast(intentStop);
                         break;
@@ -366,6 +383,6 @@ public class WearService extends WearableListenerService {
 
     // Constants
     public enum ACTION_SEND {
-        STARTACTIVITY, MESSAGE, EXAMPLE_DATAMAP, EXAMPLE_ASSET,ACC_RATE;
+        STARTACTIVITY, MESSAGE, EXAMPLE_DATAMAP, EXAMPLE_ASSET,ACC_RATE,COUNTER;
     }
 }

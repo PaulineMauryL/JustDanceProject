@@ -9,27 +9,20 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.widget.TextView;
 
-public class DanceActivity extends WearableActivity implements SensorEventListener {
-
-    private float[] accRate = new float[3];
-    private int error = 5;
-    private int actualPosition;
+public class CounterActivity extends WearableActivity implements SensorEventListener {
     public static final String STOP_ACTIVITY = "STOP_ACTIVITY";
     private final String TAG = this.getClass().getSimpleName();
-    private Handler mHandler;
     private int counter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dance);
-        mHandler = new Handler();
-
+        setContentView(R.layout.activity_counter);
         counter = 0;
         /*Sensor SetUp*/
         final SensorManager sensorManager = (SensorManager) getSystemService(WatchMainActivity.SENSOR_SERVICE);
@@ -40,52 +33,14 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
         LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                sensorManager.unregisterListener(DanceActivity.this);
+                sensorManager.unregisterListener(CounterActivity.this);
                 finish();
             }
         }, new IntentFilter(STOP_ACTIVITY));
 
         setAmbientEnabled();
-        startSendingData();
-    }
-    protected void startSendingData() {
-        mHandler.postDelayed(sendDataToBroadcast,50);
     }
 
-    final Runnable sendDataToBroadcast = new Runnable() {
-        public void run() {
-
-            TextView[] mText = {findViewById(R.id.textView1),findViewById(R.id.textView2),findViewById(R.id.textView3)};
-            counter ++;
-        /*for (int i = 0; i < event.values.length; i++) {
-            accRate[i] += event.values[i];
-            mText[i].setText("Acc = " + accRate[i]);
-        }*/
-
-
-            if(Math.abs(accRate[0])<error) {
-                actualPosition = 2;
-            } else if(Math.abs(accRate[1])<error && Math.abs(accRate[2])<error && accRate[0]>0){
-                actualPosition = 1;
-            } else if(Math.abs(accRate[1])<error && Math.abs(accRate[2])<error && accRate[0]<0) {
-                actualPosition = 3;
-            } else{
-                actualPosition += 0;
-            }
-            /* Send Values */
-            Log.d(TAG,"Send values: 1");
-            Intent intent = new Intent(DanceActivity.this, WearService.class);
-            Log.d(TAG,"Send values: 2");
-            intent.setAction(WearService.ACTION_SEND.COUNTER.name());
-            Log.d(TAG,"Send values: 3");
-            intent.putExtra(WearService.COUNTER, actualPosition);
-            Log.d(TAG,"Send values: 4");
-            startService(intent);
-
-            mText[1].setText("Counter: "+ actualPosition);
-            startSendingData();
-        }
-    };
     @Override
     protected void onResume() {
         super.onResume();
@@ -104,14 +59,36 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-           for (int i = 0; i < event.values.length; i++) {
-                accRate[i] = event.values[i];
-            }
+        float[] accRate = new float[3];
 
+        TextView[] mText = {findViewById(R.id.textView1),findViewById(R.id.textView2),findViewById(R.id.textView3)};
+
+        for(int i = 0; i< event.values.length; i++)
+        {
+            accRate[i] = event.values[i];
+            //mText[i].setText("Acc = " + accRate[i]);
+        }
+        counter ++;
+        mText[1].setText("Counter: " + counter);
+        /* Send Values */
+        Log.d(TAG,"Send values: 1");
+        Intent intent = new Intent(CounterActivity.this, WearService.class);
+        Log.d(TAG,"Send values: 2");
+        intent.setAction(WearService.ACTION_SEND.COUNTER.name());
+        Log.d(TAG,"Send values: 3");
+        intent.putExtra(WearService.COUNTER, counter);
+        Log.d(TAG,"Send values: 4");
+        startService(intent);
+        if(counter>100){finishCounter();}
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+
+    private void finishCounter(){
+        finish();
+    }
+
 }

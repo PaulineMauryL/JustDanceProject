@@ -24,7 +24,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class DanceActivity extends AppCompatActivity {
 
     static final String NUMBER_POINTS = "Number_points";  //Added by Pauline for finish activity
-
+    // temp
+    private int counter;
     private TextView mText;
     private MusicDance musical = null;
     private Handler mHandler;
@@ -51,8 +52,10 @@ public class DanceActivity extends AppCompatActivity {
 
         }
     };
-    public static final String RECEIVE_ACC_RATE = "RECEIVE_ACC_RATE";
-    public static final String ACC_RATE = "ACC_RATE";
+
+    public static final String RECEIVE_COUNTER = "RECEIVE_COUNTER";
+    public static final String COUNTER = "COUNTER";
+
     private AccRateBroadcastReceiver accRateBroadcastReceiver;
 
     @Override
@@ -61,6 +64,7 @@ public class DanceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dance);
         // Temp Hugo
         mText = findViewById(R.id.textViewMovements);
+        counter =0;
 
         int[] music;
         Bundle bunble = getIntent().getExtras();
@@ -74,6 +78,8 @@ public class DanceActivity extends AppCompatActivity {
                         Intent intentFinishDance = new Intent(DanceActivity.this, FinishActivity.class);
                         intentFinishDance.putExtra(NUMBER_POINTS,score);
                         startActivity(intentFinishDance);
+                        isRunning.set(false);
+                        finish();
                     }
                 });
                 mHandler = new Handler();
@@ -85,7 +91,10 @@ public class DanceActivity extends AppCompatActivity {
                 bar.setMax(210);
             }
         }
-        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){startWatchActivity();}
+        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+            // Change to dance activity
+            Communication.changeWatchActivity(DanceActivity.this,BuildConfig.W_dance_activity);
+        }
     }
 
     @Override
@@ -102,14 +111,16 @@ public class DanceActivity extends AppCompatActivity {
         background.start();// Get the accelerometer datas back from the watch
         accRateBroadcastReceiver = new AccRateBroadcastReceiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(accRateBroadcastReceiver, new
-                IntentFilter(RECEIVE_ACC_RATE));
+                IntentFilter(RECEIVE_COUNTER));
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         isPausing.set(true);
+        Communication.stopRecordingOnWear(DanceActivity.this, BuildConfig.W_dance_activity);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(accRateBroadcastReceiver);
+
     }
 
     @Override
@@ -119,7 +130,7 @@ public class DanceActivity extends AppCompatActivity {
         // Get the accelerometer datas back from the watch
         accRateBroadcastReceiver = new AccRateBroadcastReceiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(accRateBroadcastReceiver, new
-                IntentFilter(RECEIVE_ACC_RATE));
+                IntentFilter(RECEIVE_COUNTER));
     }
 
     private class AccRateBroadcastReceiver extends BroadcastReceiver {
@@ -127,20 +138,10 @@ public class DanceActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             // Show AR in a TextView
-            float[] accRateWatch = intent.getFloatArrayExtra(ACC_RATE);
-            if(Math.abs(accRateWatch[0])<error && Math.abs(accRateWatch[1])<error) {
-                actualPosition = 2;
-                mText.setText("Middle");
-            } else if(Math.abs(accRateWatch[1])<error && Math.abs(accRateWatch[2])<error && accRateWatch[0]>0){
-                actualPosition = 1;
-                mText.setText("Up");
-            } else if(Math.abs(accRateWatch[1])<error && Math.abs(accRateWatch[2])<error && accRateWatch[0]>0) {
-                actualPosition = 3;
-                mText.setText("Down");
-            } else{
-                actualPosition = 100;
-                mText.setText("Unknow!");
-            }
+            actualPosition = intent.getIntExtra(COUNTER,0);
+            counter++;
+            mText.setText("mode: " + actualPosition+"\n"
+            +"counter: " + counter);
         }
     }
 
@@ -151,13 +152,6 @@ public class DanceActivity extends AppCompatActivity {
         startService(intent);
     }
 
-    public void stopRecordingOnWear(View view) {
-        /* Store here the datas is needed */
-        Intent intentStopRec = new Intent(DanceActivity.this, WearService.class);
-        intentStopRec.setAction(WearService.ACTION_SEND.STOPACTIVITY.name());
-        intentStopRec.putExtra(WearService.ACTIVITY_TO_STOP, BuildConfig.W_dance_activity);
-        startService(intentStopRec);
-    }
 
     public void movementsOnMusic(){
         int i;
@@ -193,11 +187,11 @@ public class DanceActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton(R.string.ButtonQuit, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        finish();
                         // Leave
                         Intent intent_change = new Intent(getApplication(), MainActivity.class);
                         startActivity(intent_change);
                         finish();
+                        isRunning.set(false);
 
                     }
                 })
