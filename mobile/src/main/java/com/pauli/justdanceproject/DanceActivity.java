@@ -25,6 +25,7 @@ public class DanceActivity extends AppCompatActivity {
 
     static final String NUMBER_POINTS = "Number_points";  //Added by Pauline for finish activity
 
+    private TextView mText;
     private MusicDance musical = null;
     private Handler mHandler;
     //private int[] music = null;
@@ -58,6 +59,9 @@ public class DanceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dance);
+        // Temp Hugo
+        mText = findViewById(R.id.textViewMovements);
+
         int[] music;
         Bundle bunble = getIntent().getExtras();
         if (bunble!=null){
@@ -126,12 +130,16 @@ public class DanceActivity extends AppCompatActivity {
             float[] accRateWatch = intent.getFloatArrayExtra(ACC_RATE);
             if(Math.abs(accRateWatch[0])<error && Math.abs(accRateWatch[1])<error) {
                 actualPosition = 2;
+                mText.setText("Middle");
             } else if(Math.abs(accRateWatch[1])<error && Math.abs(accRateWatch[2])<error && accRateWatch[0]>0){
                 actualPosition = 1;
+                mText.setText("Up");
             } else if(Math.abs(accRateWatch[1])<error && Math.abs(accRateWatch[2])<error && accRateWatch[0]>0) {
                 actualPosition = 3;
+                mText.setText("Down");
             } else{
                 actualPosition = 100;
+                mText.setText("Unknow!");
             }
         }
     }
