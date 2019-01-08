@@ -41,4 +41,5 @@
     <string name="No">Non</string>
     <string name="ChangeOfDancerTitle">Changement de danseur</string>
     <string name="YesChangeUserPopUp">Ok ! On se voit plus tard</string>
+    <string name="QuestionChangeUser">Veux-tu réellement changer d\'utilisateur ?</string>
 </resources>
