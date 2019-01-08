@@ -268,10 +268,10 @@ public class DanceActivity extends AppCompatActivity {
                     //Ajouter des données à transmettre au Handler via le Bundle
                     if(askedPosition == actualPosition) {
                         messageBundle.putInt(PROGRESS_BAR_INCREMENT,3);
-                        score = score+10;
+                        score = score+3;
                     }else if(nextPosition == actualPosition){
                         messageBundle.putInt(PROGRESS_BAR_INCREMENT,1);
-                        score=score+5;
+                        score=score+1;
                     }else{
                         messageBundle.putInt(PROGRESS_BAR_INCREMENT,0);
                     }
