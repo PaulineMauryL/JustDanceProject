@@ -38,9 +38,9 @@ public class ShowProfile extends AppCompatActivity implements MusicalinetteFragm
 
 
     private void setUpViewPager(ViewPager mViewPager) {
-        mSectionStatePagerAdapter.addFragment(levelFragment, "User level");
-        mSectionStatePagerAdapter.addFragment(perfFragment, "Performance");
-        mSectionStatePagerAdapter.addFragment(historyFragment, "History");
+        mSectionStatePagerAdapter.addFragment(levelFragment,getString(R.string.HerculeName));
+        mSectionStatePagerAdapter.addFragment(perfFragment, getString(R.string.FrogPrincessName));
+        mSectionStatePagerAdapter.addFragment(historyFragment, getString(R.string.musicalinette));
         mViewPager.setAdapter(mSectionStatePagerAdapter);
     }
 

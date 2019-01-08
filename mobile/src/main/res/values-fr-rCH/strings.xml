@@ -58,5 +58,6 @@
     <string name="quit_without_save">Es-tu sûr de vouloir quitter sans sauver ?</string>
     <string name="HerculeName">Hercule - De Zéro en Héros</string>
     <string name="FrogPrincessName">La Princesse et la Grenouille - Creuse</string>
+    <string name="yourScore">Tes résultats sur cette danse sont listés ci-dessous</string>
 
 </resources>

@@ -168,4 +168,5 @@
     <string name="HerculeName">Hercule - From Zero to Hero</string>
     <string name="FrogPrincessName">The Princess Frog - Digging</string>
     <string name="musicalinette" translatable="false">Musicalinette</string>
+    <string name="yourScore">Your score on this song are listed below</string>
 </resources>

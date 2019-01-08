@@ -114,10 +114,6 @@ public class CreuseFragment extends Fragment {
         // Inflate the layout for this fragment
         fragmentView = inflater.inflate(R.layout.fragment_creuse, container, false);
 
-        listView = fragmentView.findViewById(R.id.myHistoryList);
-        adapter = new RecordingAdapter(getActivity(), R.layout.row_history_layout);
-        listView.setAdapter(adapter);
-
         Intent intent = getActivity().getIntent();
         if (intent.hasExtra(LaunchActivity.USER_ID)) {
             userID = intent.getStringExtra(LaunchActivity.USER_ID);

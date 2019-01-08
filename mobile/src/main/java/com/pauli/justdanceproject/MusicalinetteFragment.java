@@ -133,23 +133,6 @@ public class MusicalinetteFragment extends Fragment {
             recID = intent.getStringExtra(MainActivity.RECORDING_ID);
         }
 
-        // Android Plot
-        dancePlot = fragmentView.findViewById(R.id.dancePlot);
-        configurePlot();
-
-        // Initialize plot
-        xyPlotSeriesList = new XYplotSeriesList();
-        LineAndPointFormatter formatter = new LineAndPointFormatter(RED, TRANSPARENT,
-                TRANSPARENT, null);
-        formatter.getLinePaint().setStrokeWidth(8);
-        xyPlotSeriesList.initializeSeriesAndAddToList(POINTS_PLOT_WATCH, MIN_POINTS, NUMBER_OF_POINTS,
-                formatter);
-        XYSeries PointsSeries = new SimpleXYSeries(xyPlotSeriesList.getSeriesFromList(POINTS_PLOT_WATCH),
-                SimpleXYSeries.ArrayFormat.XY_VALS_INTERLEAVED, POINTS_PLOT_WATCH);
-        dancePlot.clear();
-        dancePlot.addSeries(PointsSeries, formatter);
-        dancePlot.redraw();
-
     /*
         // Get recording information from Firebase
         FirebaseDatabase database = FirebaseDatabase.getInstance();
