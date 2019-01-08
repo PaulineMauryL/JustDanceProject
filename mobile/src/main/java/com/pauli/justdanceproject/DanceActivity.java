@@ -32,6 +32,7 @@ public class DanceActivity extends AppCompatActivity {
     private Handler mHandler;
     //private int[] music = null;
     private Boolean resume = true;
+    private TextView goodOrBad = null;
     private ImageView toCancelImageButtonView = null;
     private ImageView nextImageButtonView = null;
     private ImageView actualImageButtonView = null;
@@ -177,7 +178,7 @@ public class DanceActivity extends AppCompatActivity {
         while(i<musical.getTiming().length){
             delay = musical.getTiming()[i];
             mHandler.postDelayed(r1,delay-musical.getSound().getCurrentPosition());
-            mHandler.postDelayed(r2,delay-musical.getSound().getCurrentPosition()+500);
+            mHandler.postDelayed(r2,delay-musical.getSound().getCurrentPosition()+600);
             mHandler.postDelayed(r3,delay-musical.getSound().getCurrentPosition()+1100);
             i=i+2;
         }
@@ -242,9 +243,14 @@ public class DanceActivity extends AppCompatActivity {
                     if(askedPosition == actualPosition) {
                         messageBundle.putInt(PROGRESS_BAR_INCREMENT,3);
                         score = score+3;
+                        goodOrBad = findViewById(R.id.danceGoodOrOk);
+                        goodOrBad.setText(getString(R.string.good));
+
                     }else if(nextPosition == actualPosition){
                         messageBundle.putInt(PROGRESS_BAR_INCREMENT,1);
                         score=score+1;
+                        goodOrBad = findViewById(R.id.danceGoodOrOk);
+                        goodOrBad.setText(getString(R.string.ok));
                     }else{
                         messageBundle.putInt(PROGRESS_BAR_INCREMENT,0);
                     }
@@ -292,6 +298,9 @@ public class DanceActivity extends AppCompatActivity {
             toCancelImageButtonView.setActivated(false);
             nextPosition = 0;
             askedPosition = 0;
+
+            goodOrBad = findViewById(R.id.danceGoodOrOk);
+            goodOrBad.setText("");
         }
     };
 
