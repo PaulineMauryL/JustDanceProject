@@ -422,12 +422,12 @@ public class EditUser extends AppCompatActivity {
                 builder.setMessage("Change user").setTitle("userChange");
 
                 //Setting message manually and performing action on button click
-                builder.setMessage("Do you really want to change user ?")
+                builder.setMessage(R.string.QuestionChangeUser)
                         .setCancelable(false)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 finish();
-                                Toast.makeText(getApplicationContext(),"Ok ! See you another time",
+                                Toast.makeText(getApplicationContext(),getString(R.string.YesChangeUserPopUp),
                                         Toast.LENGTH_SHORT).show();
                                 // Leave
                                 Intent intent_change = new Intent(getApplication(), LaunchActivity.class);
@@ -436,18 +436,18 @@ public class EditUser extends AppCompatActivity {
 
                             }
                         })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 //  Action for 'NO' Button
                                 dialog.cancel();
-                                Toast.makeText(getApplicationContext(),"Good choice",
+                                Toast.makeText(getApplicationContext(),getString(R.string.NoChangeUserPopUp),
                                         Toast.LENGTH_SHORT).show();
                             }
                         });
                 //Creating dialog box
                 AlertDialog alert = builder.create();
                 //Setting the title manually
-                alert.setTitle("Change of dancer");
+                alert.setTitle(R.string.ChangeOfDancerTitle);
                 alert.show();
 
                 break;

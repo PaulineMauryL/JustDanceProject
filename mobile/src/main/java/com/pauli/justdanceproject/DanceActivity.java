@@ -167,7 +167,6 @@ public class DanceActivity extends AppCompatActivity {
     }
 
     public void ResumeMusic(View view) {
-        Button pauseButton = findViewById(R.id.ResumeButton);
         musical.getSound().pause();
         mHandler.removeCallbacks(r1);
         mHandler.removeCallbacks(r2);
@@ -179,12 +178,12 @@ public class DanceActivity extends AppCompatActivity {
         builder = new AlertDialog.Builder(this);
 
         //Uncomment the below code to Set the message and title from the strings.xml file
-        builder.setMessage("Pause on the game").setTitle("pauseDance");
+        builder.setMessage(R.string.TitleQuitOrPause).setTitle(R.string.IdQuitOrPause);
 
         //Setting message manually and performing action on button click
-        builder.setMessage("Do you want to quit the party or to resume ? If you quit, you will lose your score")
+        builder.setMessage(R.string.QuitOrResumeText)
                 .setCancelable(false)
-                .setPositiveButton("Quit", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.ButtonQuit, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         finish();
                         // Leave
@@ -194,7 +193,7 @@ public class DanceActivity extends AppCompatActivity {
 
                     }
                 })
-                .setNegativeButton("Resume", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.ButtonResume, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //  Action for 'NO' Button
                         dialog.cancel();
@@ -207,7 +206,7 @@ public class DanceActivity extends AppCompatActivity {
         //Creating dialog box
         AlertDialog alert = builder.create();
         //Setting the title manually
-        alert.setTitle("Pause in the game");
+        alert.setTitle(R.string.TitleQuitOrPause);
         alert.show();
 
     }

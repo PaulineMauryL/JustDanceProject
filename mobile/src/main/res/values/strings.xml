@@ -92,52 +92,63 @@
     </string>
     <string name="action_settings" translatable="false">Settings</string>
     <string name="title_activity_dance" translatable="false">Dance</string>
-    <string name="Up" translatable="false">Go up !</string>
-    <string name="Down" translatable="false">Go down !</string>
-    <string name="Middle" translatable="false">Stay in the middle !</string>
-    <string name="Resume" translatable="false">Pause the music</string>
-    <string name="Restart" translatable="false">Restart the music</string>
+    <string name="Up">Go up !</string>
+    <string name="Down">Go down !</string>
+    <string name="Middle">Stay in the middle !</string>
+    <string name="Resume">Pause the music</string>
+    <string name="Restart">Restart the music</string>
 
     <string name="english" translatable="false">en</string>
     <string name="french" translatable="false">fr</string>
     <string name="NoSpanish" translatable="false">No está en el menú. Elige otra comida por favor !</string>
     <string name="NoGerman" translatable="false">Es steht nicht auf der Speisekarte. Wählen Sie ein anderes Gericht !</string>
-    <string name="selectProfilePicture" translatable="false">You need to choose a profile picture!</string>
-    <string name="uploadPictureFailed" translatable="false">Failed uploading photo</string>
-    <string name="registrationSuccessful" translatable="false">Registration successful</string>
-    <string name="registrationFailed" translatable="false">Registration failed. Please try again later.</string>
-    <string name="selectPicture" translatable="false">Select a picture</string>
-    <string name="welcome" translatable="false">Welcome :\u0020</string>
-    <string name="createProfile" translatable="false">.   Please, create your profile</string>
-    <string name="appWelcome" translatable="false">Welcome to Just Dance !</string>
-    <string name="enterUsername" translatable="false">Who are you ?</string>
-    <string name="launchApp" translatable="false">Let\'s Dance !</string>
+    <string name="selectProfilePicture">You need to choose a profile picture!</string>
+    <string name="uploadPictureFailed">Failed uploading photo</string>
+    <string name="registrationSuccessful">Registration successful</string>
+    <string name="registrationFailed">Registration failed. Please try again later.</string>
+    <string name="selectPicture">Select a picture</string>
+    <string name="welcome">Welcome :\u0020</string>
+    <string name="createProfile">.   Please, create your profile</string>
+    <string name="appWelcome">Welcome to Just Dance !</string>
+    <string name="enterUsername">Who are you ?</string>
+    <string name="launchApp">Let\'s Dance !</string>
     <string name="user_profile_image" translatable="false">user_profile_image</string>
-    <string name="enter_username" translatable="false">Enter username</string>
-    <string name="chooseLanguage" translatable="false">Make an existential choice</string>
+    <string name="enter_username">Enter username</string>
+    <string name="chooseLanguage">Make an existential choice</string>
     <string name="englishChoice" translatable="false">Tea and marmite</string>
     <string name="frenchChoice" translatable="false">Fromage et baguette</string>
     <string name="germanChoice" translatable="false">Wurst und Kartoffeln</string>
     <string name="spanishChoice" translatable="false">Tapas y paella</string>
-    <string name="nameEmpty" translatable="false">You must enter your name to play</string>
-    <string name="noSelectedLanguages" translatable="false">You should eat something !</string>
+    <string name="nameEmpty">You must enter your name to play</string>
+    <string name="noSelectedLanguages">You should eat something !</string>
     <string name="edit_button" translatable="false">edit_Button</string>
     <string name="do_not_edit_button" translatable="false">do_Not_Edit_Button</string>
     <string name="attribute_picture" translatable="false">attribute_picture</string>
-    <string name="hallOfFame" translatable="false">Hall of fame</string>
-    <string name="dance_again" translatable="false">Dance again !</string>
-    <string name="see_profile" translatable="false">See profile</string>
-    <string name="level" translatable="false">You are a</string>
-    <string name="dance" translatable="false">Dance</string>
-    <string name="edit_profile" translatable="false">Edit profile</string>
-    <string name="change_user" translatable="false">Change user</string>
-    <string name="my_profile" translatable="false">My Profile</string>
+    <string name="hallOfFame">Hall of fame</string>
+    <string name="dance_again">Dance again !</string>
+    <string name="see_profile">See profile</string>
+    <string name="level">You are a</string>
+    <string name="dance">Dance</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="change_user">Change user</string>
+    <string name="my_profile">My Profile</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
-    <string name="number_of_points" translatable="false">Number of points</string>
-    <string name="level_user_dance" translatable="false">Level</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="number_of_points">Number of points</string>
+    <string name="level_user_dance">Level</string>
     <string name="title_activity_test_sensors" translatable="false">testSensors</string>
     <string name="fr" translatable="false">fr</string>
     <string name="start_dance">Start dance !</string>
+    <string name="QuitOrResumeText">Do you want to quit the party or to resume ? If you quit, you will lose your score</string>
+    <string name="TitleQuitOrPause">Pause on the game</string>
+    <string name="IdQuitOrPause" translatable="false">pauseDance</string>
+    <string name="ButtonQuit">Quit</string>
+    <string name="ButtonResume">Resume</string>
+    <string name="Yes">Yes</string>
+    <string name="NoChangeUserPopUp">Good choice</string>
+    <string name="No">No</string>
+    <string name="ChangeOfDancerTitle">Change of dancer</string>
+    <string name="YesChangeUserPopUp">Ok ! See you later</string>
+    <string name="QuestionChangeUser">Do you really want to change user ?</string>
 </resources>
