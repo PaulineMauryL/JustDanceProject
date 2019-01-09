@@ -13,38 +13,27 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
 
 
 public class MusicalinetteFragment extends Fragment {
 
-    private OnFragmentInteractionListener mListener;
-    private String userID;
-    private View fragmentView;
-
-    AlertDialog.Builder builder;
     private final String TAG = this.getClass().getSimpleName();
-    
+    AlertDialog.Builder builder;
+    private CreuseFragment.OnFragmentInteractionListener mListener;
+    private View fragmentView;
+    private String userID;
+    private TextView TxtInfo;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        fragmentView = inflater.inflate(R.layout.fragment_musicalinette, container, false);
-
-        Intent intent = getActivity().getIntent();
-        if (intent.hasExtra(LaunchActivity.USER_ID)) {
-            userID = intent.getStringExtra(LaunchActivity.USER_ID);
-        }
-
-        return fragmentView;
-    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -84,7 +73,6 @@ public class MusicalinetteFragment extends Fragment {
                                         Toast.LENGTH_SHORT).show();
                                 // Leave
                                 Intent intent_change = new Intent(getActivity().getApplication(), LaunchActivity.class);
-                                intent_change.putExtra(LaunchActivity.USER_ID, userID);
                                 startActivity(intent_change);
                                 getActivity().finish();
 
@@ -114,14 +102,36 @@ public class MusicalinetteFragment extends Fragment {
     }
 
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
+            savedInstanceState) {
+        // Inflate the layout for this fragment
+        fragmentView = inflater.inflate(R.layout.fragment_creuse, container, false);
 
+        Intent intent = getActivity().getIntent();
+        if (intent.hasExtra(LaunchActivity.USER_ID)) {
+            userID = intent.getStringExtra(LaunchActivity.USER_ID);
+        }
+        TxtInfo = fragmentView.findViewById(R.id.txt_display_info);
+        List<DatabaseEntity> entities = DanceActivity.cloneDanceRD.dataDao().getHallOfFame(String.valueOf(R.raw.musicalinette));
+
+        String info = "";
+        for(DatabaseEntity dbEnt : entities){
+            String user_name = dbEnt.getUser_name();
+            int score = dbEnt.getScore();
+            info = info + "User :" + user_name + " Score :" + score + "\n";
+        }
+        TxtInfo.setText(info);
+
+        return fragmentView;
+    }
 
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof CreuseFragment.OnFragmentInteractionListener) {
+            mListener = (CreuseFragment.OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -135,8 +145,6 @@ public class MusicalinetteFragment extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-
 }

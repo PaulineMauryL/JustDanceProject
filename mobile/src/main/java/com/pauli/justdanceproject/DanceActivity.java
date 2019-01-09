@@ -10,6 +10,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -20,7 +21,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.util.Log;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import android.util.Log;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -30,11 +36,10 @@ public class DanceActivity extends AppCompatActivity {
     static final String NUMBER_POINTS = "Number_points";  //Added by Pauline for finish activity
     static final String MUSIC_NAME = "Music_name";
 
-    private CloneDanceRoomDatabase danceDB;
     private String userID;
     private String music_name;
     private int score=0;
-
+    private String user_db;
 
     // temp
     private int counter;
@@ -73,7 +78,9 @@ public class DanceActivity extends AppCompatActivity {
     private AccRateBroadcastReceiver accRateBroadcastReceiver;
     public static CloneDanceRoomDatabase cloneDanceRD;
 
-    static final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private static final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private static final DatabaseReference profileGetRef = database.getReference("profiles");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,20 +105,33 @@ public class DanceActivity extends AppCompatActivity {
                 musical.getSound().start();
                 musical.getSound().setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
                     public void onCompletion(MediaPlayer mp){
-                        String username = database.getReference("profiles").child(userID).child("username").toString();
+                        profileGetRef.child(userID).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                user_db = dataSnapshot.child("username").getValue(String.class);
+                            }
+
+                            @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                            }
+                        });
+                        //String username = database.getReference("profiles").child(userID).child("username").toString();
 
                         DatabaseEntity dbEntity = new DatabaseEntity();
-                        dbEntity.setUser_name(username);
+                        dbEntity.setUser_name(user_db);
                         dbEntity.setMusic(musical.getName());
                         dbEntity.setScore(score);
 
                         cloneDanceRD.dataDao().insertEntity(dbEntity);
-                        //Toast.makeText(getApplicationContext(), "Entity added", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Username" + user_db + "\n Music Name" + musical.getName() + "\n score" + score, Toast.LENGTH_LONG).show();
+                        Log.d("PAULINE", "username_fb " + user_db );
+                        Log.d("PAULINE", "music_name " + musical.getName() );
+                        Log.d("PAULINE", "score " + score );
 
                         Intent intentFinishDance = new Intent(DanceActivity.this, FinishActivity.class);
                         intentFinishDance.putExtra(LaunchActivity.USER_ID, userID);
                         intentFinishDance.putExtra(NUMBER_POINTS, score);
-                        intentFinishDance.putExtra(MUSIC_NAME, music_name);
+                        intentFinishDance.putExtra(MUSIC_NAME, musical.getName());
                         isRunning.set(false);
                         startActivity(intentFinishDance);
                         finish();
@@ -153,7 +173,9 @@ public class DanceActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         isPausing.set(true);
-        Communication.stopRecordingOnWear(DanceActivity.this, BuildConfig.W_dance_activity);
+        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)) {
+            Communication.stopRecordingOnWear(DanceActivity.this, BuildConfig.W_dance_activity);
+        }
         LocalBroadcastManager.getInstance(this).unregisterReceiver(accRateBroadcastReceiver);
     }
 

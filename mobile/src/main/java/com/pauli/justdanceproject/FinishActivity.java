@@ -15,7 +15,7 @@ public class FinishActivity extends AppCompatActivity {
     private String userID;
     private String music_name;
     private int score;
-    private CloneDanceRoomDatabase danceDB;
+    private TextView  TxtInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,18 +28,21 @@ public class FinishActivity extends AppCompatActivity {
         score = intent.getIntExtra(DanceActivity.NUMBER_POINTS, 0);
 
         TextView view_nb_points = findViewById(R.id.txt_nb_points);
-        String points_number = "You have " + String.valueOf(score) + "points";
+        String points_number = "You have " + String.valueOf(score) + " points";
         view_nb_points.setText(points_number);
 
-        /*List<DatabaseEntity> usersAndSongs = danceDB.dataDao().getHallOfFame(music_name);
+        TxtInfo = findViewById(R.id.txt_display_info);
+        List<DatabaseEntity> entities = DanceActivity.cloneDanceRD.dataDao().getHallOfFame(music_name);
 
         String info = "";
 
-        for(DatabaseEntity dance : usersAndSongs){
-            String username = dance.
+        for(DatabaseEntity dbEnt : entities){
+            String user_name = dbEnt.getUser_name();
+            int score = dbEnt.getScore();
+            info = info + "User :" + user_name + " Score :" + score + "\n";
         }
-        */
 
+        TxtInfo.setText(info);
     }
 
     public void dance_again(View view) {

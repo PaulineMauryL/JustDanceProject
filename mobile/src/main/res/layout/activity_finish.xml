@@ -80,9 +80,18 @@
             android:textColor="@color/colorAccent"
             app:fontFamily="@font/simplehandwrittingregular"/>
 
-        <android.support.v7.widget.RecyclerView
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/txt_display_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                app:fontFamily="@font/simplehandwrittingregular"/>
+
+        </ScrollView>
 
     </LinearLayout>
 

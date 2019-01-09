@@ -13,7 +13,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.List;
 
 
 /**
@@ -24,11 +27,12 @@ import android.widget.Toast;
  */
 public class HerculeFragment extends Fragment {
 
-    private OnFragmentInteractionListener mListener;
-    private String userID;
-    private View fragmentView;
-    private Profile userProfile;
+    private final String TAG = this.getClass().getSimpleName();
     AlertDialog.Builder builder;
+    private CreuseFragment.OnFragmentInteractionListener mListener;
+    private View fragmentView;
+    private String userID;
+    private TextView TxtInfo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,65 +40,6 @@ public class HerculeFragment extends Fragment {
         setHasOptionsMenu(true);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        fragmentView = inflater.inflate(R.layout.fragment_hercule, container, false);
-
-        Intent intent = getActivity().getIntent();
-        if (intent.hasExtra(LaunchActivity.USER_ID)) {
-            userID = intent.getStringExtra(LaunchActivity.USER_ID);
-        }
-        //readUserProfile();
-        return fragmentView;
-    }
-
-    /*private void readUserProfile() {
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference profileRef = database.getReference("profiles");
-        profileRef.child(userID).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String user_db = dataSnapshot.child("username").getValue(String.class);
-                String photo = dataSnapshot.child("photo").getValue(String.class);
-                String Translation = dataSnapshot.child("Translation").getValue(String.class);
-                userProfile = new Profile(user_db, Translation);
-
-                userProfile.photoPath = photo;
-
-                setUserImageAndProfileInfo();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Empty
-            }
-        });
-    }
-
-    private void setUserImageAndProfileInfo() {
-        //  Reference to an image file in Firebase Storage
-        StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl
-                (userProfile.photoPath);
-        storageRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                if (isAdded()) {
-                    final Bitmap selectedImage = BitmapFactory.decodeByteArray(bytes, 0, bytes
-                            .length);
-                    ImageView imageView = fragmentView.findViewById(R.id.userImage);
-                    imageView.setImageBitmap(selectedImage);
-                }
-            }
-        });
-
-        TextView usernameTextView = fragmentView.findViewById(R.id.txt_usernameValue);
-        usernameTextView.setText(userProfile.username);
-
-        TextView levelTextView = fragmentView.findViewById(R.id.txt_levelValue);
-        levelTextView.setText(userProfile.level);
-    } */
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -163,18 +108,38 @@ public class HerculeFragment extends Fragment {
     }
 
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
+            savedInstanceState) {
+        // Inflate the layout for this fragment
+        fragmentView = inflater.inflate(R.layout.fragment_creuse, container, false);
+
+        Intent intent = getActivity().getIntent();
+        if (intent.hasExtra(LaunchActivity.USER_ID)) {
+            userID = intent.getStringExtra(LaunchActivity.USER_ID);
         }
+        TxtInfo = fragmentView.findViewById(R.id.txt_display_info);
+        List<DatabaseEntity> entities = DanceActivity.cloneDanceRD.dataDao().getHallOfFame(String.valueOf(R.raw.zero));
+
+        String info = "";
+
+        for(DatabaseEntity dbEnt : entities){
+            String user_name = dbEnt.getUser_name();
+            int score = dbEnt.getScore();
+            info = info + "User :" + user_name + " Score :" + score + "\n";
+        }
+
+        TxtInfo.setText(info);
+
+        return fragmentView;
     }
+
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof CreuseFragment.OnFragmentInteractionListener) {
+            mListener = (CreuseFragment.OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -188,7 +153,6 @@ public class HerculeFragment extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }

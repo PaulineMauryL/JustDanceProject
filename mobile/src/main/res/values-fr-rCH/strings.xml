@@ -23,12 +23,12 @@
     <string name="noSelectedLanguages">Tu devrais manger quelque chose !</string>
     <string name="hallOfFame">Mur de la gloire</string>
     <string name="dance_again">C\'est reparti !</string>
-    <string name="see_profile">Voir le profil</string>
+    <string name="see_profile">Voir le Mur de la Gloire</string>
     <string name="level">Tu es un</string>
     <string name="dance">Danse</string>
     <string name="edit_profile">Editer le profil</string>
     <string name="change_user">Changer d\'utilisateur</string>
-    <string name="my_profile">Mon profil</string>
+    <string name="my_profile">Murs de la Gloire</string>
     <string name="hello_blank_fragment">"Salut fragment blanc "</string>
     <string name="number_of_points">Nombre de point</string>
     <string name="level_user_dance">Niveau</string>
