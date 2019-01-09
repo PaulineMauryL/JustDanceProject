@@ -31,7 +31,7 @@ import java.util.Locale;
 public class CreuseFragment extends Fragment {
 
     private final String TAG = this.getClass().getSimpleName();
-    AlertDialog.Builder builder;
+    //AlertDialog.Builder builder;
     private OnFragmentInteractionListener mListener;
     private ListView listView;
     private View fragmentView;
@@ -70,11 +70,25 @@ public class CreuseFragment extends Fragment {
                 getActivity().finish();
                 break;
             case R.id.txt_change_user:                            // to copy in main activity and the three fragments
-                // Check if user really wants to change
-                builder = new AlertDialog.Builder(getActivity());
+                DialogueYesNo dialogueYesNo = new DialogueYesNo(getActivity(), getString(R.string.QuestionChangeUser),true);
+                dialogueYesNo.creat();
 
-                //Uncomment the below code to Set the message and title from the strings.xml file
-                builder.setMessage("Change user").setTitle("userChange");
+
+               /* if(dialogueYesNo.getResult()){
+                    Toast.makeText(getActivity().getApplicationContext(),getString(R.string.YesChangeUserPopUp),
+                            Toast.LENGTH_SHORT).show();
+                    // Leave
+                    Intent intent_change = new Intent(getActivity().getApplication(), LaunchActivity.class);
+                    startActivity(intent_change);
+                    getActivity().finish();
+                }else{
+                    //  Action for 'NO' Button
+                    Toast.makeText(getActivity().getApplicationContext(),getString(R.string.NoChangeUserPopUp),
+                            Toast.LENGTH_SHORT).show();
+                }*/
+
+                // Check if user really wants to change
+                /*builder = new AlertDialog.Builder(getActivity());
 
                 //Setting message manually and performing action on button click
                 builder.setMessage(R.string.QuestionChangeUser)
@@ -102,7 +116,7 @@ public class CreuseFragment extends Fragment {
                 AlertDialog alert = builder.create();
                 //Setting the title manually
                 alert.setTitle(R.string.ChangeOfDancerTitle);
-                alert.show();
+                alert.show();*/
 
                 break;
         }
