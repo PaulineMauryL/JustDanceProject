@@ -6,6 +6,7 @@
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.BODY_SENSORS" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/logo_just_dance_now"
@@ -25,8 +26,8 @@
 
         <activity
             android:name=".WatchMainActivity"
-            android:theme="@style/AppTheme"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,10 +54,15 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".SleepActivity"
-            android:theme="@style/AppTheme"/>
-        <activity android:name=".DanceActivity"
-            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".SleepActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".DanceActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".CounterActivity"
+            android:label="@string/title_activity_counter"></activity>
     </application>
 
 </manifest>

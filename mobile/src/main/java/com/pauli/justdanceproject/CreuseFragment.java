@@ -123,14 +123,14 @@ public class CreuseFragment extends Fragment {
             userID = intent.getStringExtra(LaunchActivity.USER_ID);
         }
         TxtInfo = fragmentView.findViewById(R.id.txt_display_info);
-        List<DatabaseEntity> entities = DanceActivity.cloneDanceRD.dataDao().getHallOfFame(String.valueOf(R.raw.musicalinette));
+        List<DatabaseEntity> entities = DanceActivity.cloneDanceRD.dataDao().getHallOfFame(String.valueOf(R.raw.creuser));
 
         String info = "";
 
         for(DatabaseEntity dbEnt : entities){
             String user_name = dbEnt.getUser_name();
             int score = dbEnt.getScore();
-            info = info + "User :" + user_name + " Score :" + score;
+            info = info + "User :" + user_name + " Score :" + score + "\n";
         }
 
         TxtInfo.setText(info);
@@ -138,39 +138,6 @@ public class CreuseFragment extends Fragment {
         return fragmentView;
     }
 
-    /*
-    private class RecordingAdapter extends ArrayAdapter<Recording> {
-        private int row_layout;
-
-        RecordingAdapter(FragmentActivity activity, int row_layout) {
-            super(activity, row_layout);
-            this.row_layout = row_layout;
-        }
-
-
-        @NonNull
-        @Override
-        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            //Reference to the row View
-            View row = convertView;
-
-            if (row == null) {
-                //Inflate it from layout
-                row = LayoutInflater.from(getContext()).inflate(row_layout, parent, false);
-            }
-
-            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss", Locale.getDefault());
-            ((TextView) row.findViewById(R.id.danceType)).setText(getItem(position).danceName);
-            ((TextView) row.findViewById(R.id.danceDateTime)).setText(formatter.format(new Date(getItem(position).danceDateTime)));
-
-            ((TextView) row.findViewById(R.id.dancePoints)).setText(String.valueOf(getItem(position).nbPoints));
-            ((TextView) row.findViewById(R.id.danceLevel)).setText(getItem(position).level);
-
-            return row;
-        }
-
-    }
-    */
 
     @Override
     public void onAttach(Context context) {
@@ -190,7 +157,6 @@ public class CreuseFragment extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }
