@@ -38,6 +38,14 @@ public class WearService extends WearableListenerService {
     // Tag for Logcat
     private static final String TAG = "WearService";
 
+    private static int hugo_count_test;
+
+    public static void setToZero(){
+        hugo_count_test = 0;
+    }
+    public static int getCount(){
+        return hugo_count_test;
+    }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
@@ -69,7 +77,7 @@ public class WearService extends WearableListenerService {
                 putDataMapRequest.getDataMap().putAsset(BuildConfig.W_some_other_key, (Asset) intent.getParcelableExtra(IMAGE));
                 sendPutDataMapRequest(putDataMapRequest);
                 break;
-            case ACC_RATE:
+            /*case ACC_RATE:
                 Log.d(TAG,"ACC_RATE: here");
                 putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_acc_rate_path);
                 float[] accRate = intent.getFloatArrayExtra(ACC_RATE);
@@ -79,8 +87,10 @@ public class WearService extends WearableListenerService {
                 }
                 putDataMapRequest.getDataMap().putFloatArray(BuildConfig.W_acc_rate_key, accRate);
                 sendPutDataMapRequest(putDataMapRequest);
+                break;*/
             case COUNTER:
-                Log.d(TAG,"ACC_RATE: here");
+                hugo_count_test ++;
+                Log.d(TAG,"COUNTER: here" +hugo_count_test);
                 putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_counter_path);
                 int counter = intent.getIntExtra(COUNTER,0);
                 putDataMapRequest.getDataMap().putInt(BuildConfig.W_counter_key, counter);

@@ -8,7 +8,7 @@
     tools:context=".FinishActivity"
     tools:ignore="MissingDefaultResource">
 
-<LinearLayout
+    <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -35,22 +35,6 @@
             android:textColor="@color/colorAccent"
             app:fontFamily="@font/simplehandwrittingregular" />
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/attribute_picture"
-        app:srcCompat="@drawable/logo_just_dance_now" />
-
-        <TextView
-            android:id="@+id/txt_level"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/level"
-            android:gravity="center"
-            android:textSize="40sp"
-            android:textColor="@color/colorAccent"
-            app:fontFamily="@font/simplehandwrittingregular" />
     </LinearLayout>
 
     <LinearLayout

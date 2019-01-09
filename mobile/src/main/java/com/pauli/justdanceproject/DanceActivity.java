@@ -15,6 +15,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -42,13 +44,14 @@ public class DanceActivity extends AppCompatActivity {
     private String user_db;
 
     // temp
+    private String TAG = this.getClass().getSimpleName();
     private int counter;
     private TextView mText;
     private MusicDance musical = null;
     private Handler mHandler;
     //private int[] music = null;
     private Boolean resume = true;
-   private TextView goodOrBad = null;
+    private TextView goodOrBad = null;
     private ImageView toCancelImageButtonView = null;
     private ImageView nextImageButtonView = null;
     private ImageView actualImageButtonView = null;
@@ -89,10 +92,18 @@ public class DanceActivity extends AppCompatActivity {
         // Temp Hugo
         mText = findViewById(R.id.textViewMovements);
         counter =0;
+        WearService.setToZero();
 
+        ImageButton buttonPause = findViewById(R.id.pausebutton);
 
+        buttonPause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    ResumeMusic(v);
+                }
+        });
 
-        // Create instance of Sport Tracker Room DB
+        // Create instance of Clone Room DB
         cloneDanceRD = Room.databaseBuilder(getApplicationContext(), CloneDanceRoomDatabase.class, "db").allowMainThreadQueries().build();
 
         int[] music;
@@ -124,9 +135,6 @@ public class DanceActivity extends AppCompatActivity {
 
                         cloneDanceRD.dataDao().insertEntity(dbEntity);
                         Toast.makeText(getApplicationContext(), "Username" + user_db + "\n Music Name" + musical.getName() + "\n score" + score, Toast.LENGTH_LONG).show();
-                        Log.d("PAULINE", "username_fb " + user_db );
-                        Log.d("PAULINE", "music_name " + musical.getName() );
-                        Log.d("PAULINE", "score " + score );
 
                         Intent intentFinishDance = new Intent(DanceActivity.this, FinishActivity.class);
                         intentFinishDance.putExtra(LaunchActivity.USER_ID, userID);
@@ -198,6 +206,7 @@ public class DanceActivity extends AppCompatActivity {
             counter++;
             mText.setText("mode: " + actualPosition+"\n"
                     +"counter: " + counter);
+            Log.d(TAG, "counter : "+ counter + "Wearservice counter : " + WearService.getCount());
         }
     }
 
@@ -269,6 +278,7 @@ public class DanceActivity extends AppCompatActivity {
         alert.show();
 
     }
+
     private Runnable progressRunnable = new Runnable() {
         Bundle messageBundle=new Bundle();
         Message myMessage;

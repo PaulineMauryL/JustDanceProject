@@ -34,6 +34,7 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
         mHandler = new Handler();
 
         counter = 0;
+        WearService.setToZero();
         /*Sensor SetUp*/
         sensorManager = (SensorManager) getSystemService(WatchMainActivity.SENSOR_SERVICE);
         Sensor acc_sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -47,7 +48,7 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
         startSendingData();
     }
     protected void startSendingData() {
-        mHandler.postDelayed(sendDataToBroadcast,50);
+        mHandler.postDelayed(sendDataToBroadcast,500);
     }
 
     final Runnable sendDataToBroadcast = new Runnable() {
@@ -55,7 +56,7 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
 
             TextView[] mText = {findViewById(R.id.textView1),findViewById(R.id.textView2),findViewById(R.id.textView3)};
             counter ++;
-            
+
             if(Math.abs(accRate[0])<error) {
                 actualPosition = 2;
             } else if(Math.abs(accRate[1])<error && Math.abs(accRate[2])<error && accRate[0]>0){
@@ -63,19 +64,17 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
             } else if(Math.abs(accRate[1])<error && Math.abs(accRate[2])<error && accRate[0]<0) {
                 actualPosition = 3;
             } else{
-                actualPosition += 0;
+                actualPosition = 0;
             }
             /* Send Values */
-            Log.d(TAG,"Send values: 1");
+
             Intent intent = new Intent(DanceActivity.this, WearService.class);
-            Log.d(TAG,"Send values: 2");
             intent.setAction(WearService.ACTION_SEND.COUNTER.name());
-            Log.d(TAG,"Send values: 3");
             intent.putExtra(WearService.COUNTER, actualPosition);
-            Log.d(TAG,"Send values: 4");
             startService(intent);
 
-            mText[1].setText("Counter: "+ actualPosition);
+            mText[1].setText("Mode: "+ actualPosition + " Counter:" + counter);
+            Log.d(TAG, "counter : "+ counter + "Wearservice counter : " + WearService.getCount());
             startSendingData();
         }
     };
