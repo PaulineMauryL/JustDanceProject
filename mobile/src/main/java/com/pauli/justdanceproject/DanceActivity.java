@@ -15,6 +15,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -36,12 +37,13 @@ public class DanceActivity extends AppCompatActivity {
     static final String NUMBER_POINTS = "Number_points";  //Added by Pauline for finish activity
     static final String MUSIC_NAME = "Music_name";
 
+    //private CloneDanceRoomDatabase danceDB;
     private String userID;
     private String music_name;
     private int score=0;
     private String user_db;
-
     // temp
+    private String TAG = this.getClass().getSimpleName();
     private int counter;
     private TextView mText;
     private MusicDance musical = null;
@@ -89,6 +91,7 @@ public class DanceActivity extends AppCompatActivity {
         // Temp Hugo
         mText = findViewById(R.id.textViewMovements);
         counter =0;
+        WearService.setToZero();
 
 
 
@@ -150,23 +153,21 @@ public class DanceActivity extends AppCompatActivity {
             // Change to dance activity
             Communication.changeWatchActivity(DanceActivity.this,BuildConfig.W_dance_activity);
         }
+        accRateBroadcastReceiver = new AccRateBroadcastReceiver();
+        Log.d(TAG,"New Local BroadCastManager (OnCreat)");
+        LocalBroadcastManager.getInstance(this).registerReceiver(accRateBroadcastReceiver, new
+                IntentFilter(RECEIVE_COUNTER));
     }
 
     @Override
     public void onStart() {
         super.onStart();
         mHandler.postDelayed(startMusic,1000);
-        // initialisation de la ProgressBar
         bar.setProgress(0);
-        // Définition de la Thread (peut être effectuée dans une classe externe ou interne)
         Thread background = new Thread(progressRunnable);
-        //Lancement de la Thread
         isPausing.set(true);
         isRunning.set(true);
         background.start();// Get the accelerometer datas back from the watch
-        accRateBroadcastReceiver = new AccRateBroadcastReceiver();
-        LocalBroadcastManager.getInstance(this).registerReceiver(accRateBroadcastReceiver, new
-                IntentFilter(RECEIVE_COUNTER));
     }
 
     @Override
@@ -184,9 +185,11 @@ public class DanceActivity extends AppCompatActivity {
         super.onResume();
         isPausing.set(false);
         // Get the accelerometer datas back from the watch
+        if(accRateBroadcastReceiver == null){
         accRateBroadcastReceiver = new AccRateBroadcastReceiver();
+        Log.d(TAG,"New Local BroadCastManager");
         LocalBroadcastManager.getInstance(this).registerReceiver(accRateBroadcastReceiver, new
-                IntentFilter(RECEIVE_COUNTER));
+                IntentFilter(RECEIVE_COUNTER));}
     }
 
     private class AccRateBroadcastReceiver extends BroadcastReceiver {
@@ -198,16 +201,9 @@ public class DanceActivity extends AppCompatActivity {
             counter++;
             mText.setText("mode: " + actualPosition+"\n"
                     +"counter: " + counter);
+            Log.d(TAG, "counter : "+ counter + "Wearservice counter : " + WearService.getCount());
         }
     }
-
-    private void startWatchActivity(){
-        Intent intent = new Intent(DanceActivity.this, WearService.class);
-        intent.setAction(WearService.ACTION_SEND.STARTACTIVITY.name());
-        intent.putExtra(WearService.ACTIVITY_TO_START, BuildConfig.W_dance_activity);
-        startService(intent);
-    }
-
 
     public void movementsOnMusic(){
         int i;
@@ -245,11 +241,11 @@ public class DanceActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         isRunning.set(false);
                         musical.getSound().stop();
-                        finish();
                         // Leave
                         Intent intent_change = new Intent(getApplication(), MainActivity.class);
                         intent_change.putExtra(LaunchActivity.USER_ID,userID);
                         startActivity(intent_change);
+                        finish();
                     }
                 })
                 .setNegativeButton(R.string.ButtonResume, new DialogInterface.OnClickListener() {

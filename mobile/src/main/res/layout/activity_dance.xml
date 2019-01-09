@@ -37,7 +37,7 @@
                     android:layout_width="match_parent"
                     android:layout_weight="1"
                     android:scaleType="fitStart"
-                    app:srcCompat="@drawable/pausebutton" />
+                    app:srcCompat="@drawable/disco" />
 
                 <TextView
                     android:id="@+id/danceGoodOrOk"
