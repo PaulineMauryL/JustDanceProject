@@ -48,11 +48,12 @@ public class LaunchActivity extends AppCompatActivity {
             communicationBroadcastReceiver = new CommunicationBroadcastReceiver();
             LocalBroadcastManager.getInstance(this).registerReceiver(communicationBroadcastReceiver, new IntentFilter(ACTION_RECEIVE_MESSAGE));
         }
-        //Intent intent = getIntent();
+    }
 
-       // Log.d(TAG, "oncreate");
-        //username = findViewById(R.id.txt_enter_name);
-        //button = findViewById(R.id.bn_launch);
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){testIfWatchPaired();}
     }
 
     @Override
@@ -69,8 +70,6 @@ public class LaunchActivity extends AppCompatActivity {
     public void begin_game(View view) {  //if button is clicked
 
         final String username = ((EditText) findViewById(R.id.txt_enter_name)).getText().toString();
-        // Test if the watch is paired
-        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){testIfWatchPaired();}
         if(username.isEmpty()) {
             // No connection to internet
             DialogOk dialogOk = new DialogOk(LaunchActivity.this,getString(R.string.nameEmpty));
@@ -91,6 +90,8 @@ public class LaunchActivity extends AppCompatActivity {
             // Check if the internet connection works
             DialogOk dialogOk = new DialogOk(LaunchActivity.this,getString(R.string.internet_connection_message));
             dialogOk.creat();
+            // Test if the watch is paired
+            if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){testIfWatchPaired();}
         } else{
             // Begin fire base transaction
             final FirebaseDatabase database = FirebaseDatabase.getInstance();

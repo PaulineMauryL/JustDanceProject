@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intentStartDance = new Intent(MainActivity.this, DanceActivity.class);
             intentStartDance.putExtra("musicchosen", chosenMusic);
             startActivity(intentStartDance);
+            finish();
         }
     }
 

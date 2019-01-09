@@ -24,6 +24,9 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
     private final String TAG = this.getClass().getSimpleName();
     private Handler mHandler;
     private int counter;
+
+    private SensorManager sensorManager;
+    private StopActivityBroadcastReceiver stopActivityBroadcastReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,18 +35,13 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
 
         counter = 0;
         /*Sensor SetUp*/
-        final SensorManager sensorManager = (SensorManager) getSystemService(WatchMainActivity.SENSOR_SERVICE);
+        sensorManager = (SensorManager) getSystemService(WatchMainActivity.SENSOR_SERVICE);
         Sensor acc_sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         // Enable registerListener
         sensorManager.registerListener(this, acc_sensor, SensorManager.SENSOR_DELAY_NORMAL);
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                sensorManager.unregisterListener(DanceActivity.this);
-                finish();
-            }
-        }, new IntentFilter(STOP_ACTIVITY));
+        stopActivityBroadcastReceiver = new StopActivityBroadcastReceiver();
+        LocalBroadcastManager.getInstance(this).registerReceiver(stopActivityBroadcastReceiver,new IntentFilter(STOP_ACTIVITY));
 
         setAmbientEnabled();
         startSendingData();
@@ -57,12 +55,7 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
 
             TextView[] mText = {findViewById(R.id.textView1),findViewById(R.id.textView2),findViewById(R.id.textView3)};
             counter ++;
-        /*for (int i = 0; i < event.values.length; i++) {
-            accRate[i] += event.values[i];
-            mText[i].setText("Acc = " + accRate[i]);
-        }*/
-
-
+            
             if(Math.abs(accRate[0])<error) {
                 actualPosition = 2;
             } else if(Math.abs(accRate[1])<error && Math.abs(accRate[2])<error && accRate[0]>0){
@@ -89,29 +82,40 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
     @Override
     protected void onResume() {
         super.onResume();
-        final SensorManager sensorManager = (SensorManager) getSystemService(WatchMainActivity.SENSOR_SERVICE);
+        sensorManager = (SensorManager) getSystemService(WatchMainActivity.SENSOR_SERVICE);
         Sensor acc_sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         // Enable registerListener
         sensorManager.registerListener(this, acc_sensor, SensorManager.SENSOR_DELAY_NORMAL);
+        stopActivityBroadcastReceiver = new StopActivityBroadcastReceiver();
+        LocalBroadcastManager.getInstance(this).registerReceiver(stopActivityBroadcastReceiver,new IntentFilter(STOP_ACTIVITY));
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        final SensorManager sensorManager = (SensorManager) getSystemService(WatchMainActivity.SENSOR_SERVICE);
         sensorManager.unregisterListener(this);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(stopActivityBroadcastReceiver);
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-           for (int i = 0; i < event.values.length; i++) {
-                accRate[i] = event.values[i];
-            }
+        for (int i = 0; i < event.values.length; i++) {
+            accRate[i] = event.values[i];
+        }
 
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
+    }
+
+    private class StopActivityBroadcastReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            sensorManager.unregisterListener(DanceActivity.this);
+            finish();
+        }
     }
 }
