@@ -24,8 +24,10 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
     private final String TAG = this.getClass().getSimpleName();
     private Handler mHandler;
     private int counter;
+    private Boolean isRunning;
 
     private SensorManager sensorManager;
+    private Sensor acc_sensor;
     private StopActivityBroadcastReceiver stopActivityBroadcastReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,15 +38,18 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
         counter = 0;
         WearService.setToZero();
         /*Sensor SetUp*/
+
         sensorManager = (SensorManager) getSystemService(WatchMainActivity.SENSOR_SERVICE);
-        Sensor acc_sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        acc_sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         // Enable registerListener
-        sensorManager.registerListener(this, acc_sensor, SensorManager.SENSOR_DELAY_NORMAL);
+        Log.d(TAG, "New registerListener");
+        sensorManager.registerListener(DanceActivity.this, acc_sensor, SensorManager.SENSOR_DELAY_NORMAL);
 
         stopActivityBroadcastReceiver = new StopActivityBroadcastReceiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(stopActivityBroadcastReceiver,new IntentFilter(STOP_ACTIVITY));
 
         setAmbientEnabled();
+        isRunning = true;
         startSendingData();
     }
     protected void startSendingData() {
@@ -75,24 +80,29 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
 
             mText[1].setText("Mode: "+ actualPosition + " Counter:" + counter);
             Log.d(TAG, "counter : "+ counter + "Wearservice counter : " + WearService.getCount());
-            startSendingData();
+            if(isRunning){startSendingData();}
         }
     };
     @Override
     protected void onResume() {
         super.onResume();
-        sensorManager = (SensorManager) getSystemService(WatchMainActivity.SENSOR_SERVICE);
-        Sensor acc_sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        // Enable registerListener
-        sensorManager.registerListener(this, acc_sensor, SensorManager.SENSOR_DELAY_NORMAL);
-        stopActivityBroadcastReceiver = new StopActivityBroadcastReceiver();
-        LocalBroadcastManager.getInstance(this).registerReceiver(stopActivityBroadcastReceiver,new IntentFilter(STOP_ACTIVITY));
+        if(sensorManager == null) {
+            Log.d(TAG, "New registerListener (On Resume)");
+            sensorManager = (SensorManager) getSystemService(WatchMainActivity.SENSOR_SERVICE);
+            acc_sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            // Enable registerListener
+            sensorManager.registerListener(DanceActivity.this, acc_sensor, SensorManager.SENSOR_DELAY_NORMAL);}
+        if(stopActivityBroadcastReceiver==null){
+            stopActivityBroadcastReceiver = new StopActivityBroadcastReceiver();
+            LocalBroadcastManager.getInstance(this).registerReceiver(stopActivityBroadcastReceiver,new IntentFilter(STOP_ACTIVITY));
+        }
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        sensorManager.unregisterListener(this);
+        sensorManager.unregisterListener(DanceActivity.this);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(stopActivityBroadcastReceiver);
     }
 
@@ -113,7 +123,8 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            sensorManager.unregisterListener(DanceActivity.this);
+            //sensorManager.unregisterListener(DanceActivity.this);
+            isRunning = false;
             finish();
         }
     }

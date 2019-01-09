@@ -92,10 +92,7 @@ public class DanceActivity extends AppCompatActivity {
                 musical.getSound().setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
                     public void onCompletion(MediaPlayer mp){
                         Log.d("PAULINE", "onCompletion");
-                        //Store in database
-                        //String music_name = musical.getName();
-                        //SaveInDatabase rowAsyncTask = new SaveInDatabase(danceDB);
-                        //rowAsyncTask.execute(userID, music_name, score);
+
                         Log.d("PAULINE", "After Asynk Task");
 
                         Intent intentFinishDance = new Intent(DanceActivity.this, FinishActivity.class);
@@ -119,6 +116,10 @@ public class DanceActivity extends AppCompatActivity {
             // Change to dance activity
             Communication.changeWatchActivity(DanceActivity.this,BuildConfig.W_dance_activity);
         }
+        accRateBroadcastReceiver = new AccRateBroadcastReceiver();
+        Log.d(TAG,"New Local BroadCastManager (OnCreat)");
+        LocalBroadcastManager.getInstance(this).registerReceiver(accRateBroadcastReceiver, new
+                IntentFilter(RECEIVE_COUNTER));
     }
 
     @Override
@@ -130,9 +131,6 @@ public class DanceActivity extends AppCompatActivity {
         isPausing.set(true);
         isRunning.set(true);
         background.start();
-        accRateBroadcastReceiver = new AccRateBroadcastReceiver();
-        LocalBroadcastManager.getInstance(this).registerReceiver(accRateBroadcastReceiver, new
-                IntentFilter(RECEIVE_COUNTER));
     }
 
     @Override
@@ -148,9 +146,11 @@ public class DanceActivity extends AppCompatActivity {
         super.onResume();
         isPausing.set(false);
         // Get the accelerometer datas back from the watch
+        if(accRateBroadcastReceiver == null){
         accRateBroadcastReceiver = new AccRateBroadcastReceiver();
+        Log.d(TAG,"New Local BroadCastManager");
         LocalBroadcastManager.getInstance(this).registerReceiver(accRateBroadcastReceiver, new
-                IntentFilter(RECEIVE_COUNTER));
+                IntentFilter(RECEIVE_COUNTER));}
     }
 
     private class AccRateBroadcastReceiver extends BroadcastReceiver {
@@ -165,14 +165,6 @@ public class DanceActivity extends AppCompatActivity {
             Log.d(TAG, "counter : "+ counter + "Wearservice counter : " + WearService.getCount());
         }
     }
-
-    private void startWatchActivity(){
-        Intent intent = new Intent(DanceActivity.this, WearService.class);
-        intent.setAction(WearService.ACTION_SEND.STARTACTIVITY.name());
-        intent.putExtra(WearService.ACTIVITY_TO_START, BuildConfig.W_dance_activity);
-        startService(intent);
-    }
-
 
     public void movementsOnMusic(){
         int i;
@@ -210,11 +202,11 @@ public class DanceActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         isRunning.set(false);
                         musical.getSound().stop();
-                        finish();
                         // Leave
                         Intent intent_change = new Intent(getApplication(), MainActivity.class);
                         intent_change.putExtra(LaunchActivity.USER_ID,userID);
                         startActivity(intent_change);
+                        finish();
                     }
                 })
                 .setNegativeButton(R.string.ButtonResume, new DialogInterface.OnClickListener() {

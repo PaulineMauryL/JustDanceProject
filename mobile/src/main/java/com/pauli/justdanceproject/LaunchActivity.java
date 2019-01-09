@@ -65,7 +65,9 @@ public class LaunchActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if(communicationBroadcastReceiver == null){
         LocalBroadcastManager.getInstance(this).registerReceiver(communicationBroadcastReceiver, new IntentFilter(ACTION_RECEIVE_MESSAGE));
+        }
     }
     public void begin_game(View view) {  //if button is clicked
 
