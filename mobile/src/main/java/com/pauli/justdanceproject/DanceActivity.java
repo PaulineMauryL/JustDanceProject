@@ -1,5 +1,6 @@
 package com.pauli.justdanceproject;
 
+import android.arch.persistence.room.Room;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,14 +20,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.util.Log;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DanceActivity extends AppCompatActivity {
 
     static final String NUMBER_POINTS = "Number_points";  //Added by Pauline for finish activity
+    static final String MUSIC_NAME = "Music_name";
 
-    //private CloneDanceRoomDatabase danceDB;
+    private CloneDanceRoomDatabase danceDB;
     private String userID;
+    private String music_name;
+    private int score=0;
 
     private MusicDance musical = null;
     private Handler mHandler;
@@ -39,7 +45,6 @@ public class DanceActivity extends AppCompatActivity {
     private int nextPosition = 0;
     private int askedPosition = 0;
     private int actualPosition = 0;
-    private int score=0;
     final int error = 5;
     private static final String PROGRESS_BAR_INCREMENT="ProgressBarIncrementId";
     private ProgressBar bar;
@@ -58,14 +63,16 @@ public class DanceActivity extends AppCompatActivity {
     public static final String RECEIVE_ACC_RATE = "RECEIVE_ACC_RATE";
     public static final String ACC_RATE = "ACC_RATE";
     private AccRateBroadcastReceiver accRateBroadcastReceiver;
+    public static CloneDanceRoomDatabase cloneDanceRD;
+
+    static final FirebaseDatabase database = FirebaseDatabase.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dance);
         // Create instance of Sport Tracker Room DB
-        //danceDB = CloneDanceRoomDatabase.getDatabase(getApplicationContext());
-
+        cloneDanceRD = Room.databaseBuilder(getApplicationContext(), CloneDanceRoomDatabase.class, "db").allowMainThreadQueries().build();
 
         int[] music;
         Bundle bunble = getIntent().getExtras();
@@ -73,21 +80,24 @@ public class DanceActivity extends AppCompatActivity {
             music = bunble.getIntArray("musicchosen");
             userID = bunble.getString(LaunchActivity.USER_ID);
             if(music!=null) {
-                Log.d("PAULINE", "music not null");
-                musical = new MusicDance("musicname", music, this);
+                musical = new MusicDance( music, this);
                 musical.getSound().start();
                 musical.getSound().setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
                     public void onCompletion(MediaPlayer mp){
-                        Log.d("PAULINE", "onCompletion");
-                        //Store in database
-                        //String music_name = musical.getName();
-                        //SaveInDatabase rowAsyncTask = new SaveInDatabase(danceDB);
-                        //rowAsyncTask.execute(userID, music_name, score);
-                        Log.d("PAULINE", "After Asynk Task");
+                        String username = database.getReference("profiles").child(userID).child("username").toString();
+
+                        DatabaseEntity dbEntity = new DatabaseEntity();
+                        dbEntity.setUser_name(username);
+                        dbEntity.setMusic(musical.getName());
+                        dbEntity.setScore(score);
+
+                        cloneDanceRD.dataDao().insertEntity(dbEntity);
+                        //Toast.makeText(getApplicationContext(), "Entity added", Toast.LENGTH_SHORT).show();
 
                         Intent intentFinishDance = new Intent(DanceActivity.this, FinishActivity.class);
                         intentFinishDance.putExtra(LaunchActivity.USER_ID, userID);
                         intentFinishDance.putExtra(NUMBER_POINTS, score);
+                        intentFinishDance.putExtra(MUSIC_NAME, music_name);
                         startActivity(intentFinishDance);
                     }
                 });

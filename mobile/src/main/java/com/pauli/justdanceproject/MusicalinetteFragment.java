@@ -3,12 +3,10 @@ package com.pauli.justdanceproject;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,39 +15,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.androidplot.xy.BoundaryMode;
-import com.androidplot.xy.LineAndPointFormatter;
-import com.androidplot.xy.SimpleXYSeries;
-import com.androidplot.xy.XYGraphWidget;
-import com.androidplot.xy.XYPlot;
-import com.androidplot.xy.XYSeries;
-import com.google.firebase.database.DatabaseReference;
-
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-
-import static android.graphics.Color.RED;
-import static android.graphics.Color.TRANSPARENT;
 
 
 public class MusicalinetteFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private String userID;
-    private String recID;
     private View fragmentView;
 
-    private DatabaseReference recordingRef;
     AlertDialog.Builder builder;
-    public static final String POINTS_PLOT_WATCH = "Points Smart Watch";  //pas sure de comprendre ce que je fait ici..
-    private static final int NUMBER_OF_POINTS = 50;
-    private static final int MIN_POINTS= 0;
-    private static final int MAX_POINTS = 1000;
-    private static XYPlot dancePlot;
     private final String TAG = this.getClass().getSimpleName();
-    private XYplotSeriesList xyPlotSeriesList;
-
-    private ArrayList<Integer> hrDataArrayList = new ArrayList<>();
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,6 +32,19 @@ public class MusicalinetteFragment extends Fragment {
         setHasOptionsMenu(true);
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        fragmentView = inflater.inflate(R.layout.fragment_musicalinette, container, false);
+
+        Intent intent = getActivity().getIntent();
+        if (intent.hasExtra(LaunchActivity.USER_ID)) {
+            userID = intent.getStringExtra(LaunchActivity.USER_ID);
+        }
+
+        return fragmentView;
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -96,6 +84,7 @@ public class MusicalinetteFragment extends Fragment {
                                         Toast.LENGTH_SHORT).show();
                                 // Leave
                                 Intent intent_change = new Intent(getActivity().getApplication(), LaunchActivity.class);
+                                intent_change.putExtra(LaunchActivity.USER_ID, userID);
                                 startActivity(intent_change);
                                 getActivity().finish();
 
@@ -125,55 +114,7 @@ public class MusicalinetteFragment extends Fragment {
     }
 
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        fragmentView = inflater.inflate(R.layout.fragment_musicalinette, container, false);
 
-        Intent intent = getActivity().getIntent();
-        if (intent.hasExtra(LaunchActivity.USER_ID)) {
-            userID = intent.getStringExtra(LaunchActivity.USER_ID);
-        }
-        if (intent.hasExtra(MainActivity.RECORDING_ID)) {
-            recID = intent.getStringExtra(MainActivity.RECORDING_ID);
-        }
-
-    /*
-        // Get recording information from Firebase
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference profileGetRef = database.getReference("profiles");
-
-        recordingRef = profileGetRef.child(userID).child("recordings").child(recID);
-
-        recordingRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                TextView danceType = fragmentView.findViewById(R.id.danceTypeLive);
-                danceType.setText(dataSnapshot.child("selected_dance").getValue().toString());
-
-                TextView danceDatetime = fragmentView.findViewById(R.id.danceDateTimeLive);
-                Long datetime = Long.parseLong(dataSnapshot.child("datetime").getValue().toString());
-                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss", Locale.getDefault());
-                danceDatetime.setText(formatter.format(new Date(datetime)));
-
-                String nb_pts = dataSnapshot.child("points").getValue().toString();
-                TextView txt_points = fragmentView.findViewById(R.id.danceNbPointsLive);
-                txt_points.setText(nb_pts);
-
-                String level = dataSnapshot.child("level").getValue().toString();
-                TextView hrBelt = fragmentView.findViewById(R.id.danceLevelLive);
-                hrBelt.setText(level);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    */
-        return fragmentView;
-    }
 
 
     @Override

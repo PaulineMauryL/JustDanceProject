@@ -12,13 +12,9 @@ public class MusicDance implements Serializable {
     private MediaPlayer musicSound;
     private int[] musicTiming;
 
-    /**
-     * @param musicName
-     * @param music
-     * @param context
-     */
-    MusicDance(String musicName, int[] music,final Context context){
-        this.musicName = musicName;
+
+    MusicDance(int[] music,final Context context){
+        this.musicName = String.valueOf(music[0]);
         this.musicSound = MediaPlayer.create(context,music[0]);
         Resources res = context.getResources();
         this.musicTiming = res.getIntArray(music[1]);

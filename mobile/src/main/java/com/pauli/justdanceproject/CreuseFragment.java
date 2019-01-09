@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -33,12 +34,9 @@ public class CreuseFragment extends Fragment {
     private final String TAG = this.getClass().getSimpleName();
     AlertDialog.Builder builder;
     private OnFragmentInteractionListener mListener;
-    private ListView listView;
     private View fragmentView;
-    private RecordingAdapter adapter;
-    //private MyFirebaseRecordingListener mFirebaseRecordingListener;
-    private DatabaseReference databaseRef;
     private String userID;
+    private TextView  TxtInfo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -124,10 +122,23 @@ public class CreuseFragment extends Fragment {
         if (intent.hasExtra(LaunchActivity.USER_ID)) {
             userID = intent.getStringExtra(LaunchActivity.USER_ID);
         }
+        TxtInfo = fragmentView.findViewById(R.id.txt_display_info);
+        List<DatabaseEntity> entities = DanceActivity.cloneDanceRD.dataDao().getHallOfFame(String.valueOf(R.raw.musicalinette));
+
+        String info = "";
+
+        for(DatabaseEntity dbEnt : entities){
+            String user_name = dbEnt.getUser_name();
+            int score = dbEnt.getScore();
+            info = info + "User :" + user_name + " Score :" + score;
+        }
+
+        TxtInfo.setText(info);
 
         return fragmentView;
     }
 
+    /*
     private class RecordingAdapter extends ArrayAdapter<Recording> {
         private int row_layout;
 
@@ -135,6 +146,7 @@ public class CreuseFragment extends Fragment {
             super(activity, row_layout);
             this.row_layout = row_layout;
         }
+
 
         @NonNull
         @Override
@@ -156,7 +168,9 @@ public class CreuseFragment extends Fragment {
 
             return row;
         }
+
     }
+    */
 
     @Override
     public void onAttach(Context context) {

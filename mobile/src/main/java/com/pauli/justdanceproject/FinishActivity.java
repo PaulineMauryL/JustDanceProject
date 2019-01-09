@@ -8,10 +8,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.List;
+
 public class FinishActivity extends AppCompatActivity {
 
     private String userID;
+    private String music_name;
     private int score;
+    private CloneDanceRoomDatabase danceDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,17 +24,22 @@ public class FinishActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         userID = intent.getStringExtra(LaunchActivity.USER_ID);
-
-        int nb_points = intent.getIntExtra(DanceActivity.NUMBER_POINTS, 0);
-        String user_level = "to do";   //TODO: set user level depending on nb points (see Profile)
+        music_name = intent.getStringExtra(DanceActivity.MUSIC_NAME);
+        score = intent.getIntExtra(DanceActivity.NUMBER_POINTS, 0);
 
         TextView view_nb_points = findViewById(R.id.txt_nb_points);
-        String points_number = "You have " + String.valueOf(nb_points) + "points";
+        String points_number = "You have " + String.valueOf(score) + "points";
         view_nb_points.setText(points_number);
 
-        TextView view_level = findViewById(R.id.txt_level);
-        String user_level_string = "You are a " + user_level;
-        view_level.setText(user_level_string);
+        /*List<DatabaseEntity> usersAndSongs = danceDB.dataDao().getHallOfFame(music_name);
+
+        String info = "";
+
+        for(DatabaseEntity dance : usersAndSongs){
+            String username = dance.
+        }
+        */
+
     }
 
     public void dance_again(View view) {
