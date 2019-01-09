@@ -1,6 +1,5 @@
 package com.pauli.justdanceproject;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -101,42 +100,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent_edit);
                 finish();
                 break;
-            case R.id.txt_change_user:                            // to copy in main activity and the three fragments
-                // Check if user really wants to change
-                builder = new AlertDialog.Builder(this);
-
-                //Uncomment the below code to Set the message and title from the strings.xml file
-                builder.setMessage("Change user").setTitle("userChange");
-
-                //Setting message manually and performing action on button click
-                builder.setMessage(R.string.QuestionChangeUser)
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                finish();
-                                Toast.makeText(getApplicationContext(),getString(R.string.YesChangeUserPopUp),
-                                        Toast.LENGTH_SHORT).show();
-                                // Leave
-                                Intent intent_change = new Intent(getApplication(), LaunchActivity.class);
-                                startActivity(intent_change);
-                                finish();
-
-                            }
-                        })
-                        .setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                //  Action for 'NO' Button
-                                dialog.cancel();
-                                Toast.makeText(getApplicationContext(),getString(R.string.NoChangeUserPopUp),
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                //Creating dialog box
-                AlertDialog alert = builder.create();
-                //Setting the title manually
-                alert.setTitle(getString(R.string.ChangeOfDancerTitle));
-                alert.show();
-
+            case R.id.txt_change_user:// to copy in main activity and the three fragments
+                DialogueYesNo dialogueYesNo = new DialogueYesNo(DialogueYesNo.EDIT_PROFILE,this, getString(R.string.QuestionChangeUser));
+                dialogueYesNo.create(getString(R.string.YesChangeUserPopUp), getString(R.string.NoChangeUserPopUp));
                 break;
         }
         return super.onOptionsItemSelected(item);

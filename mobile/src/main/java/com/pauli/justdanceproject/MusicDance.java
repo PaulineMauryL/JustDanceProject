@@ -1,7 +1,6 @@
 package com.pauli.justdanceproject;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.media.MediaPlayer;
 import java.io.Serializable;

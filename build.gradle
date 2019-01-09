@@ -55,7 +55,7 @@ allprojects {
                 counter_key        : "counter_key",
                 counter_path       : "/COUNTER_RATE",
 
-                flag_watch_enable   : "true"
+                flag_watch_enable   : "false"
         ]
     }
 }

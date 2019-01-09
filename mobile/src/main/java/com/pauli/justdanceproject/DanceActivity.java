@@ -1,8 +1,8 @@
 package com.pauli.justdanceproject;
 
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.MediaPlayer;
@@ -10,14 +10,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.util.Log;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -46,7 +44,6 @@ public class DanceActivity extends AppCompatActivity {
     private int askedPosition = 0;
     private int actualPosition = 0;
     private int score=0;
-    final int error = 5;
     private static final String PROGRESS_BAR_INCREMENT="ProgressBarIncrementId";
     private ProgressBar bar;
     AtomicBoolean isRunning = new AtomicBoolean(false);
@@ -137,7 +134,9 @@ public class DanceActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         isPausing.set(true);
-        Communication.stopRecordingOnWear(DanceActivity.this, BuildConfig.W_dance_activity);
+        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)) {
+            Communication.stopRecordingOnWear(DanceActivity.this, BuildConfig.W_dance_activity);
+        }
         LocalBroadcastManager.getInstance(this).unregisterReceiver(accRateBroadcastReceiver);
     }
 
@@ -189,42 +188,39 @@ public class DanceActivity extends AppCompatActivity {
         resume = true;
         isPausing.set(true);
 
-        AlertDialog.Builder builder;
-        builder = new AlertDialog.Builder(this);
+        final Dialog dialog = new Dialog(this); // Context, this, etc.
+        dialog.setContentView(R.layout.dialog_yes_no);
+        TextView mTextInfo = dialog.findViewById(R.id.dialog_info_yes_no);
+        mTextInfo.setText(R.string.QuitOrResumeText);
+        Button quitButton = dialog.findViewById(R.id.buttonYesDialog);
+        quitButton.setText(getString(R.string.ButtonQuit));
+        quitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isRunning.set(false);
+                musical.getSound().stop();
+                // Leave
+                Intent intent_change = new Intent(getApplication(), MainActivity.class);
+                intent_change.putExtra(LaunchActivity.USER_ID,userID);
+                startActivity(intent_change);
+                finish();
+            }
+        });
 
-        //Uncomment the below code to Set the message and title from the strings.xml file
-        builder.setMessage(R.string.TitleQuitOrPause).setTitle(R.string.IdQuitOrPause);
-
-        //Setting message manually and performing action on button click
-        builder.setMessage(R.string.QuitOrResumeText)
-                .setCancelable(false)
-                .setPositiveButton(R.string.ButtonQuit, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        isRunning.set(false);
-                        musical.getSound().stop();
-                        // Leave
-                        Intent intent_change = new Intent(getApplication(), MainActivity.class);
-                        intent_change.putExtra(LaunchActivity.USER_ID,userID);
-                        startActivity(intent_change);
-                        finish();
-                    }
-                })
-                .setNegativeButton(R.string.ButtonResume, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //  Action for 'NO' Button
-                        dialog.cancel();
-                        musical.getSound().start();
-                        resume = false;
-                        movementsOnMusic();
-                        isPausing.set(false);
-                    }
-                });
-        //Creating dialog box
-        AlertDialog alert = builder.create();
-        //Setting the title manually
-        alert.setTitle(R.string.TitleQuitOrPause);
-        alert.show();
-
+        Button resumeButton = dialog.findViewById(R.id.buttonNoDialog);
+        resumeButton.setText(getString(R.string.ButtonResume));
+        resumeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //  Action for 'NO' Button
+                dialog.cancel();
+                musical.getSound().start();
+                resume = false;
+                movementsOnMusic();
+                isPausing.set(false);
+            }
+        });
+        dialog.show();
     }
     private Runnable progressRunnable = new Runnable() {
         Bundle messageBundle=new Bundle();

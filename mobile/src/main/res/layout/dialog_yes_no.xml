@@ -19,6 +19,7 @@
         app:fontFamily="@font/simplehandwrittingregular" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_below="@id/dialog_info_yes_no">
@@ -27,6 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.1" />
+
         <Button
             android:id="@+id/buttonYesDialog"
             android:layout_width="0dp"
@@ -37,6 +39,7 @@
             android:textColor="@android:color/white"
             android:textSize="18sp"
             app:fontFamily="@font/simplehandwrittingregular" />
+
         <Button
             android:id="@+id/buttonNoDialog"
             android:layout_width="0dp"
@@ -56,6 +59,8 @@
     </LinearLayout>
 
     <Space
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_below="@id/linearLayout" />
+
 </RelativeLayout>
