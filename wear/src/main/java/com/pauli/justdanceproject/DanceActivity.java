@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 public class DanceActivity extends WearableActivity implements SensorEventListener {
@@ -108,6 +109,7 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+
 
     private class StopActivityBroadcastReceiver extends BroadcastReceiver{
 
