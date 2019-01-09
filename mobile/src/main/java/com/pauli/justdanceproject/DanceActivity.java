@@ -16,6 +16,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -93,11 +94,16 @@ public class DanceActivity extends AppCompatActivity {
         counter =0;
         WearService.setToZero();
 
-
+        ImageButton button = findViewById(R.id.pausebutton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ResumeMusic(v);
+            }
+        });
 
         // Create instance of Sport Tracker Room DB
         cloneDanceRD = Room.databaseBuilder(getApplicationContext(), CloneDanceRoomDatabase.class, "db").allowMainThreadQueries().build();
-
         int[] music;
         Bundle bunble = getIntent().getExtras();
         if (bunble!=null){
@@ -111,25 +117,24 @@ public class DanceActivity extends AppCompatActivity {
                         profileGetRef.child(userID).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                user_db = dataSnapshot.child("username").getValue(String.class);
+                                String user_db = dataSnapshot.child("username").getValue(String.class);
+
+                                DatabaseEntity dbEntity = new DatabaseEntity();
+                                dbEntity.setUser_name(user_db);
+                                dbEntity.setMusic(musical.getName());
+                                dbEntity.setScore(score);
+
+                                cloneDanceRD.dataDao().insertEntity(dbEntity);
+                                //Toast.makeText(getApplicationContext(), "Username" + user_db + "\n Music Name" + musical.getName() + "\n score" + score, Toast.LENGTH_LONG).show();
+
                             }
 
                             @Override
                                 public void onCancelled(@NonNull DatabaseError databaseError) {
+                                System.out.println("The read failed: " + databaseError.getCode());
                             }
                         });
                         //String username = database.getReference("profiles").child(userID).child("username").toString();
-
-                        DatabaseEntity dbEntity = new DatabaseEntity();
-                        dbEntity.setUser_name(user_db);
-                        dbEntity.setMusic(musical.getName());
-                        dbEntity.setScore(score);
-
-                        cloneDanceRD.dataDao().insertEntity(dbEntity);
-                        Toast.makeText(getApplicationContext(), "Username" + user_db + "\n Music Name" + musical.getName() + "\n score" + score, Toast.LENGTH_LONG).show();
-                        Log.d("PAULINE", "username_fb " + user_db );
-                        Log.d("PAULINE", "music_name " + musical.getName() );
-                        Log.d("PAULINE", "score " + score );
 
                         Intent intentFinishDance = new Intent(DanceActivity.this, FinishActivity.class);
                         intentFinishDance.putExtra(LaunchActivity.USER_ID, userID);
