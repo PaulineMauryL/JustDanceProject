@@ -39,6 +39,15 @@ public class WearService extends WearableListenerService {
     // Tag for Logcat
     private static final String TAG = "WearService";
 
+    private static int hugo_count_test;
+
+    public static void setToZero(){
+        hugo_count_test = 0;
+    }
+    public static int getCount(){
+        return hugo_count_test;
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
@@ -193,16 +202,9 @@ public class WearService extends WearableListenerService {
                         intent.putExtra("REPLACE_THIS_WITH_A_STRING_OF_ARRAYLIST_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY", arraylist);
                         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
                         break;
-                    /*case BuildConfig.W_acc_rate_path:
-                        float[] acc_rate = dataMapItem.getDataMap().getFloatArray(BuildConfig
-                                .W_acc_rate_key);
-                        intent = new Intent(DanceActivity.RECEIVE_ACC_RATE);
-                        intent.putExtra(DanceActivity.ACC_RATE, acc_rate);
-                        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-                        break;*/
                     case BuildConfig.W_counter_path:
-                        int counter = dataMapItem.getDataMap().getInt(BuildConfig
-                                .W_counter_key);
+                        hugo_count_test++;
+                        int counter = dataMapItem.getDataMap().getInt(BuildConfig.W_counter_key);
                         intent = new Intent(DanceActivity.RECEIVE_COUNTER);
                         intent.putExtra(DanceActivity.COUNTER, counter);
                         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
@@ -229,11 +231,6 @@ public class WearService extends WearableListenerService {
         Log.v(TAG, "Received a message for path " + path
                 + " : \"" + data
                 + "\", from node " + messageEvent.getSourceNodeId());
-
-        if (path.equals(BuildConfig.W_path_start_activity)
-                && data.equals(BuildConfig.W_mainactivity)) {
-            startActivity(new Intent(this, MainActivity.class));
-        }
 
         switch (path) {
             case BuildConfig.W_path_start_activity:

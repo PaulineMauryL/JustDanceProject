@@ -30,6 +30,7 @@ public class DanceActivity extends AppCompatActivity {
     private String userID;
 
     // temp
+    private String TAG = this.getClass().getSimpleName();
     private int counter;
     private TextView mText;
     private MusicDance musical = null;
@@ -73,6 +74,7 @@ public class DanceActivity extends AppCompatActivity {
         // Temp Hugo
         mText = findViewById(R.id.textViewMovements);
         counter =0;
+        WearService.setToZero();
 
         // Create instance of Sport Tracker Room DB
         //danceDB = CloneDanceRoomDatabase.getDatabase(getApplicationContext());
@@ -160,6 +162,7 @@ public class DanceActivity extends AppCompatActivity {
             counter++;
             mText.setText("mode: " + actualPosition+"\n"
                     +"counter: " + counter);
+            Log.d(TAG, "counter : "+ counter + "Wearservice counter : " + WearService.getCount());
         }
     }
 
