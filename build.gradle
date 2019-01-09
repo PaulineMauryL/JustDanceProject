@@ -38,6 +38,7 @@ allprojects {
                 watchmainactivity   : "WatchMainActivity",
                 sleepactivity       :  "SleepActivity",
                 dance_activity      : "DanceActivity",
+                counter_activity    : "counter_activity",
 
                 a_key               : "a_value",
                 some_other_key      : "some_other_value",
@@ -51,7 +52,10 @@ allprojects {
                 test_isPaired       : "test_isPaired",
                 test_isPaired_true  : "test_isPaired_true",
 
-                flag_watch_enable   : "false"
+                counter_key        : "counter_key",
+                counter_path       : "/COUNTER_RATE",
+
+                flag_watch_enable   : "true"
         ]
     }
 }

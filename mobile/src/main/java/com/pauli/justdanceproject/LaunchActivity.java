@@ -7,10 +7,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -21,8 +21,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import static com.pauli.justdanceproject.WearService.MESSAGE;
 
 public class LaunchActivity extends AppCompatActivity {
 
@@ -38,7 +36,7 @@ public class LaunchActivity extends AppCompatActivity {
     private Boolean isWatchPaired= false;
     private String userID;
     boolean notMember = true;
-
+    private CommunicationBroadcastReceiver communicationBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,30 +45,31 @@ public class LaunchActivity extends AppCompatActivity {
         Log.d(TAG,"test :"+Boolean.parseBoolean(BuildConfig.W_flag_watch_enable));
         // Get acknowledge from the watch
         if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)) {
-            LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    Log.d(TAG, "Message received");
-                    String s_message = intent.getStringExtra(MESSAGE);
-                    Log.d(TAG, "Message receive: " + s_message);
-                    if (s_message.equals(BuildConfig.W_test_isPaired_true)) {
-                        isWatchPaired = true;
-                    }
-                }
-            }, new IntentFilter(ACTION_RECEIVE_MESSAGE));
+            communicationBroadcastReceiver = new CommunicationBroadcastReceiver();
+            LocalBroadcastManager.getInstance(this).registerReceiver(communicationBroadcastReceiver, new IntentFilter(ACTION_RECEIVE_MESSAGE));
         }
-        //Intent intent = getIntent();
-
-       // Log.d(TAG, "oncreate");
-        //username = findViewById(R.id.txt_enter_name);
-        //button = findViewById(R.id.bn_launch);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){testIfWatchPaired();}
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(communicationBroadcastReceiver);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(communicationBroadcastReceiver, new IntentFilter(ACTION_RECEIVE_MESSAGE));
+    }
     public void begin_game(View view) {  //if button is clicked
 
         final String username = ((EditText) findViewById(R.id.txt_enter_name)).getText().toString();
-        // Test if the watch is paired
-        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){testIfWatchPaired();}
         if(username.isEmpty()) {
             // No connection to internet
             DialogOk dialogOk = new DialogOk(LaunchActivity.this,getString(R.string.nameEmpty));
@@ -91,6 +90,8 @@ public class LaunchActivity extends AppCompatActivity {
             // Check if the internet connection works
             DialogOk dialogOk = new DialogOk(LaunchActivity.this,getString(R.string.internet_connection_message));
             dialogOk.creat();
+            // Test if the watch is paired
+            if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){testIfWatchPaired();}
         } else{
             // Begin fire base transaction
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -155,4 +156,15 @@ public class LaunchActivity extends AppCompatActivity {
         Log.d(TAG, "Message send");
     }
 
+    private class CommunicationBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "Message received");
+            String s_message = intent.getStringExtra(MESSAGE);
+            Log.d(TAG, "Message receive: " + s_message);
+            if (s_message.equals(BuildConfig.W_test_isPaired_true)) {
+                isWatchPaired = true;
+            }
+        }
+    }
 }

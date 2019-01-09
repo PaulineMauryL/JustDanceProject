@@ -22,6 +22,7 @@ import android.util.Log;
 
 import com.google.firebase.database.FirebaseDatabase;
 
+
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DanceActivity extends AppCompatActivity {
@@ -34,10 +35,17 @@ public class DanceActivity extends AppCompatActivity {
     private String music_name;
     private int score=0;
 
+    //private CloneDanceRoomDatabase danceDB;
+    private String userID;
+
+    // temp
+    private int counter;
+    private TextView mText;
     private MusicDance musical = null;
     private Handler mHandler;
     //private int[] music = null;
     private Boolean resume = true;
+    private TextView goodOrBad = null;
     private ImageView toCancelImageButtonView = null;
     private ImageView nextImageButtonView = null;
     private ImageView actualImageButtonView = null;
@@ -60,8 +68,10 @@ public class DanceActivity extends AppCompatActivity {
 
         }
     };
-    public static final String RECEIVE_ACC_RATE = "RECEIVE_ACC_RATE";
-    public static final String ACC_RATE = "ACC_RATE";
+
+    public static final String RECEIVE_COUNTER = "RECEIVE_COUNTER";
+    public static final String COUNTER = "COUNTER";
+
     private AccRateBroadcastReceiver accRateBroadcastReceiver;
     public static CloneDanceRoomDatabase cloneDanceRD;
 
@@ -71,8 +81,14 @@ public class DanceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dance);
+
+        // Temp Hugo
+        mText = findViewById(R.id.textViewMovements);
+        counter =0;
+
         // Create instance of Sport Tracker Room DB
-        cloneDanceRD = Room.databaseBuilder(getApplicationContext(), CloneDanceRoomDatabase.class, "db").allowMainThreadQueries().build();
+        //danceDB = CloneDanceRoomDatabase.getDatabase(getApplicationContext());
+
 
         int[] music;
         Bundle bunble = getIntent().getExtras();
@@ -91,14 +107,18 @@ public class DanceActivity extends AppCompatActivity {
                         dbEntity.setMusic(musical.getName());
                         dbEntity.setScore(score);
 
-                        cloneDanceRD.dataDao().insertEntity(dbEntity);
-                        //Toast.makeText(getApplicationContext(), "Entity added", Toast.LENGTH_SHORT).show();
+
+                musical = new MusicDance("musicname", music, this);
+                musical.getSound().start();
+                musical.getSound().setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
+                    public void onCompletion(MediaPlayer mp){
 
                         Intent intentFinishDance = new Intent(DanceActivity.this, FinishActivity.class);
                         intentFinishDance.putExtra(LaunchActivity.USER_ID, userID);
                         intentFinishDance.putExtra(NUMBER_POINTS, score);
-                        intentFinishDance.putExtra(MUSIC_NAME, music_name);
+                        isRunning.set(false);
                         startActivity(intentFinishDance);
+                        finish();
                     }
                 });
                 mHandler = new Handler();
@@ -110,7 +130,10 @@ public class DanceActivity extends AppCompatActivity {
                 bar.setMax(210);
             }
         }
-        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){startWatchActivity();}
+        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+            // Change to dance activity
+            Communication.changeWatchActivity(DanceActivity.this,BuildConfig.W_dance_activity);
+        }
     }
 
     @Override
@@ -124,13 +147,14 @@ public class DanceActivity extends AppCompatActivity {
         background.start();
         accRateBroadcastReceiver = new AccRateBroadcastReceiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(accRateBroadcastReceiver, new
-                IntentFilter(RECEIVE_ACC_RATE));
+                IntentFilter(RECEIVE_COUNTER));
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         isPausing.set(true);
+        Communication.stopRecordingOnWear(DanceActivity.this, BuildConfig.W_dance_activity);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(accRateBroadcastReceiver);
     }
 
@@ -141,7 +165,7 @@ public class DanceActivity extends AppCompatActivity {
         // Get the accelerometer datas back from the watch
         accRateBroadcastReceiver = new AccRateBroadcastReceiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(accRateBroadcastReceiver, new
-                IntentFilter(RECEIVE_ACC_RATE));
+                IntentFilter(RECEIVE_COUNTER));
     }
 
     private class AccRateBroadcastReceiver extends BroadcastReceiver {
@@ -149,16 +173,10 @@ public class DanceActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             // Show AR in a TextView
-            float[] accRateWatch = intent.getFloatArrayExtra(ACC_RATE);
-            if(Math.abs(accRateWatch[0])<error && Math.abs(accRateWatch[1])<error) {
-                actualPosition = 2;
-            } else if(Math.abs(accRateWatch[1])<error && Math.abs(accRateWatch[2])<error && accRateWatch[0]>0){
-                actualPosition = 1;
-            } else if(Math.abs(accRateWatch[1])<error && Math.abs(accRateWatch[2])<error && accRateWatch[0]>0) {
-                actualPosition = 3;
-            } else{
-                actualPosition = 100;
-            }
+            actualPosition = intent.getIntExtra(COUNTER,0);
+            counter++;
+            mText.setText("mode: " + actualPosition+"\n"
+                    +"counter: " + counter);
         }
     }
 
@@ -169,13 +187,6 @@ public class DanceActivity extends AppCompatActivity {
         startService(intent);
     }
 
-    public void stopRecordingOnWear(View view) {
-        /* Store here the datas is needed */
-        Intent intentStopRec = new Intent(DanceActivity.this, WearService.class);
-        intentStopRec.setAction(WearService.ACTION_SEND.STOPACTIVITY.name());
-        intentStopRec.putExtra(WearService.ACTIVITY_TO_STOP, BuildConfig.W_dance_activity);
-        startService(intentStopRec);
-    }
 
     public void movementsOnMusic(){
         int i;
@@ -185,9 +196,9 @@ public class DanceActivity extends AppCompatActivity {
         isPausing.set(false);
         while(i<musical.getTiming().length){
             delay = musical.getTiming()[i];
-            mHandler.postDelayed(r1,delay-musical.getSound().getCurrentPosition());
-            mHandler.postDelayed(r2,delay-musical.getSound().getCurrentPosition()+500);
-            mHandler.postDelayed(r3,delay-musical.getSound().getCurrentPosition()+1100);
+            mHandler.postDelayed(r1,350*i+delay-musical.getSound().getCurrentPosition());
+            mHandler.postDelayed(r2,350*i+delay-musical.getSound().getCurrentPosition()+650);
+            mHandler.postDelayed(r3,350*i+delay-musical.getSound().getCurrentPosition()+1100);
             i=i+2;
         }
     }
@@ -211,12 +222,13 @@ public class DanceActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton(R.string.ButtonQuit, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        isRunning.set(false);
+                        musical.getSound().stop();
                         finish();
                         // Leave
                         Intent intent_change = new Intent(getApplication(), MainActivity.class);
+                        intent_change.putExtra(LaunchActivity.USER_ID,userID);
                         startActivity(intent_change);
-                        finish();
-
                     }
                 })
                 .setNegativeButton(R.string.ButtonResume, new DialogInterface.OnClickListener() {
@@ -250,11 +262,16 @@ public class DanceActivity extends AppCompatActivity {
                     if(askedPosition == actualPosition) {
                         messageBundle.putInt(PROGRESS_BAR_INCREMENT,3);
                         score = score+3;
+                        goodOrBad = findViewById(R.id.danceGoodOrOk);
+                        goodOrBad.setText(getString(R.string.good));
+
                     }else if(nextPosition == actualPosition){
                         messageBundle.putInt(PROGRESS_BAR_INCREMENT,1);
                         score=score+1;
+                        goodOrBad = findViewById(R.id.danceGoodOrOk);
+                        goodOrBad.setText(getString(R.string.ok));
                     }else{
-                        messageBundle.putInt(PROGRESS_BAR_INCREMENT,0);
+                        messageBundle.putInt(PROGRESS_BAR_INCREMENT,1);
                     }
                     myMessage.setData(messageBundle);
                     handler.sendMessage(myMessage);
@@ -300,6 +317,9 @@ public class DanceActivity extends AppCompatActivity {
             toCancelImageButtonView.setActivated(false);
             nextPosition = 0;
             askedPosition = 0;
+
+            goodOrBad = findViewById(R.id.danceGoodOrOk);
+            goodOrBad.setText("");
         }
     };
 
@@ -309,3 +329,4 @@ public class DanceActivity extends AppCompatActivity {
         }
     };
 }
+

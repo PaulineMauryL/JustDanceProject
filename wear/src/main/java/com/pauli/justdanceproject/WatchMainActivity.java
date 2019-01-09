@@ -9,9 +9,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.wearable.activity.WearableActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -23,10 +25,12 @@ public class WatchMainActivity extends WearableActivity {
     public static final String MESSAGE = "MESSAGE";
     public static final String ACTION_RECEIVE_IMAGE = "ACTION_RECEIVE_IMAGE";
     public static final String IMAGE ="IMAGE";
-
+    public final String TAG = this.getClass().getSimpleName();
     private TextView mTextView;
     private ConstraintLayout mLayout;
     private ImageView mImageView;
+
+    private CommunicationBroadcastReceiver communicationBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,48 +51,32 @@ public class WatchMainActivity extends WearableActivity {
 
         /* For the communication with the tablet*/
         // Get Message
-        LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                String s_message = intent.getStringExtra(MESSAGE);
-                if(s_message.equals(BuildConfig.W_test_isPaired)){
-                    Communication.sendMessage(WatchMainActivity.this,BuildConfig.W_test_isPaired_true);
-                }
-            }
-        }, new IntentFilter(ACTION_RECEIVE_MESSAGE));
-       /* // Get image
-        LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                byte[] byteArray = intent.getByteArrayExtra(IMAGE);
-                Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-                mImageView.setImageBitmap(bmp);
-            }
-        }, new IntentFilter(ACTION_RECEIVE_IMAGE));*/
-
-        // Enables Always-on
+        communicationBroadcastReceiver = new CommunicationBroadcastReceiver();
+        LocalBroadcastManager.getInstance(this).registerReceiver(communicationBroadcastReceiver, new IntentFilter(ACTION_RECEIVE_MESSAGE));
         setAmbientEnabled();
     }
 
-
-/*@Override
-    public void onEnterAmbient(Bundle ambientDetails) {
-        super.onEnterAmbient(ambientDetails);
-        updateDisplay();
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(communicationBroadcastReceiver);
     }
 
     @Override
-    public void onExitAmbient() {
-        super.onExitAmbient();
-        updateDisplay();
+    protected void onResume() {
+        super.onResume();
+        communicationBroadcastReceiver = new CommunicationBroadcastReceiver();
+        LocalBroadcastManager.getInstance(this).registerReceiver(communicationBroadcastReceiver, new IntentFilter(ACTION_RECEIVE_MESSAGE));
     }
 
-    private void updateDisplay() {
-        if(isAmbient()){
-            mLayout.setBackgroundColor(getResources().getColor(android.R.color.black,getTheme()));
-        }else{
-            mLayout.setBackgroundColor(getResources().getColor(android.R.color.darker_gray,getTheme()));
+    private class CommunicationBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String s_message = intent.getStringExtra(MESSAGE);
+            Log.d(TAG,"Receive message: " + s_message);
+            if(s_message.equals(BuildConfig.W_test_isPaired)){
+                Communication.sendMessage(WatchMainActivity.this,BuildConfig.W_test_isPaired_true);
+            }
         }
-    }*/
-
+    }
 }

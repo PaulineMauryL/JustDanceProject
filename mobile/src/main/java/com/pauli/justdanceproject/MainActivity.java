@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
             intentStartDance.putExtra("musicchosen", chosenMusic);
             intentStartDance.putExtra(LaunchActivity.USER_ID, userID);
             startActivity(intentStartDance);
+            finish();
         }
     }
 
