@@ -14,4 +14,7 @@ public interface DataDao {
 
     @Insert
     void insertEntity(DatabaseEntity databaseEntity);
+
+    //@Query("DELETE FROM DatabaseEntity")
+    //void deleteAll();
 }

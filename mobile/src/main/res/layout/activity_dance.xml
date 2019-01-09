@@ -130,7 +130,6 @@
             android:layout_gravity="center"
             android:layout_weight="0.4"
             android:background="@color/ap_transparent"
-            android:onClick="ResumeMusic"
             android:saveEnabled="false"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/pausebutton" />

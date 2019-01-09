@@ -126,7 +126,7 @@ public class HerculeFragment extends Fragment {
         for(DatabaseEntity dbEnt : entities){
             String user_name = dbEnt.getUser_name();
             int score = dbEnt.getScore();
-            info = info + "User :" + user_name + " Score :" + score + "\n";
+            info = info + "User: " + user_name + " Score: " + score + "\n";
         }
 
         TxtInfo.setText(info);
