@@ -1,6 +1,7 @@
 package com.pauli.justdanceproject;
 
 import android.app.Dialog;
+import android.arch.persistence.room.Room;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,13 +10,23 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.util.Log;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import android.util.Log;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -23,10 +34,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class DanceActivity extends AppCompatActivity {
 
     static final String NUMBER_POINTS = "Number_points";  //Added by Pauline for finish activity
+    static final String MUSIC_NAME = "Music_name";
 
     //private CloneDanceRoomDatabase danceDB;
     private String userID;
-
+    private String music_name;
+    private int score=0;
+    private String user_db;
     // temp
     private String TAG = this.getClass().getSimpleName();
     private int counter;
@@ -43,7 +57,7 @@ public class DanceActivity extends AppCompatActivity {
     private int nextPosition = 0;
     private int askedPosition = 0;
     private int actualPosition = 0;
-    private int score=0;
+    final int error = 5;
     private static final String PROGRESS_BAR_INCREMENT="ProgressBarIncrementId";
     private ProgressBar bar;
     AtomicBoolean isRunning = new AtomicBoolean(false);
@@ -63,6 +77,11 @@ public class DanceActivity extends AppCompatActivity {
     public static final String COUNTER = "COUNTER";
 
     private AccRateBroadcastReceiver accRateBroadcastReceiver;
+    public static CloneDanceRoomDatabase cloneDanceRD;
+
+    private static final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private static final DatabaseReference profileGetRef = database.getReference("profiles");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,28 +92,52 @@ public class DanceActivity extends AppCompatActivity {
         counter =0;
         WearService.setToZero();
 
+        ImageButton button = findViewById(R.id.pausebutton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ResumeMusic(v);
+            }
+        });
+
         // Create instance of Sport Tracker Room DB
-        //danceDB = CloneDanceRoomDatabase.getDatabase(getApplicationContext());
-
-
+        cloneDanceRD = Room.databaseBuilder(getApplicationContext(), CloneDanceRoomDatabase.class, "db").allowMainThreadQueries().build();
         int[] music;
         Bundle bunble = getIntent().getExtras();
         if (bunble!=null){
             music = bunble.getIntArray("musicchosen");
             userID = bunble.getString(LaunchActivity.USER_ID);
             if(music!=null) {
-                Log.d("PAULINE", "music not null");
-                musical = new MusicDance("musicname", music, this);
+                musical = new MusicDance( music, this);
                 musical.getSound().start();
                 musical.getSound().setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
                     public void onCompletion(MediaPlayer mp){
-                        Log.d("PAULINE", "onCompletion");
+                        profileGetRef.child(userID).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                String user_db = dataSnapshot.child("username").getValue(String.class);
 
-                        Log.d("PAULINE", "After Asynk Task");
+                                DatabaseEntity dbEntity = new DatabaseEntity();
+                                dbEntity.setUser_name(user_db);
+                                dbEntity.setMusic(musical.getName());
+                                dbEntity.setScore(score);
+
+                                cloneDanceRD.dataDao().insertEntity(dbEntity);
+                                //Toast.makeText(getApplicationContext(), "Username" + user_db + "\n Music Name" + musical.getName() + "\n score" + score, Toast.LENGTH_LONG).show();
+
+                            }
+
+                            @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                System.out.println("The read failed: " + databaseError.getCode());
+                            }
+                        });
+                        //String username = database.getReference("profiles").child(userID).child("username").toString();
 
                         Intent intentFinishDance = new Intent(DanceActivity.this, FinishActivity.class);
                         intentFinishDance.putExtra(LaunchActivity.USER_ID, userID);
                         intentFinishDance.putExtra(NUMBER_POINTS, score);
+                        intentFinishDance.putExtra(MUSIC_NAME, musical.getName());
                         isRunning.set(false);
                         startActivity(intentFinishDance);
                         finish();
@@ -127,7 +170,7 @@ public class DanceActivity extends AppCompatActivity {
         Thread background = new Thread(progressRunnable);
         isPausing.set(true);
         isRunning.set(true);
-        background.start();
+        background.start();// Get the accelerometer datas back from the watch
     }
 
     @Override

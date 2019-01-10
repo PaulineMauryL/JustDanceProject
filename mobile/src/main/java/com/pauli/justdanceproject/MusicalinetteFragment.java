@@ -3,54 +3,31 @@ package com.pauli.justdanceproject;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.androidplot.xy.BoundaryMode;
-import com.androidplot.xy.LineAndPointFormatter;
-import com.androidplot.xy.SimpleXYSeries;
-import com.androidplot.xy.XYGraphWidget;
-import com.androidplot.xy.XYPlot;
-import com.androidplot.xy.XYSeries;
-import com.google.firebase.database.DatabaseReference;
-
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-
-import static android.graphics.Color.RED;
-import static android.graphics.Color.TRANSPARENT;
+import java.util.List;
 
 
 public class MusicalinetteFragment extends Fragment {
 
-    private OnFragmentInteractionListener mListener;
-    private String userID;
-    private String recID;
-    private View fragmentView;
-
-    private DatabaseReference recordingRef;
-    AlertDialog.Builder builder;
-    public static final String POINTS_PLOT_WATCH = "Points Smart Watch";  //pas sure de comprendre ce que je fait ici..
-    private static final int NUMBER_OF_POINTS = 50;
-    private static final int MIN_POINTS= 0;
-    private static final int MAX_POINTS = 1000;
-    private static XYPlot dancePlot;
     private final String TAG = this.getClass().getSimpleName();
-    private XYplotSeriesList xyPlotSeriesList;
+    AlertDialog.Builder builder;
+    private CreuseFragment.OnFragmentInteractionListener mListener;
+    private View fragmentView;
+    private String userID;
+    private TextView TxtInfo;
 
-    private ArrayList<Integer> hrDataArrayList = new ArrayList<>();
-    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,52 +71,26 @@ public class MusicalinetteFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
+            savedInstanceState) {
         // Inflate the layout for this fragment
-        fragmentView = inflater.inflate(R.layout.fragment_musicalinette, container, false);
+        fragmentView = inflater.inflate(R.layout.fragment_creuse, container, false);
 
         Intent intent = getActivity().getIntent();
         if (intent.hasExtra(LaunchActivity.USER_ID)) {
             userID = intent.getStringExtra(LaunchActivity.USER_ID);
         }
-        if (intent.hasExtra(MainActivity.RECORDING_ID)) {
-            recID = intent.getStringExtra(MainActivity.RECORDING_ID);
+        TxtInfo = fragmentView.findViewById(R.id.txt_display_info);
+        List<DatabaseEntity> entities = DanceActivity.cloneDanceRD.dataDao().getHallOfFame(String.valueOf(R.raw.musicalinette));
+
+        String info = "";
+        for(DatabaseEntity dbEnt : entities){
+            String user_name = dbEnt.getUser_name();
+            int score = dbEnt.getScore();
+            info = info + "User :" + user_name + " Score :" + score + "\n";
         }
+        TxtInfo.setText(info);
 
-    /*
-        // Get recording information from Firebase
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference profileGetRef = database.getReference("profiles");
-
-        recordingRef = profileGetRef.child(userID).child("recordings").child(recID);
-
-        recordingRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                TextView danceType = fragmentView.findViewById(R.id.danceTypeLive);
-                danceType.setText(dataSnapshot.child("selected_dance").getValue().toString());
-
-                TextView danceDatetime = fragmentView.findViewById(R.id.danceDateTimeLive);
-                Long datetime = Long.parseLong(dataSnapshot.child("datetime").getValue().toString());
-                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss", Locale.getDefault());
-                danceDatetime.setText(formatter.format(new Date(datetime)));
-
-                String nb_pts = dataSnapshot.child("points").getValue().toString();
-                TextView txt_points = fragmentView.findViewById(R.id.danceNbPointsLive);
-                txt_points.setText(nb_pts);
-
-                String level = dataSnapshot.child("level").getValue().toString();
-                TextView hrBelt = fragmentView.findViewById(R.id.danceLevelLive);
-                hrBelt.setText(level);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    */
         return fragmentView;
     }
 
@@ -147,8 +98,8 @@ public class MusicalinetteFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof CreuseFragment.OnFragmentInteractionListener) {
+            mListener = (CreuseFragment.OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -162,8 +113,6 @@ public class MusicalinetteFragment extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-
 }

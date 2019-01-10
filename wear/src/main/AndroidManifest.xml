@@ -62,7 +62,7 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".CounterActivity"
-            android:label="@string/title_activity_counter"></activity>
+            android:label="ok"></activity>
     </application>
 
 </manifest>

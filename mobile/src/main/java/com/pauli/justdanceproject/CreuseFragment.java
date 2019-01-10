@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -29,12 +30,9 @@ public class CreuseFragment extends Fragment {
 
     private final String TAG = this.getClass().getSimpleName();
     private OnFragmentInteractionListener mListener;
-    private ListView listView;
     private View fragmentView;
-    private RecordingAdapter adapter;
-    //private MyFirebaseRecordingListener mFirebaseRecordingListener;
-    private DatabaseReference databaseRef;
     private String userID;
+    private TextView  TxtInfo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +46,7 @@ public class CreuseFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_show_profile, menu);
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -88,39 +87,22 @@ public class CreuseFragment extends Fragment {
         if (intent.hasExtra(LaunchActivity.USER_ID)) {
             userID = intent.getStringExtra(LaunchActivity.USER_ID);
         }
+        TxtInfo = fragmentView.findViewById(R.id.txt_display_info);
+        List<DatabaseEntity> entities = DanceActivity.cloneDanceRD.dataDao().getHallOfFame(String.valueOf(R.raw.creuser));
+
+        String info = "";
+
+        for(DatabaseEntity dbEnt : entities){
+            String user_name = dbEnt.getUser_name();
+            int score = dbEnt.getScore();
+            info = info + "User :" + user_name + " Score :" + score + "\n";
+        }
+
+        TxtInfo.setText(info);
 
         return fragmentView;
     }
 
-    private class RecordingAdapter extends ArrayAdapter<Recording> {
-        private int row_layout;
-
-        RecordingAdapter(FragmentActivity activity, int row_layout) {
-            super(activity, row_layout);
-            this.row_layout = row_layout;
-        }
-
-        @NonNull
-        @Override
-        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            //Reference to the row View
-            View row = convertView;
-
-            if (row == null) {
-                //Inflate it from layout
-                row = LayoutInflater.from(getContext()).inflate(row_layout, parent, false);
-            }
-
-            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss", Locale.getDefault());
-            ((TextView) row.findViewById(R.id.danceType)).setText(getItem(position).danceName);
-            ((TextView) row.findViewById(R.id.danceDateTime)).setText(formatter.format(new Date(getItem(position).danceDateTime)));
-
-            ((TextView) row.findViewById(R.id.dancePoints)).setText(String.valueOf(getItem(position).nbPoints));
-            ((TextView) row.findViewById(R.id.danceLevel)).setText(getItem(position).level);
-
-            return row;
-        }
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -140,7 +122,6 @@ public class CreuseFragment extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }

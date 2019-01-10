@@ -8,7 +8,7 @@
     tools:ignore="MissingDefaultResource">
 
     <LinearLayout
-        android:id="@+id/linearLayoutHercule"
+        android:id="@+id/linearLayoutCreuse"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="8dp"
@@ -26,7 +26,7 @@
         app:layout_constraintVertical_weight="1">
 
         <TextView
-            android:id="@+id/herculeName"
+            android:id="@+id/CreuseName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
@@ -37,7 +37,7 @@
             android:layout_marginBottom="4dp"
             android:text="@string/yourScore"
             android:textColor="@color/colorAccent"
-            android:textSize="20sp"
+            android:textSize="30sp"
             android:textStyle="bold"
             app:fontFamily="@font/simplehandwrittingregular"
             app:layout_constraintBottom_toTopOf="parent"
@@ -49,52 +49,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/txt_display_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:textSize="20dp"
+                app:fontFamily="@font/simplehandwrittingregular"/>
 
-                <TextView
-                    android:id="@+id/scoreHercule1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:id="@+id/scoreHercule2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:id="@+id/scoreHercule3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:id="@+id/scoreHercule4"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:id="@+id/scoreHercule5"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:id="@+id/scoreHercule6"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:id="@+id/scoreHercule7"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:id="@+id/scoreHercule8"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:id="@+id/scoreHercule9"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:id="@+id/scoreHercule10"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
         </ScrollView>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
