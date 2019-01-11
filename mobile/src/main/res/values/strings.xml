@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Clone Dance !</string>
+    <string name="app_name">Pinky Robot Dance !</string>
     <string name="title_activity_scrolling" translatable="false">ScrollingActivity</string>
     <string name="large_text" translatable="false">
         "Material is the metaphor.\n\n"
