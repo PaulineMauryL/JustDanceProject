@@ -6,23 +6,45 @@
     android:layout_height="wrap_content"
     android:background="@color/background_material_light">
 
-    <TextView
-        android:id="@+id/dialog_info_ok"
+    <Space
+        android:id ="@+id/spaceUp"
+        android:layout_width="match_parent"
+        android:layout_height="25dp" />
+
+    <LinearLayout
+        android:id="@+id/linearLayoutOk"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="20dp"
-        android:text=""
-        android:textColor="@android:color/white"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:fontFamily="@font/simplehandwrittingregular" />
+        android:layout_below="@id/spaceUp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="horizontal">
 
+        <ImageView
+            android:id="@+id/imageViewOk"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.7"
+            app:srcCompat="@drawable/warning" />
+
+        <TextView
+            android:id="@+id/dialog_info_ok"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:gravity="center_vertical"
+            android:padding="20dp"
+            android:text=""
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:fontFamily="@font/simplehandwrittingregular" />
+    </LinearLayout>
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_below="@id/dialog_info_ok">
+        android:layout_below="@+id/linearLayoutOk">
 
         <Space
             android:layout_width="0dp"

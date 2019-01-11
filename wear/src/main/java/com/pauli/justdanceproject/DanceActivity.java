@@ -13,26 +13,29 @@ import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
-import android.widget.TextView;
 
 public class DanceActivity extends WearableActivity implements SensorEventListener {
 
     private float[] accRate = new float[3];
     private int error = 5;
     private int actualPosition;
-    public static final String STOP_ACTIVITY = "STOP_ACTIVITY";
+
     private final String TAG = this.getClass().getSimpleName();
     private Handler mHandler;
     private int counter;
     private Boolean isRunning;
+    private DialogPause dialogPause;
 
     private SensorManager sensorManager;
     private Sensor acc_sensor;
-    private StopActivityBroadcastReceiver stopActivityBroadcastReceiver;
+    private CommunicationBroadcastReceiver communicationBroadcastReceiver;
+    private StartActivityBR startActivityBR;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dance);
+
         mHandler = new Handler();
 
         counter = 0;
@@ -45,13 +48,18 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
         Log.d(TAG, "New registerListener");
         sensorManager.registerListener(DanceActivity.this, acc_sensor, SensorManager.SENSOR_DELAY_NORMAL);
 
-        stopActivityBroadcastReceiver = new StopActivityBroadcastReceiver();
-        LocalBroadcastManager.getInstance(this).registerReceiver(stopActivityBroadcastReceiver,new IntentFilter(STOP_ACTIVITY));
+        communicationBroadcastReceiver = new CommunicationBroadcastReceiver();
+        LocalBroadcastManager.getInstance(this).registerReceiver(communicationBroadcastReceiver, new IntentFilter(WearService.ACTION_RECEIVE_MESSAGE));
+
+        startActivityBR = new StartActivityBR();
+        startActivityBR.setCurrentContext(DanceActivity.this);
+        LocalBroadcastManager.getInstance(this).registerReceiver(startActivityBR, new IntentFilter(WearService.ACTIVITY_TO_START));
 
         setAmbientEnabled();
         isRunning = true;
         startSendingData();
     }
+
     protected void startSendingData() {
         mHandler.postDelayed(sendDataToBroadcast,500);
     }
@@ -59,7 +67,7 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
     final Runnable sendDataToBroadcast = new Runnable() {
         public void run() {
 
-            TextView[] mText = {findViewById(R.id.textView1),findViewById(R.id.textView2),findViewById(R.id.textView3)};
+            //TextView[] mText = {findViewById(R.id.textView1),findViewById(R.id.textView2),findViewById(R.id.textView3)};
             counter ++;
 
             if(Math.abs(accRate[0])<error) {
@@ -78,7 +86,7 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
             intent.putExtra(WearService.COUNTER, actualPosition);
             startService(intent);
 
-            mText[1].setText("Mode: "+ actualPosition + " Counter:" + counter);
+            //mText[1].setText("Mode: "+ actualPosition + " Counter:" + counter);
             Log.d(TAG, "counter : "+ counter + "Wearservice counter : " + WearService.getCount());
             if(isRunning){startSendingData();}
         }
@@ -92,9 +100,15 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
             acc_sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             // Enable registerListener
             sensorManager.registerListener(DanceActivity.this, acc_sensor, SensorManager.SENSOR_DELAY_NORMAL);}
-        if(stopActivityBroadcastReceiver==null){
-            stopActivityBroadcastReceiver = new StopActivityBroadcastReceiver();
-            LocalBroadcastManager.getInstance(this).registerReceiver(stopActivityBroadcastReceiver,new IntentFilter(STOP_ACTIVITY));
+
+        if(communicationBroadcastReceiver==null){
+            communicationBroadcastReceiver = new CommunicationBroadcastReceiver();
+            LocalBroadcastManager.getInstance(this).registerReceiver(communicationBroadcastReceiver,new IntentFilter(WearService.ACTION_RECEIVE_MESSAGE));
+        }
+        if(startActivityBR == null) {
+            startActivityBR = new StartActivityBR();
+            startActivityBR.setCurrentContext(DanceActivity.this);
+            LocalBroadcastManager.getInstance(this).registerReceiver(startActivityBR, new IntentFilter(WearService.ACTIVITY_TO_START));
         }
 
     }
@@ -103,7 +117,9 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
     protected void onPause() {
         super.onPause();
         sensorManager.unregisterListener(DanceActivity.this);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(stopActivityBroadcastReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(communicationBroadcastReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(startActivityBR);
+
     }
 
     @Override
@@ -119,13 +135,27 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
 
     }
 
-    private class StopActivityBroadcastReceiver extends BroadcastReceiver{
+    public void stopActivity(){
+        sensorManager.unregisterListener(DanceActivity.this);
+        isRunning = false;
+        finish();
+    }
 
+    private class CommunicationBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            //sensorManager.unregisterListener(DanceActivity.this);
-            isRunning = false;
-            finish();
+            sensorManager.unregisterListener(DanceActivity.this);
+            String s_message = intent.getStringExtra(WearService.MESSAGE);
+            Log.d(TAG,"Receive message : " + s_message);
+            if(s_message.equals(BuildConfig.W_pause_activity_start)){
+                Log.d(TAG, "PAUSE_START");
+                dialogPause = new DialogPause(DanceActivity.this);
+                dialogPause.create();
+            }else if(s_message.equals(BuildConfig.W_pause_activity_stop)){
+                Log.d(TAG, "PAUSE_STOP");
+                if(dialogPause!=null && dialogPause.isOpen()){dialogPause.close();}
+            }
+            sensorManager.registerListener(DanceActivity.this, acc_sensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
     }
 }

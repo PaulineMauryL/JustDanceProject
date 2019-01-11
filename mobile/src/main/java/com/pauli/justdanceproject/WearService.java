@@ -62,6 +62,7 @@ public class WearService extends WearableListenerService {
             case STARTACTIVITY:
                 String activity = intent.getStringExtra(ACTIVITY_TO_START);
                 sendMessage(activity, BuildConfig.W_path_start_activity);
+                Log.v(TAG,"Start Activity : " + activity);
                 break;
             case STOPACTIVITY:
                 String activityStop = intent.getStringExtra(ACTIVITY_TO_STOP);
@@ -110,6 +111,7 @@ public class WearService extends WearableListenerService {
     public static final String ACTIVITY_TO_START = "ACTIVITY_TO_START";
     public static final String ACTIVITY_TO_STOP = "ACTIVITY_TO_STOP";
     public static final String MESSAGE = "MESSAGE";
+    public static final String ACTION_RECEIVE_MESSAGE = "ACTION_RECEIVE_MESSAGE";
     public static final String DATAMAP_INT = "DATAMAP_INT";
     public static final String DATAMAP_INT_ARRAYLIST = "DATAMAP_INT_ARRAYLIST";
     public static final String IMAGE = "IMAGE";
@@ -251,8 +253,8 @@ public class WearService extends WearableListenerService {
                 break;
             case BuildConfig.W_path_message:
                 Log.v(TAG,"Message received: " + data);
-                Intent intent = new Intent(LaunchActivity.ACTION_RECEIVE_MESSAGE);
-                intent.putExtra(LaunchActivity.MESSAGE,data);
+                Intent intent = new Intent(ACTION_RECEIVE_MESSAGE);
+                intent.putExtra(MESSAGE,data);
                 LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
                 break;
             case BuildConfig.W_path_acknowledge:

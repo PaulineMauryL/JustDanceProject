@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/dance_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LaunchActivity"
+        <activity
+            android:name=".LaunchActivity"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,21 +23,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".EditUser"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".DanceActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".FinishActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ShowProfile"
+            android:theme="@style/AppTheme" />
 
-        <activity android:name=".EditUser"
-            android:theme="@style/AppTheme"/>
-        <activity android:name=".MainActivity"
-            android:theme="@style/AppTheme"/>
-        <activity android:name=".DanceActivity"
-            android:theme="@style/AppTheme"/>
-        <activity android:name=".FinishActivity"
-            android:theme="@style/AppTheme"/>
-        <activity android:name=".ShowProfile"
-            android:theme="@style/AppTheme"/>
-        <activity android:name = "TestWatchActivity"></activity>
         <service android:name=".WearService"> <!-- Needed for the communication with the watch -->
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />
+
                 <data
                     android:host="*"
                     android:pathPrefix=""
@@ -44,6 +50,7 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+
                 <data
                     android:host="*"
                     android:pathPrefix=""
@@ -51,10 +58,6 @@
             </intent-filter>
         </service>
 
-        <activity
-            android:name=".testSensors"
-            android:label="@string/title_activity_test_sensors"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

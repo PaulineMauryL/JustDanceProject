@@ -24,8 +24,6 @@ import com.google.firebase.database.ValueEventListener;
 
 public class LaunchActivity extends AppCompatActivity {
 
-    public static final String MESSAGE = "MESSAGE";
-    public static final String ACTION_RECEIVE_MESSAGE = "ACTION_RECEIVE_MESSAGE";
     private final String TAG = this.getClass().getSimpleName();
 
     public static final String ACTIVITY_NAME = "launch_activity";
@@ -46,7 +44,7 @@ public class LaunchActivity extends AppCompatActivity {
         // Get acknowledge from the watch
         if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)) {
             communicationBroadcastReceiver = new CommunicationBroadcastReceiver();
-            LocalBroadcastManager.getInstance(this).registerReceiver(communicationBroadcastReceiver, new IntentFilter(ACTION_RECEIVE_MESSAGE));
+            LocalBroadcastManager.getInstance(this).registerReceiver(communicationBroadcastReceiver, new IntentFilter(WearService.ACTION_RECEIVE_MESSAGE));
         }
     }
 
@@ -66,7 +64,7 @@ public class LaunchActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if(communicationBroadcastReceiver == null){
-        LocalBroadcastManager.getInstance(this).registerReceiver(communicationBroadcastReceiver, new IntentFilter(ACTION_RECEIVE_MESSAGE));
+        LocalBroadcastManager.getInstance(this).registerReceiver(communicationBroadcastReceiver, new IntentFilter(WearService.ACTION_RECEIVE_MESSAGE));
         }
     }
     public void begin_game(View view) {  //if button is clicked
@@ -75,23 +73,23 @@ public class LaunchActivity extends AppCompatActivity {
         if(username.isEmpty()) {
             // No connection to internet
             DialogOk dialogOk = new DialogOk(LaunchActivity.this,getString(R.string.nameEmpty));
-            dialogOk.creat();
+            dialogOk.create();
         }
         else if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable) && !isBluetoothEnabled()){
             // check if the bluetooth is on
             DialogOk dialogOk = new DialogOk(LaunchActivity.this,getString(R.string.error_message_bluetooth));
-            dialogOk.creat();
+            dialogOk.create();
         }
         else if (Boolean.parseBoolean(BuildConfig.W_flag_watch_enable) && !isWatchPaired){
             // Check if the watch is paired
             DialogOk dialogOk = new DialogOk(LaunchActivity.this,getString(R.string.error_message_pair_watch));
-            dialogOk.creat();
+            dialogOk.create();
         }
         else if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable) && !isNetworkAvailable())
         {
             // Check if the internet connection works
             DialogOk dialogOk = new DialogOk(LaunchActivity.this,getString(R.string.internet_connection_message));
-            dialogOk.creat();
+            dialogOk.create();
             // Test if the watch is paired
             if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){testIfWatchPaired();}
         } else{
@@ -120,12 +118,20 @@ public class LaunchActivity extends AppCompatActivity {
                         intent.putExtra(USERNAME, username);
                         intent.putExtra(EditUser.ACTIVITY_NAME,ACTIVITY_NAME);
                         startActivity(intent);
+                        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+                            // Change to dance activity
+                            Communication.changeWatchActivity(LaunchActivity.this,BuildConfig.W_edit_activity_start);
+                        }
                         finish();
                     } else {              // user exist, go to mainActivity to select a dance
                         translation.changeLanguage(getBaseContext(),language,userID);
                         Intent intent = new Intent(LaunchActivity.this, MainActivity.class);
                         intent.putExtra(USER_ID, userID);
                         startActivity(intent);
+                        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+                            // Change to dance activity
+                            Communication.changeWatchActivity(LaunchActivity.this,BuildConfig.W_watchmain_activity_start);
+                        }
                         finish();
                     }
                 }
@@ -162,7 +168,7 @@ public class LaunchActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d(TAG, "Message received");
-            String s_message = intent.getStringExtra(MESSAGE);
+            String s_message = intent.getStringExtra(WearService.MESSAGE);
             Log.d(TAG, "Message receive: " + s_message);
             if (s_message.equals(BuildConfig.W_test_isPaired_true)) {
                 isWatchPaired = true;

@@ -1,6 +1,5 @@
 package com.pauli.justdanceproject;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,7 +7,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -45,7 +43,6 @@ import java.io.OutputStream;
 public class EditUser extends AppCompatActivity {
 
     private final String TAG = this.getClass().getSimpleName();
-    AlertDialog.Builder builder;  //Choose a version by chance here.
 
     public static final String ACTIVITY_NAME = "activity_name";
 
@@ -266,6 +263,10 @@ public class EditUser extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.putExtra(LaunchActivity.USER_ID, userID);
                 startActivity(intent);
+                if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+                    // Change to dance activity
+                    Communication.changeWatchActivity(EditUser.this,BuildConfig.W_watchmain_activity_start);
+                }
                 finish();
             } else {
                 Toast.makeText(EditUser.this, R.string.registrationFailed, Toast.LENGTH_SHORT).show();
@@ -279,64 +280,17 @@ public class EditUser extends AppCompatActivity {
     public void do_not_edit(View view) {  //return to launch activity
         // Check if user really wants to change
         if(getIntent().getStringExtra(ACTIVITY_NAME).equals(LaunchActivity.ACTIVITY_NAME)){
-            builder = new AlertDialog.Builder(this);
 
-            //Uncomment the below code to Set the message and title from the strings.xml file
-            builder.setMessage("Change user").setTitle("userChange");
-
-            //Setting message manually and performing action on button click
-            builder.setMessage(R.string.quit_without_save)
-                    .setCancelable(false)
-                    .setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            // Leave
-                            Intent intent = new Intent(EditUser.this, LaunchActivity.class);
-                            startActivity(intent);
-                            finish();
-
-                        }
-                    })
-                    .setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            //  Action for 'NO' Button
-                            dialog.cancel();
-                        }
-                    });
-            //Creating dialog box
-            AlertDialog alert = builder.create();
-            //Setting the title manually
-            alert.setTitle(R.string.ChangeOfDancerTitle);
-            alert.show();
+            DialogueYesNo dialogueYesNo = new DialogueYesNo(DialogueYesNo.SAVE,this, getString(R.string.quit_without_save));
+            dialogueYesNo.create("", "");
         } else if(getIntent().getStringExtra(ACTIVITY_NAME).equals(MainActivity.ACTIVITY_NAME)){
-            builder = new AlertDialog.Builder(this);
 
-            //Uncomment the below code to Set the message and title from the strings.xml file
-            builder.setMessage("Change user").setTitle("userChange");
+            // Create Intent
+            Intent intent = new Intent(EditUser.this, MainActivity.class);
+            intent.putExtra(LaunchActivity.USER_ID, userID);
 
-            //Setting message manually and performing action on button click
-            builder.setMessage(R.string.quit_without_save)
-                    .setCancelable(false)
-                    .setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            // Leave
-                            Intent intent = new Intent(EditUser.this, MainActivity.class);
-                            intent.putExtra(LaunchActivity.USER_ID, userID);
-                            startActivity(intent);
-                            finish();
-
-                        }
-                    })
-                    .setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            //  Action for 'NO' Button
-                            dialog.cancel();
-                        }
-                    });
-            //Creating dialog box
-            AlertDialog alert = builder.create();
-            //Setting the title manually
-            alert.setTitle(getString(R.string.no_saving));
-            alert.show();
+            DialogueYesNo dialogueYesNo = new DialogueYesNo(DialogueYesNo.SAVE2MAIN,this, getString(R.string.quit_without_save),intent);
+            dialogueYesNo.create("", "");
         }
 
 
@@ -349,6 +303,7 @@ public class EditUser extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
+
         startActivityForResult(Intent.createChooser(intent, getString(R.string.selectPicture)), PICK_IMAGE);
     }
 
@@ -451,40 +406,8 @@ public class EditUser extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.txt_change_user:                            // to copy in main activity and the three fragments
                 // Check if user really wants to change
-                builder = new AlertDialog.Builder(this);
-
-                //Uncomment the below code to Set the message and title from the strings.xml file
-                builder.setMessage("Change user").setTitle("userChange");
-
-                //Setting message manually and performing action on button click
-                builder.setMessage(R.string.QuestionChangeUser)
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                finish();
-                                Toast.makeText(getApplicationContext(),getString(R.string.YesChangeUserPopUp),
-                                        Toast.LENGTH_SHORT).show();
-                                // Leave
-                                Intent intent_change = new Intent(getApplication(), LaunchActivity.class);
-                                startActivity(intent_change);
-                                finish();
-
-                            }
-                        })
-                        .setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                //  Action for 'NO' Button
-                                dialog.cancel();
-                                Toast.makeText(getApplicationContext(),getString(R.string.NoChangeUserPopUp),
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                //Creating dialog box
-                AlertDialog alert = builder.create();
-                //Setting the title manually
-                alert.setTitle(R.string.ChangeOfDancerTitle);
-                alert.show();
-
+                DialogueYesNo dialogueYesNo = new DialogueYesNo(DialogueYesNo.EDIT_PROFILE,this, getString(R.string.QuestionChangeUser));
+                dialogueYesNo.create(getString(R.string.YesChangeUserPopUp), getString(R.string.NoChangeUserPopUp));
                 break;
         }
         return super.onOptionsItemSelected(item);

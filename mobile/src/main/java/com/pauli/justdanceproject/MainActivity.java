@@ -1,6 +1,5 @@
 package com.pauli.justdanceproject;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -8,7 +7,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,7 +18,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int PICK_MUSIC = 1;
     private int[] chosenMusic=null;
     boolean musicSelected = false;
-    AlertDialog.Builder builder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,16 +32,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             //Toast.makeText(this, "error no id", Toast.LENGTH_SHORT).show();
         }
-
-        Button b_testWatchActivity = findViewById(R.id.buttonTestWatchActivity);
-        b_testWatchActivity.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                // Start on click activity
-                Intent it = new Intent(MainActivity.this,TestWatchActivity.class);
-                startActivity(it);
-            }
-        });
     }
 
 
@@ -52,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         if(!musicSelected){
             // check if one music has been selected
             DialogOk dialogOk = new DialogOk(MainActivity.this,getString(R.string.error_message_music_selected));
-            dialogOk.creat();
+            dialogOk.create();
         }
         else {
             // Start the dance Activity
@@ -60,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
             intentStartDance.putExtra("musicchosen", chosenMusic);
             intentStartDance.putExtra(LaunchActivity.USER_ID, userID);
             startActivity(intentStartDance);
+            if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+                // Change to dance activity
+                Communication.changeWatchActivity(MainActivity.this,BuildConfig.W_dance_activity_start);
+            }
             finish();
         }
     }
@@ -92,6 +83,10 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent_show = new Intent(this, ShowProfile.class);
                 intent_show.putExtra(LaunchActivity.USER_ID, userID);
                 startActivity(intent_show);
+                if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+                    // Change to dance activity
+                    Communication.changeWatchActivity(MainActivity.this,BuildConfig.W_hall_activity_start);
+                }
                 finish();
                 break;
             case R.id.txt_edit_profile:
@@ -99,44 +94,15 @@ public class MainActivity extends AppCompatActivity {
                 intent_edit.putExtra(LaunchActivity.USER_ID, userID);
                 intent_edit.putExtra(EditUser.ACTIVITY_NAME,ACTIVITY_NAME);
                 startActivity(intent_edit);
+                if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+                    // Change to dance activity
+                    Communication.changeWatchActivity(MainActivity.this,BuildConfig.W_edit_activity_start);
+                }
                 finish();
                 break;
-            case R.id.txt_change_user:                            // to copy in main activity and the three fragments
-                // Check if user really wants to change
-                builder = new AlertDialog.Builder(this);
-
-                //Uncomment the below code to Set the message and title from the strings.xml file
-                builder.setMessage("Change user").setTitle("userChange");
-
-                //Setting message manually and performing action on button click
-                builder.setMessage(R.string.QuestionChangeUser)
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                finish();
-                                Toast.makeText(getApplicationContext(),getString(R.string.YesChangeUserPopUp),
-                                        Toast.LENGTH_SHORT).show();
-                                // Leave
-                                Intent intent_change = new Intent(getApplication(), LaunchActivity.class);
-                                startActivity(intent_change);
-                                finish();
-
-                            }
-                        })
-                        .setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                //  Action for 'NO' Button
-                                dialog.cancel();
-                                Toast.makeText(getApplicationContext(),getString(R.string.NoChangeUserPopUp),
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                //Creating dialog box
-                AlertDialog alert = builder.create();
-                //Setting the title manually
-                alert.setTitle(getString(R.string.ChangeOfDancerTitle));
-                alert.show();
-
+            case R.id.txt_change_user:// to copy in main activity and the three fragments
+                DialogueYesNo dialogueYesNo = new DialogueYesNo(DialogueYesNo.EDIT_PROFILE,this, getString(R.string.QuestionChangeUser));
+                dialogueYesNo.create(getString(R.string.YesChangeUserPopUp), getString(R.string.NoChangeUserPopUp));
                 break;
         }
         return super.onOptionsItemSelected(item);

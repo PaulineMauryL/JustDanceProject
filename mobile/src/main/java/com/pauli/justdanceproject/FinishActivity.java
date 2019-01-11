@@ -49,6 +49,10 @@ public class FinishActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(LaunchActivity.USER_ID, userID);
         startActivity(intent);
+        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+            // Change to dance activity
+            Communication.changeWatchActivity(FinishActivity.this,BuildConfig.W_watchmain_activity_start);
+        }
         finish();
     }
 
@@ -56,6 +60,10 @@ public class FinishActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ShowProfile.class);
         intent.putExtra(LaunchActivity.USER_ID, userID);
         startActivity(intent);
+        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+            // Change to dance activity
+            Communication.changeWatchActivity(FinishActivity.this,BuildConfig.W_hall_activity_start);
+        }
         finish();
     }
 
@@ -71,6 +79,10 @@ public class FinishActivity extends AppCompatActivity {
             case R.id.txt_change_user:
                 Intent intent_change = new Intent(this, LaunchActivity.class);
                 startActivity(intent_change);
+                if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+                    // Change to dance activity
+                    Communication.changeWatchActivity(FinishActivity.this,BuildConfig.W_watchmain_activity_start);
+                }
                 finish();
                 break;
         }

@@ -36,9 +36,7 @@ allprojects {
 
                 mainactivity        : "MainActivity",
                 watchmainactivity   : "WatchMainActivity",
-                sleepactivity       :  "SleepActivity",
                 dance_activity      : "DanceActivity",
-                counter_activity    : "counter_activity",
 
                 a_key               : "a_value",
                 some_other_key      : "some_other_value",
@@ -55,7 +53,16 @@ allprojects {
                 counter_key        : "counter_key",
                 counter_path       : "/COUNTER_RATE",
 
-                flag_watch_enable   : "false"
+                pause_activity_start: "pause_activity_start",
+                pause_activity_stop : "pause_activity_stop",
+
+                dance_activity_start: "dance_activity_start",
+                finish_activity_start: "finish_activity_start",
+                hall_activity_start: "hall_activity_start",
+                edit_activity_start: "edit_activity_start",
+                watchmain_activity_start: "watchmain_activity_start",
+
+                flag_watch_enable   : "true"
         ]
     }
 }

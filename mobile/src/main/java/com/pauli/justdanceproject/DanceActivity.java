@@ -1,9 +1,9 @@
 package com.pauli.justdanceproject;
 
+import android.app.Dialog;
 import android.arch.persistence.room.Room;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.MediaPlayer;
@@ -12,7 +12,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -20,7 +19,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
@@ -37,6 +35,11 @@ public class DanceActivity extends AppCompatActivity {
 
     static final String NUMBER_POINTS = "Number_points";  //Added by Pauline for finish activity
     static final String MUSIC_NAME = "Music_name";
+    private final String TAG = this.getClass().getSimpleName();
+    private static final String PROGRESS_BAR_INCREMENT="ProgressBarIncrementId";
+    public static final String RECEIVE_COUNTER = "RECEIVE_COUNTER";
+    public static final String COUNTER = "COUNTER";
+    private final String key_resume = "key_resume";
 
     //private CloneDanceRoomDatabase danceDB;
     private String userID;
@@ -44,26 +47,25 @@ public class DanceActivity extends AppCompatActivity {
     private int score=0;
     private String user_db;
     // temp
-    private String TAG = this.getClass().getSimpleName();
-    private int counter;
     private TextView mText;
     private MusicDance musical = null;
     private Handler mHandler;
     //private int[] music = null;
-    private Boolean resume = true;
-   private TextView goodOrBad = null;
+    private TextView goodOrBad = null;
     private ImageView toCancelImageButtonView = null;
     private ImageView nextImageButtonView = null;
     private ImageView actualImageButtonView = null;
+
+    private int counter = 0;
     private int index = 0;
     private int nextPosition = 0;
     private int askedPosition = 0;
     private int actualPosition = 0;
-    final int error = 5;
-    private static final String PROGRESS_BAR_INCREMENT="ProgressBarIncrementId";
     private ProgressBar bar;
+    private Boolean resume;
     AtomicBoolean isRunning = new AtomicBoolean(false);
     AtomicBoolean isPausing = new AtomicBoolean(false);
+
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -75,19 +77,28 @@ public class DanceActivity extends AppCompatActivity {
         }
     };
 
-    public static final String RECEIVE_COUNTER = "RECEIVE_COUNTER";
-    public static final String COUNTER = "COUNTER";
-
     private AccRateBroadcastReceiver accRateBroadcastReceiver;
+    private CommunicationBroadcastReceiver communicationBroadcastReceiver;
     public static CloneDanceRoomDatabase cloneDanceRD;
 
     private static final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private static final DatabaseReference profileGetRef = database.getReference("profiles");
-
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(savedInstanceState != null){
+            resume = savedInstanceState.getBoolean(key_resume);
+
+        }else{
+            resume = false;
+        }
+        if(resume){makeDialogBox();}
+
+        communicationBroadcastReceiver = new CommunicationBroadcastReceiver();
+        LocalBroadcastManager.getInstance(this).registerReceiver(communicationBroadcastReceiver,new IntentFilter(WearService.ACTION_RECEIVE_MESSAGE));
+
         setContentView(R.layout.activity_dance);
         // Temp Hugo
         mText = findViewById(R.id.textViewMovements);
@@ -142,6 +153,10 @@ public class DanceActivity extends AppCompatActivity {
                         intentFinishDance.putExtra(MUSIC_NAME, musical.getName());
                         isRunning.set(false);
                         startActivity(intentFinishDance);
+                        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+                            // Change to dance activity
+                            Communication.changeWatchActivity(DanceActivity.this,BuildConfig.W_finish_activity_start);
+                        }
                         finish();
                     }
                 });
@@ -156,12 +171,18 @@ public class DanceActivity extends AppCompatActivity {
         }
         if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
             // Change to dance activity
-            Communication.changeWatchActivity(DanceActivity.this,BuildConfig.W_dance_activity);
+            Communication.changeWatchActivity(DanceActivity.this,BuildConfig.W_dance_activity_start);
         }
         accRateBroadcastReceiver = new AccRateBroadcastReceiver();
         Log.d(TAG,"New Local BroadCastManager (OnCreat)");
         LocalBroadcastManager.getInstance(this).registerReceiver(accRateBroadcastReceiver, new
                 IntentFilter(RECEIVE_COUNTER));
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(key_resume,resume);
     }
 
     @Override
@@ -179,10 +200,9 @@ public class DanceActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         isPausing.set(true);
-        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)) {
-            Communication.stopRecordingOnWear(DanceActivity.this, BuildConfig.W_dance_activity);
-        }
+        pauseWatch();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(accRateBroadcastReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(communicationBroadcastReceiver);
     }
 
     @Override
@@ -195,6 +215,11 @@ public class DanceActivity extends AppCompatActivity {
         Log.d(TAG,"New Local BroadCastManager");
         LocalBroadcastManager.getInstance(this).registerReceiver(accRateBroadcastReceiver, new
                 IntentFilter(RECEIVE_COUNTER));}
+        if(resume && communicationBroadcastReceiver == null){
+            communicationBroadcastReceiver = new CommunicationBroadcastReceiver();
+            Log.d(TAG,"New Local BroadCastManager");
+            LocalBroadcastManager.getInstance(this).registerReceiver(communicationBroadcastReceiver, new
+                    IntentFilter(WearService.ACTION_RECEIVE_MESSAGE));}
     }
 
     private class AccRateBroadcastReceiver extends BroadcastReceiver {
@@ -232,43 +257,25 @@ public class DanceActivity extends AppCompatActivity {
         mHandler.removeCallbacks(r3);
         resume = true;
         isPausing.set(true);
+        // Pause the watch
+        makeDialogBox();
+        pauseWatch();
 
-        AlertDialog.Builder builder;
-        builder = new AlertDialog.Builder(this);
+    }
 
-        //Uncomment the below code to Set the message and title from the strings.xml file
-        builder.setMessage(R.string.TitleQuitOrPause).setTitle(R.string.IdQuitOrPause);
+    private void pauseWatch() {
+        // Change the watch activity
+        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+            // Change to dance activity
+            Communication.sendMessage(DanceActivity.this,BuildConfig.W_pause_activity_start);
+        }
+    }
 
-        //Setting message manually and performing action on button click
-        builder.setMessage(R.string.QuitOrResumeText)
-                .setCancelable(false)
-                .setPositiveButton(R.string.ButtonQuit, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        isRunning.set(false);
-                        musical.getSound().stop();
-                        // Leave
-                        Intent intent_change = new Intent(getApplication(), MainActivity.class);
-                        intent_change.putExtra(LaunchActivity.USER_ID,userID);
-                        startActivity(intent_change);
-                        finish();
-                    }
-                })
-                .setNegativeButton(R.string.ButtonResume, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //  Action for 'NO' Button
-                        dialog.cancel();
-                        musical.getSound().start();
-                        resume = false;
-                        movementsOnMusic();
-                        isPausing.set(false);
-                    }
-                });
-        //Creating dialog box
-        AlertDialog alert = builder.create();
-        //Setting the title manually
-        alert.setTitle(R.string.TitleQuitOrPause);
-        alert.show();
-
+    private void startWatch(){
+        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+            // Change to dance activity
+            Communication.sendMessage(DanceActivity.this,BuildConfig.W_pause_activity_stop);
+        }
     }
     private Runnable progressRunnable = new Runnable() {
         Bundle messageBundle=new Bundle();
@@ -350,5 +357,68 @@ public class DanceActivity extends AppCompatActivity {
             movementsOnMusic();
         }
     };
+
+    private void makeDialogBox(){
+        dialog = new Dialog(this); // Context, this, etc.
+        dialog.setContentView(R.layout.dialog_yes_no);
+        dialog.setCancelable(false);
+        TextView mTextInfo = dialog.findViewById(R.id.dialog_info_yes_no);
+        mTextInfo.setText(R.string.QuitOrResumeText);
+        Button quitButton = dialog.findViewById(R.id.buttonYesDialog);
+        quitButton.setText(getString(R.string.ButtonQuit));
+        quitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                dialog = null;
+                isRunning.set(false);
+                musical.getSound().stop();
+                // Leave
+                Intent intent_change = new Intent(getApplication(), MainActivity.class);
+                intent_change.putExtra(LaunchActivity.USER_ID,userID);
+                startActivity(intent_change);
+                if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+                    // Change to dance activity
+                    Communication.changeWatchActivity(DanceActivity.this,BuildConfig.W_watchmain_activity_start);
+                }
+                finish();
+            }
+        });
+
+        Button resumeButton = dialog.findViewById(R.id.buttonNoDialog);
+        resumeButton.setText(getString(R.string.ButtonResume));
+        resumeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //  Action for 'NO' Button
+                dialog.dismiss();
+                dialog = null;
+                musical.getSound().start();
+                resume = false;
+                movementsOnMusic();
+                isPausing.set(false);
+                startWatch();
+            }
+        });
+        dialog.show();
+    }
+
+    private class CommunicationBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String s_message = intent.getStringExtra(WearService.MESSAGE);
+            Log.d(TAG,"Receive message : " + s_message);
+            if(resume && s_message.equals(BuildConfig.W_pause_activity_stop)) {
+                if (dialog != null){
+                    dialog.dismiss();
+                    dialog = null;
+                }
+                musical.getSound().start();
+                resume = false;
+                movementsOnMusic();
+                isPausing.set(false);
+            }
+        }
+    }
 }
 

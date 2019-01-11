@@ -9,7 +9,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/logo_just_dance_now"
+        android:icon="@mipmap/fat_round"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.DeviceDefault">
@@ -55,14 +55,20 @@
         </service>
 
         <activity
-            android:name=".SleepActivity"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name=".DanceActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".CounterActivity"
-            android:label="ok"></activity>
+            android:name=".FinishActivity"
+            android:label="@string/title_activity_finish"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".HallOfFameActivity"
+            android:label="@string/title_activity_hall_of_fame"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".EditProfileActivity"
+            android:label="@string/title_activity_edit_profile"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

@@ -21,24 +21,14 @@ import android.widget.TextView;
 
 public class WatchMainActivity extends WearableActivity {
 
-    public static final String ACTION_RECEIVE_MESSAGE = "RECEIVE_MESSAGE";
-    public static final String MESSAGE = "MESSAGE";
-    public static final String ACTION_RECEIVE_IMAGE = "ACTION_RECEIVE_IMAGE";
-    public static final String IMAGE ="IMAGE";
     public final String TAG = this.getClass().getSimpleName();
-    private TextView mTextView;
-    private ConstraintLayout mLayout;
-    private ImageView mImageView;
 
     private CommunicationBroadcastReceiver communicationBroadcastReceiver;
-
+    private StartActivityBR startActivityBR;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_watch_main);
-        mLayout = findViewById(R.id.container);
-        //mTextView = (TextView) findViewById(R.id.textViewMain);
-        mImageView = findViewById(R.id.imageViewMain);
 
         /* Check the permission for the sensors */
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
@@ -52,7 +42,12 @@ public class WatchMainActivity extends WearableActivity {
         /* For the communication with the tablet*/
         // Get Message
         communicationBroadcastReceiver = new CommunicationBroadcastReceiver();
-        LocalBroadcastManager.getInstance(this).registerReceiver(communicationBroadcastReceiver, new IntentFilter(ACTION_RECEIVE_MESSAGE));
+        LocalBroadcastManager.getInstance(this).registerReceiver(communicationBroadcastReceiver, new IntentFilter(WearService.ACTION_RECEIVE_MESSAGE));
+
+        startActivityBR = new StartActivityBR();
+        startActivityBR.setCurrentContext(WatchMainActivity.this);
+        LocalBroadcastManager.getInstance(this).registerReceiver(startActivityBR, new IntentFilter(WearService.ACTIVITY_TO_START));
+
         setAmbientEnabled();
     }
 
@@ -60,22 +55,33 @@ public class WatchMainActivity extends WearableActivity {
     protected void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(communicationBroadcastReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(startActivityBR);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        communicationBroadcastReceiver = new CommunicationBroadcastReceiver();
-        LocalBroadcastManager.getInstance(this).registerReceiver(communicationBroadcastReceiver, new IntentFilter(ACTION_RECEIVE_MESSAGE));
+        if(communicationBroadcastReceiver == null) {
+            communicationBroadcastReceiver = new CommunicationBroadcastReceiver();
+            startActivityBR.setCurrentContext(WatchMainActivity.this);
+            LocalBroadcastManager.getInstance(this).registerReceiver(communicationBroadcastReceiver, new IntentFilter(WearService.ACTION_RECEIVE_MESSAGE));
+        }
+
+        if(startActivityBR == null) {
+            startActivityBR = new StartActivityBR();
+            LocalBroadcastManager.getInstance(this).registerReceiver(startActivityBR, new IntentFilter(WearService.ACTIVITY_TO_START));
+        }
     }
 
-    private class CommunicationBroadcastReceiver extends BroadcastReceiver {
+  private class CommunicationBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String s_message = intent.getStringExtra(MESSAGE);
-            Log.d(TAG,"Receive message: " + s_message);
-            if(s_message.equals(BuildConfig.W_test_isPaired)){
-                Communication.sendMessage(WatchMainActivity.this,BuildConfig.W_test_isPaired_true);
+            String s_message = intent.getStringExtra(WearService.MESSAGE);
+            Log.d(TAG, "Receive message: " + s_message);
+            switch (s_message) {
+                case BuildConfig.W_test_isPaired:
+                    Communication.sendMessage(WatchMainActivity.this, BuildConfig.W_test_isPaired_true);
+                    break;
             }
         }
     }
