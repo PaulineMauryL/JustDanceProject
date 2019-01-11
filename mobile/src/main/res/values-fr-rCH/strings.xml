@@ -14,7 +14,7 @@
     <string name="selectPicture">Sélectionne une image</string>
     <string name="welcome">Bienvenue !</string>
     <string name="createProfile">.   Merci de créer votre profil.</string>
-    <string name="appWelcome">Bienvenu dans Just Dance !</string>
+    <string name="appWelcome">Bienvenue dans Just Dance !</string>
     <string name="enterUsername" translatable="false">Qui es-tu ?</string>
     <string name="launchApp">Dansons !</string>
     <string name="enter_username">Entre ton nom d\'utilisateur</string>
