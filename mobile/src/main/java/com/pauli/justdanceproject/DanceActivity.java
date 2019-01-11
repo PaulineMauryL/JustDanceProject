@@ -51,7 +51,7 @@ public class DanceActivity extends AppCompatActivity {
     private MusicDance musical = null;
     private Handler mHandler;
     //private int[] music = null;
-    private TextView goodOrBad = null;
+    private ImageView goodOrBad = null;
     private ImageView toCancelImageButtonView = null;
     private ImageView nextImageButtonView = null;
     private ImageView actualImageButtonView = null;
@@ -96,12 +96,13 @@ public class DanceActivity extends AppCompatActivity {
         }
         if(resume){makeDialogBox();}
 
+
         communicationBroadcastReceiver = new CommunicationBroadcastReceiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(communicationBroadcastReceiver,new IntentFilter(WearService.ACTION_RECEIVE_MESSAGE));
 
         setContentView(R.layout.activity_dance);
         // Temp Hugo
-        mText = findViewById(R.id.textViewMovements);
+        // mText = findViewById(R.id.textViewMovements);
         counter =0;
         WearService.setToZero();
 
@@ -229,8 +230,7 @@ public class DanceActivity extends AppCompatActivity {
             // Show AR in a TextView
             actualPosition = intent.getIntExtra(COUNTER,0);
             counter++;
-            mText.setText("mode: " + actualPosition+"\n"
-                    +"counter: " + counter);
+            //mText.setText("mode: " + actualPosition+"\n" +"counter: " + counter);
             Log.d(TAG, "counter : "+ counter + "Wearservice counter : " + WearService.getCount());
         }
     }
@@ -288,19 +288,22 @@ public class DanceActivity extends AppCompatActivity {
                     }
                     Thread.sleep(100);
                     myMessage=handler.obtainMessage();
+                    goodOrBad = findViewById(R.id.danceResult);
                     if(askedPosition == actualPosition) {
                         messageBundle.putInt(PROGRESS_BAR_INCREMENT,3);
                         score = score+3;
-                        goodOrBad = findViewById(R.id.danceGoodOrOk);
-                        goodOrBad.setText(getString(R.string.good));
+                        Log.v("hugo","gorb_perfect");
+                        goodOrBad.setImageResource(R.drawable.perfect);
 
                     }else if(nextPosition == actualPosition){
                         messageBundle.putInt(PROGRESS_BAR_INCREMENT,1);
                         score=score+1;
-                        goodOrBad = findViewById(R.id.danceGoodOrOk);
-                        goodOrBad.setText(getString(R.string.ok));
+                        Log.v("hugo","gorb_ok");
+                        goodOrBad.setImageResource(R.drawable.ok);
                     }else{
-                        messageBundle.putInt(PROGRESS_BAR_INCREMENT,1);
+                        messageBundle.putInt(PROGRESS_BAR_INCREMENT,0);
+                        Log.v("hugo","gorb_nope");
+                        goodOrBad.setImageResource(R.drawable.nope);
                     }
                     myMessage.setData(messageBundle);
                     handler.sendMessage(myMessage);
@@ -347,8 +350,7 @@ public class DanceActivity extends AppCompatActivity {
             nextPosition = 0;
             askedPosition = 0;
 
-            goodOrBad = findViewById(R.id.danceGoodOrOk);
-            goodOrBad.setText("");
+            goodOrBad = findViewById(R.id.danceResult);
         }
     };
 
