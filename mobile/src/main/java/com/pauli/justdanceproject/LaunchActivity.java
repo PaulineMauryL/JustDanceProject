@@ -1,5 +1,6 @@
 package com.pauli.justdanceproject;
 
+import android.arch.persistence.room.Room;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -35,17 +36,33 @@ public class LaunchActivity extends AppCompatActivity {
     private String userID;
     boolean notMember = true;
     private CommunicationBroadcastReceiver communicationBroadcastReceiver;
+    private final String key_userId = "key_userId";
+    private String username = null;
+    public static CloneDanceRoomDatabase cloneDanceRD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_launch);
-        Log.d(TAG,"test :"+Boolean.parseBoolean(BuildConfig.W_flag_watch_enable));
+
+        if(savedInstanceState != null){
+            username = savedInstanceState.getString(USERNAME);
+        }
+
+        Log.d(TAG, "test :" + Boolean.parseBoolean(BuildConfig.W_flag_watch_enable));
         // Get acknowledge from the watch
-        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)) {
+        if(communicationBroadcastReceiver == null){
             communicationBroadcastReceiver = new CommunicationBroadcastReceiver();
             LocalBroadcastManager.getInstance(this).registerReceiver(communicationBroadcastReceiver, new IntentFilter(WearService.ACTION_RECEIVE_MESSAGE));
         }
+        cloneDanceRD = Room.databaseBuilder(getApplicationContext(), CloneDanceRoomDatabase.class, "db").allowMainThreadQueries().build();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(USERNAME,username);
     }
 
     @Override
@@ -64,12 +81,13 @@ public class LaunchActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if(communicationBroadcastReceiver == null){
-        LocalBroadcastManager.getInstance(this).registerReceiver(communicationBroadcastReceiver, new IntentFilter(WearService.ACTION_RECEIVE_MESSAGE));
+            communicationBroadcastReceiver = new CommunicationBroadcastReceiver();
+            LocalBroadcastManager.getInstance(this).registerReceiver(communicationBroadcastReceiver, new IntentFilter(WearService.ACTION_RECEIVE_MESSAGE));
         }
     }
     public void begin_game(View view) {  //if button is clicked
 
-        final String username = ((EditText) findViewById(R.id.txt_enter_name)).getText().toString();
+        username = ((EditText) findViewById(R.id.txt_enter_name)).getText().toString();
         if(username.isEmpty()) {
             // No connection to internet
             DialogOk dialogOk = new DialogOk(LaunchActivity.this,getString(R.string.nameEmpty));

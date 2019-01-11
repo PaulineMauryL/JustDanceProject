@@ -41,7 +41,6 @@ public class DanceActivity extends AppCompatActivity {
     public static final String COUNTER = "COUNTER";
     private final String key_resume = "key_resume";
 
-    //private CloneDanceRoomDatabase danceDB;
     private String userID;
     private String music_name;
     private int score=0;
@@ -79,7 +78,7 @@ public class DanceActivity extends AppCompatActivity {
 
     private AccRateBroadcastReceiver accRateBroadcastReceiver;
     private CommunicationBroadcastReceiver communicationBroadcastReceiver;
-    public static CloneDanceRoomDatabase cloneDanceRD;
+
 
     private static final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private static final DatabaseReference profileGetRef = database.getReference("profiles");
@@ -115,7 +114,7 @@ public class DanceActivity extends AppCompatActivity {
         });
 
         // Create instance of Sport Tracker Room DB
-        cloneDanceRD = Room.databaseBuilder(getApplicationContext(), CloneDanceRoomDatabase.class, "db").allowMainThreadQueries().build();
+
         int[] music;
         Bundle bunble = getIntent().getExtras();
         if (bunble!=null){
@@ -136,7 +135,7 @@ public class DanceActivity extends AppCompatActivity {
                                 dbEntity.setMusic(musical.getName());
                                 dbEntity.setScore(score);
 
-                                cloneDanceRD.dataDao().insertEntity(dbEntity);
+                                LaunchActivity.cloneDanceRD.dataDao().insertEntity(dbEntity);
                                 //Toast.makeText(getApplicationContext(), "Username" + user_db + "\n Music Name" + musical.getName() + "\n score" + score, Toast.LENGTH_LONG).show();
 
                             }
