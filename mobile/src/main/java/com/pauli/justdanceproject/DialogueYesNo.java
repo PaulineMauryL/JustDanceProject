@@ -49,6 +49,7 @@ public class DialogueYesNo extends AppCompatActivity {
     }
     public void create(String positive, final String negative){
         final Dialog dialog = new Dialog(context_activity); // Context, this, etc.
+        dialog.setCancelable(false);
         TextView mText;
         Button dialogButton_yes;
         Button dialogButton_no;
@@ -98,6 +99,10 @@ public class DialogueYesNo extends AppCompatActivity {
     private void yesSave2main(String message){
         Activity activity = (Activity) context_activity;
         activity.startActivity(itCallBack);
+        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+            // Change to dance activity
+            Communication.changeWatchActivity(activity,BuildConfig.W_watchmain_activity_start);
+        }
         activity.finish();
     }
 
@@ -105,6 +110,10 @@ public class DialogueYesNo extends AppCompatActivity {
         Intent intent = new Intent(context_activity, LaunchActivity.class);
         Activity activity = (Activity) context_activity;
         activity.startActivity(intent);
+        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+            // Change to dance activity
+            Communication.changeWatchActivity(activity,BuildConfig.W_watchmain_activity_start);
+        }
         activity.finish();
     }
 
@@ -117,6 +126,10 @@ public class DialogueYesNo extends AppCompatActivity {
             // Leave
             Intent intent_change = new Intent(fragmentActivity.getApplication(), LaunchActivity.class);
             fragmentActivity.startActivity(intent_change);
+            if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+                // Change to dance activity
+                Communication.changeWatchActivity(fragmentActivity,BuildConfig.W_watchmain_activity_start);
+            }
             fragmentActivity.finish();
         }else{
             Activity activity = (Activity) context_activity;
@@ -125,6 +138,10 @@ public class DialogueYesNo extends AppCompatActivity {
             // Leave
             Intent intent_change = new Intent(activity.getApplication(), LaunchActivity.class);
             activity.startActivity(intent_change);
+            if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+                // Change to dance activity
+                Communication.changeWatchActivity(activity,BuildConfig.W_watchmain_activity_start);
+            }
             activity.finish();
         }
     }

@@ -48,6 +48,10 @@ public class MusicalinetteFragment extends Fragment {
                 Intent intent_dance = new Intent(getActivity(), MainActivity.class);
                 intent_dance.putExtra(LaunchActivity.USER_ID, userID);
                 startActivity(intent_dance);
+                if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+                    // Change to dance activity
+                    Communication.changeWatchActivity(getActivity(),BuildConfig.W_watchmain_activity_start);
+                }
                 getActivity().finish();
                 break;
             case R.id.txt_edit_profile:
@@ -55,6 +59,10 @@ public class MusicalinetteFragment extends Fragment {
                 intent_edit.putExtra(LaunchActivity.USER_ID, userID);
                 intent_edit.putExtra(EditUser.ACTIVITY_NAME,MainActivity.ACTIVITY_NAME);
                 startActivity(intent_edit);
+                if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+                    // Change to dance activity
+                    Communication.changeWatchActivity(getActivity(),BuildConfig.W_edit_activity_start);
+                }
                 getActivity().finish();
                 break;
             case R.id.txt_change_user:                            // to copy in main activity and the three fragments

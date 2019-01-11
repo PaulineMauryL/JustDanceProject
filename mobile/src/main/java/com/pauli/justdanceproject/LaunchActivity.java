@@ -24,8 +24,6 @@ import com.google.firebase.database.ValueEventListener;
 
 public class LaunchActivity extends AppCompatActivity {
 
-    public static final String MESSAGE = "MESSAGE";
-    public static final String ACTION_RECEIVE_MESSAGE = "ACTION_RECEIVE_MESSAGE";
     private final String TAG = this.getClass().getSimpleName();
 
     public static final String ACTIVITY_NAME = "launch_activity";
@@ -46,7 +44,7 @@ public class LaunchActivity extends AppCompatActivity {
         // Get acknowledge from the watch
         if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)) {
             communicationBroadcastReceiver = new CommunicationBroadcastReceiver();
-            LocalBroadcastManager.getInstance(this).registerReceiver(communicationBroadcastReceiver, new IntentFilter(ACTION_RECEIVE_MESSAGE));
+            LocalBroadcastManager.getInstance(this).registerReceiver(communicationBroadcastReceiver, new IntentFilter(WearService.ACTION_RECEIVE_MESSAGE));
         }
     }
 
@@ -66,7 +64,7 @@ public class LaunchActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if(communicationBroadcastReceiver == null){
-        LocalBroadcastManager.getInstance(this).registerReceiver(communicationBroadcastReceiver, new IntentFilter(ACTION_RECEIVE_MESSAGE));
+        LocalBroadcastManager.getInstance(this).registerReceiver(communicationBroadcastReceiver, new IntentFilter(WearService.ACTION_RECEIVE_MESSAGE));
         }
     }
     public void begin_game(View view) {  //if button is clicked
@@ -120,12 +118,20 @@ public class LaunchActivity extends AppCompatActivity {
                         intent.putExtra(USERNAME, username);
                         intent.putExtra(EditUser.ACTIVITY_NAME,ACTIVITY_NAME);
                         startActivity(intent);
+                        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+                            // Change to dance activity
+                            Communication.changeWatchActivity(LaunchActivity.this,BuildConfig.W_edit_activity_start);
+                        }
                         finish();
                     } else {              // user exist, go to mainActivity to select a dance
                         translation.changeLanguage(getBaseContext(),language,userID);
                         Intent intent = new Intent(LaunchActivity.this, MainActivity.class);
                         intent.putExtra(USER_ID, userID);
                         startActivity(intent);
+                        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+                            // Change to dance activity
+                            Communication.changeWatchActivity(LaunchActivity.this,BuildConfig.W_watchmain_activity_start);
+                        }
                         finish();
                     }
                 }
@@ -162,7 +168,7 @@ public class LaunchActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d(TAG, "Message received");
-            String s_message = intent.getStringExtra(MESSAGE);
+            String s_message = intent.getStringExtra(WearService.MESSAGE);
             Log.d(TAG, "Message receive: " + s_message);
             if (s_message.equals(BuildConfig.W_test_isPaired_true)) {
                 isWatchPaired = true;

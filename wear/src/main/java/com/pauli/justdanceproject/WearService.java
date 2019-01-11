@@ -63,6 +63,7 @@ public class WearService extends WearableListenerService {
                 break;
             case MESSAGE:
                 String message = intent.getStringExtra(MESSAGE);
+                Log.d(TAG,"Message send : " + message);
                 if (message == null) message = "";
                 sendMessage(message, intent.getStringExtra(PATH));
                 break;
@@ -105,8 +106,10 @@ public class WearService extends WearableListenerService {
     }
 
     public static final String ACTIVITY_TO_START = "ACTIVITY_TO_START";
-
+    private static final String STOP_ACTIVITY = "STOP_ACTIVITY";
+    private static final String ACTION_RECEIVE_IMAGE = "ACTION_RECEIVE_IMAGE";
     public static final String MESSAGE = "MESSAGE";
+    public static final String ACTION_RECEIVE_MESSAGE = "ACTION_RECEIVE_MESSAGE";
     public static final String DATAMAP_INT = "DATAMAP_INT";
     public static final String DATAMAP_INT_ARRAYLIST = "DATAMAP_INT_ARRAYLIST";
     public static final String IMAGE = "IMAGE";
@@ -204,8 +207,8 @@ public class WearService extends WearableListenerService {
                         break;
                     case BuildConfig.W_path_image:
                         Asset imageAsset = dataMapItem.getDataMap().getAsset(BuildConfig.W_image_key);
-                        intent = new Intent(WatchMainActivity.ACTION_RECEIVE_IMAGE);
-                        bitmapFromAsset(imageAsset,intent,WatchMainActivity.IMAGE);
+                        intent = new Intent(WearService.ACTION_RECEIVE_IMAGE);
+                        bitmapFromAsset(imageAsset,intent,WearService.IMAGE);
                         break;
                     default:
                         Log.v(TAG, "Data changed for unhandled path: " + uri);
@@ -238,39 +241,17 @@ public class WearService extends WearableListenerService {
         switch (path) {
             case BuildConfig.W_path_start_activity:
                 Log.v(TAG, "Message asked to open Activity");
-                Intent startIntent = null;
-                switch (data) {
-                    case BuildConfig.W_mainactivity:
-                        startIntent = new Intent(this, WatchMainActivity.class);
-                        break;
-                    case BuildConfig.W_watchmainactivity:
-                        startIntent = new Intent(this, WatchMainActivity.class);
-                        break;
-                    case BuildConfig.W_sleepactivity:
-                        startIntent = new Intent(this, SleepActivity.class);
-                        break;
-                    case BuildConfig.W_dance_activity:
-                        startIntent = new Intent(this, DanceActivity.class);
-                        break;
-                    case BuildConfig.W_counter_activity:
-                        startIntent = new Intent(this, CounterActivity.class);
-                        break;
-                }
-
-                if (startIntent == null) {
-                    Log.w(TAG, "Asked to start unhandled activity: " + data);
-                    return;
-                }
-                startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(startIntent);
+                Intent itStart = new Intent(ACTIVITY_TO_START);
+                itStart.putExtra(PATH,data);
+                LocalBroadcastManager.getInstance(this).sendBroadcast(itStart);
                 break;
             case BuildConfig.W_path_acknowledge:
                 Log.v(TAG, "Received acknowledgment");
                 break;
             case BuildConfig.W_path_message:
                 Log.v(TAG,"Message received: " + data);
-                Intent intent = new Intent(WatchMainActivity.ACTION_RECEIVE_MESSAGE);
-                intent.putExtra(WatchMainActivity.MESSAGE,data);
+                Intent intent = new Intent(ACTION_RECEIVE_MESSAGE);
+                intent.putExtra(MESSAGE,data);
                 LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
                 break;
             case BuildConfig.W_example_path_text:
@@ -288,12 +269,7 @@ public class WearService extends WearableListenerService {
                 switch (data) {
                     case BuildConfig.W_dance_activity:
                         intentStop = new Intent();
-                        intentStop.setAction(DanceActivity.STOP_ACTIVITY);
-                        LocalBroadcastManager.getInstance(WearService.this).sendBroadcast(intentStop);
-                        break;
-                    case BuildConfig.W_counter_activity:
-                        intentStop = new Intent();
-                        intentStop.setAction(DanceActivity.STOP_ACTIVITY);
+                        intentStop.setAction(STOP_ACTIVITY);
                         LocalBroadcastManager.getInstance(WearService.this).sendBroadcast(intentStop);
                         break;
                 }

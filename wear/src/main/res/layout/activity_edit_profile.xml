@@ -4,36 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SleepActivity"
-    tools:deviceIds="wear"
-    tools:ignore="MissingDefaultResource">
+    android:padding="@dimen/box_inset_layout_padding"
+    tools:context=".EditProfileActivity"
+    tools:deviceIds="wear">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
         <ImageView
-            android:id="@+id/imageSleepMode"
-            android:layout_width="130sp"
-            android:layout_height="130sp"
+            android:id="@+id/imageViewEdit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:cropToPadding="false"
-            android:src="@mipmap/sleep_mode"
-            app:layout_constraintBottom_toTopOf="@+id/textSleepMode"
+            android:src="@mipmap/edit_profile"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textSleepMode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sleeping Mode"
-            android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageSleepMode" />
     </android.support.constraint.ConstraintLayout>
-
 </android.support.wear.widget.BoxInsetLayout>

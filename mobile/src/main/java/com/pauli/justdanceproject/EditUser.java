@@ -263,6 +263,10 @@ public class EditUser extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.putExtra(LaunchActivity.USER_ID, userID);
                 startActivity(intent);
+                if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+                    // Change to dance activity
+                    Communication.changeWatchActivity(EditUser.this,BuildConfig.W_watchmain_activity_start);
+                }
                 finish();
             } else {
                 Toast.makeText(EditUser.this, R.string.registrationFailed, Toast.LENGTH_SHORT).show();
@@ -299,6 +303,7 @@ public class EditUser extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
+
         startActivityForResult(Intent.createChooser(intent, getString(R.string.selectPicture)), PICK_IMAGE);
     }
 

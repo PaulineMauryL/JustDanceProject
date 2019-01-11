@@ -14,12 +14,14 @@
         android:layout_height="match_parent">
 
 
-        <ImageView
-            android:id="@+id/imageViewMain"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+        <ImageButton
+            android:id="@+id/imageButtonPause"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/action_item_background"
+            android:backgroundTint="@color/action_button_background"
             android:cropToPadding="false"
-            android:src="@mipmap/fat_round"
+            android:src="@mipmap/play"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

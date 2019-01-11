@@ -16,6 +16,7 @@ public class DialogOk {
     }
     public void creat(){
         final Dialog dialog = new Dialog(context_activity); // Context, this, etc.
+        dialog.setCancelable(false);
         dialog.setContentView(R.layout.dialog_ok);
         ((TextView) dialog.findViewById(R.id.dialog_info_ok)).setText(message);
         Button dialogButton = dialog.findViewById(R.id.buttonOkDialog);

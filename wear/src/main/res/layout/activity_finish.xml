@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/box_inset_layout_padding"
-    tools:context=".WatchMainActivity"
+    tools:context=".FinishActivity"
     tools:deviceIds="wear">
 
     <android.support.constraint.ConstraintLayout
@@ -15,11 +15,11 @@
 
 
         <ImageView
-            android:id="@+id/imageViewMain"
+            android:id="@+id/imageViewFinish"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:cropToPadding="false"
-            android:src="@mipmap/fat_round"
+            android:src="@mipmap/finish"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

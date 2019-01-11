@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,16 +33,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             //Toast.makeText(this, "error no id", Toast.LENGTH_SHORT).show();
         }
-
-        Button b_testWatchActivity = findViewById(R.id.buttonTestWatchActivity);
-        b_testWatchActivity.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                // Start on click activity
-                Intent it = new Intent(MainActivity.this,TestWatchActivity.class);
-                startActivity(it);
-            }
-        });
     }
 
 
@@ -59,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
             intentStartDance.putExtra("musicchosen", chosenMusic);
             intentStartDance.putExtra(LaunchActivity.USER_ID, userID);
             startActivity(intentStartDance);
+            if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+                // Change to dance activity
+                Communication.changeWatchActivity(MainActivity.this,BuildConfig.W_dance_activity_start);
+            }
             finish();
         }
     }
@@ -91,6 +84,10 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent_show = new Intent(this, ShowProfile.class);
                 intent_show.putExtra(LaunchActivity.USER_ID, userID);
                 startActivity(intent_show);
+                if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+                    // Change to dance activity
+                    Communication.changeWatchActivity(MainActivity.this,BuildConfig.W_hall_activity_start);
+                }
                 finish();
                 break;
             case R.id.txt_edit_profile:
@@ -98,6 +95,10 @@ public class MainActivity extends AppCompatActivity {
                 intent_edit.putExtra(LaunchActivity.USER_ID, userID);
                 intent_edit.putExtra(EditUser.ACTIVITY_NAME,ACTIVITY_NAME);
                 startActivity(intent_edit);
+                if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+                    // Change to dance activity
+                    Communication.changeWatchActivity(MainActivity.this,BuildConfig.W_edit_activity_start);
+                }
                 finish();
                 break;
             case R.id.txt_change_user:// to copy in main activity and the three fragments
