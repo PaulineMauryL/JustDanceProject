@@ -73,23 +73,23 @@ public class LaunchActivity extends AppCompatActivity {
         if(username.isEmpty()) {
             // No connection to internet
             DialogOk dialogOk = new DialogOk(LaunchActivity.this,getString(R.string.nameEmpty));
-            dialogOk.creat();
+            dialogOk.create();
         }
         else if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable) && !isBluetoothEnabled()){
             // check if the bluetooth is on
             DialogOk dialogOk = new DialogOk(LaunchActivity.this,getString(R.string.error_message_bluetooth));
-            dialogOk.creat();
+            dialogOk.create();
         }
         else if (Boolean.parseBoolean(BuildConfig.W_flag_watch_enable) && !isWatchPaired){
             // Check if the watch is paired
             DialogOk dialogOk = new DialogOk(LaunchActivity.this,getString(R.string.error_message_pair_watch));
-            dialogOk.creat();
+            dialogOk.create();
         }
         else if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable) && !isNetworkAvailable())
         {
             // Check if the internet connection works
             DialogOk dialogOk = new DialogOk(LaunchActivity.this,getString(R.string.internet_connection_message));
-            dialogOk.creat();
+            dialogOk.create();
             // Test if the watch is paired
             if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){testIfWatchPaired();}
         } else{

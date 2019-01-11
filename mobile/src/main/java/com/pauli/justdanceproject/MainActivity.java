@@ -18,7 +18,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int PICK_MUSIC = 1;
     private int[] chosenMusic=null;
     boolean musicSelected = false;
-    AlertDialog.Builder builder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         if(!musicSelected){
             // check if one music has been selected
             DialogOk dialogOk = new DialogOk(MainActivity.this,getString(R.string.error_message_music_selected));
-            dialogOk.creat();
+            dialogOk.create();
         }
         else {
             // Start the dance Activity
