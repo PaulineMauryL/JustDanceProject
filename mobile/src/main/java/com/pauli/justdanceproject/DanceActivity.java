@@ -37,6 +37,7 @@ public class DanceActivity extends AppCompatActivity {
     static final String MUSIC_NAME = "Music_name";
     private final String TAG = this.getClass().getSimpleName();
     private static final String PROGRESS_BAR_INCREMENT = "ProgressBarIncrementId";
+    private static final String GRADE_DANCE = "GRADE_DANCE";
     public static final String RECEIVE_COUNTER = "RECEIVE_COUNTER";
     public static final String COUNTER = "COUNTER";
 
@@ -44,10 +45,10 @@ public class DanceActivity extends AppCompatActivity {
     private String userID;
     private int score=0;
     // temp
-    private TextView mText;
+    private TextView mText = null;
     private MusicDance musical = null;
     private Handler mHandler;
-    private TextView goodOrBad = null;
+    private ImageView goodOrBad = null;
     private ImageView toCancelImageButtonView = null;
     private ImageView nextImageButtonView = null;
     private ImageView actualImageButtonView = null;
@@ -72,12 +73,24 @@ public class DanceActivity extends AppCompatActivity {
             int progress = msg.getData().getInt(PROGRESS_BAR_INCREMENT);
             // Update the Progress bar
             bar.incrementProgressBy(progress);
+
+            GradeDance gradeDance = (GradeDance) msg.getData().getSerializable(GRADE_DANCE);
+           switch(gradeDance){
+               case PERFECT:
+                   goodOrBad.setImageResource(R.drawable.perfect);
+                   break;
+               case OK:
+                   goodOrBad.setImageResource(R.drawable.ok);
+                   break;
+               case NOPE:
+                   goodOrBad.setImageResource(R.drawable.nope);
+                   break;
+           }
         }
     };
 
     private AccRateBroadcastReceiver accRateBroadcastReceiver;
     private CommunicationBroadcastReceiver communicationBroadcastReceiver;
-    public static CloneDanceRoomDatabase cloneDanceRD;
 
     private static final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private static final DatabaseReference profileGetRef = database.getReference("profiles");
@@ -95,7 +108,7 @@ public class DanceActivity extends AppCompatActivity {
     private final String key_isPausingWatch = "key_isPausingWatch";
 
     private enum ButtonState{R0,R1,R2,R3}
-
+    private enum GradeDance{PERFECT,OK,NOPE};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,8 +131,6 @@ public class DanceActivity extends AppCompatActivity {
         }else{
             Log.d(TAG, "DanceActivity : here3");
             // Create instance of Sport Tracker Room DB
-            cloneDanceRD = Room.databaseBuilder(getApplicationContext(), CloneDanceRoomDatabase.class,
-                    "db").allowMainThreadQueries().build();
 
             int[] music;
             Bundle bunble = getIntent().getExtras();
@@ -261,9 +272,6 @@ public class DanceActivity extends AppCompatActivity {
             toCancelImageButtonView.setActivated(false);
             nextPosition = 0;
             askedPosition = 0;
-
-            goodOrBad = findViewById(R.id.danceGoodOrOk);
-            goodOrBad.setText("");
         }
     };
 
@@ -407,7 +415,7 @@ public class DanceActivity extends AppCompatActivity {
         dbEntity.setMusic(musical.getName());
         dbEntity.setScore(score);
 
-        cloneDanceRD.dataDao().insertEntity(dbEntity);
+        LaunchActivity.cloneDanceRD.dataDao().insertEntity(dbEntity);
     }
 
 
@@ -484,6 +492,7 @@ private Runnable progressRunnable = new Runnable() {
     private Bundle messageBundle = new Bundle();
     private  Message myMessage;
     public void run() {
+
         try {
             while (isRunning.get()) { // disable the thread when isRunning is false
                 // check is the danse is paused or not
@@ -493,21 +502,27 @@ private Runnable progressRunnable = new Runnable() {
                 }
                 Log.d(TAG, "DanceActivity : progressRunnable : after");
                 Thread.sleep(100);
+                GradeDance grade_dance;
                 myMessage = progressBarHandler.obtainMessage();
+                goodOrBad = findViewById(R.id.danceResult);
+                mText = findViewById(R.id.textViewMovements);
                 if(askedPosition == actualPosition) {
                     messageBundle.putInt(PROGRESS_BAR_INCREMENT,3);
                     score = score+3;
-                    goodOrBad = findViewById(R.id.danceGoodOrOk);
-                    goodOrBad.setText(getString(R.string.good));
+                    grade_dance = GradeDance.PERFECT;
+                    Log.d(TAG,"DanceActivity : progressRunnable : Perfect");
 
                 }else if(nextPosition == actualPosition){
                     messageBundle.putInt(PROGRESS_BAR_INCREMENT,1);
                     score=score+1;
-                    goodOrBad = findViewById(R.id.danceGoodOrOk);
-                    goodOrBad.setText(getString(R.string.ok));
+                    grade_dance = GradeDance.OK;
+                    Log.d(TAG,"DanceActivity : progressRunnable : OK");
                 }else{
                     messageBundle.putInt(PROGRESS_BAR_INCREMENT,0);
+                    grade_dance = GradeDance.NOPE;
+                    Log.d(TAG,"DanceActivity : progressRunnable : Nope");
                 }
+                messageBundle.putSerializable(GRADE_DANCE,grade_dance);
                 myMessage.setData(messageBundle);
                 progressBarHandler.sendMessage(myMessage);
             }

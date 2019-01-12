@@ -39,6 +39,13 @@
                     android:scaleType="fitStart"
                     app:srcCompat="@drawable/disco" />
 
+                <TextView
+                    android:id="@+id/textViewMovements"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="TextView" />
+
                 <ImageView
                     android:id="@+id/danceResult"
                     android:layout_width="match_parent"
@@ -113,6 +120,7 @@
         <ProgressBar
             android:id="@+id/progress"
             style="?android:attr/progressBarStyleHorizontal"
+            android:progressDrawable="@drawable/customprogressbar"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_marginLeft="10dp"
