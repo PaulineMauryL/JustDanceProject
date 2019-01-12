@@ -1,5 +1,6 @@
 package com.pauli.justdanceproject;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
@@ -7,11 +8,13 @@ import android.widget.ImageButton;
 
 public class DialogPause {
     private Context context_activity;
+    private Activity activity;
     private Dialog dialog;
     private Boolean open;
 
     public DialogPause(Context context_activity){
         this.context_activity = context_activity;
+        this.activity = (Activity) context_activity;
         this.dialog = new Dialog(context_activity); // Context, this, etc.
         this.open = false;
     }
@@ -24,9 +27,11 @@ public class DialogPause {
             @Override
             public void onClick(View v) {
                 Communication.sendMessage(context_activity,BuildConfig.W_pause_activity_stop);
+                ((DanceActivity)activity).startSensor();
                 dialog.dismiss();
             }
         });
+        ((DanceActivity)activity).stopSensor();
         dialog.show();
         open = true;
     }
