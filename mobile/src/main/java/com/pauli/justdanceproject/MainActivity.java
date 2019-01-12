@@ -11,12 +11,12 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-
+    private String key_userID = "key_userID";
     public static final String ACTIVITY_NAME = "main_activity";
     public static final String RECORDING_ID = "recording_id";  //added by Pauline
     private String userID;
     private static final int PICK_MUSIC = 1;
-    private int[] chosenMusic=null;
+    private int[] chosenMusic = null;
     boolean musicSelected = false;
 
     @Override
@@ -24,16 +24,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = getIntent();
         musicSelected = false;
-        if (intent.hasExtra(LaunchActivity.USER_ID)) {
-            userID = intent.getStringExtra(LaunchActivity.USER_ID);
-            //Toast.makeText(this, userID, Toast.LENGTH_SHORT).show();
+
+        if (savedInstanceState != null) {
+            userID = savedInstanceState.getString(key_userID);
         } else {
-            //Toast.makeText(this, "error no id", Toast.LENGTH_SHORT).show();
+            Intent intent = getIntent();
+            if (intent.hasExtra(LaunchActivity.USER_ID)) {
+                userID = intent.getStringExtra(LaunchActivity.USER_ID);
+            } else {
+                Toast.makeText(this, "error no id", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(key_userID,userID);
+    }
 
     public void StartDance(View view) {
         if(!musicSelected){

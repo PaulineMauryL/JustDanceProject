@@ -46,14 +46,14 @@ public class EditUser extends AppCompatActivity {
 
     public static final String ACTIVITY_NAME = "activity_name";
 
-    TextView edit_username;
-    String languageString;  //default languageString
+    private TextView edit_username;
+    private String languageString;  //default languageString
     private Translation lang = new Translation();
 
-    Switch s_english;
-    Switch s_french;
-    Switch s_spanish;
-    Switch s_german;
+    private Switch s_english;
+    private Switch s_french;
+    private Switch s_spanish;
+    private Switch s_german;
 
     private static final int PICK_IMAGE = 1;
     private File imageFile;
@@ -84,6 +84,9 @@ public class EditUser extends AppCompatActivity {
         s_german.setChecked(false);
 
         languageString = getString(R.string.english);
+        if(savedInstanceState != null){
+            userID = savedInstanceState.getString(LaunchActivity.USER_ID);
+        }
 
         Intent intent = getIntent();
 
@@ -161,11 +164,12 @@ public class EditUser extends AppCompatActivity {
     }
 
 
-    // To keep image after config change
+    // To keep image and user id after config change
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable("ImageUri", savedImageUri);
+        outState.putString(LaunchActivity.USER_ID,userID);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////

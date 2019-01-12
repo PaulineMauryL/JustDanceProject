@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Clone Dance !</string>
+    <string name="app_name">Pinky Robot Dance !</string>
     <string name="start_dance">Débuter la danse !</string>
     <string name="Up" translatable="false">Monte !</string>
     <string name="Down" translatable="false">Descends !</string>
@@ -14,7 +14,7 @@
     <string name="selectPicture">Sélectionne une image</string>
     <string name="welcome">Bienvenue !</string>
     <string name="createProfile">.   Merci de créer votre profil.</string>
-    <string name="appWelcome">Bienvenu dans Just Dance !</string>
+    <string name="appWelcome">Bienvenue dans Just Dance !</string>
     <string name="enterUsername" translatable="false">Qui es-tu ?</string>
     <string name="launchApp">Dansons !</string>
     <string name="enter_username">Entre ton nom d\'utilisateur</string>

@@ -95,7 +95,7 @@ public class HerculeFragment extends Fragment {
             userID = intent.getStringExtra(LaunchActivity.USER_ID);
         }
         TxtInfo = fragmentView.findViewById(R.id.txt_display_info);
-        List<DatabaseEntity> entities = DanceActivity.cloneDanceRD.dataDao().getHallOfFame(String.valueOf(R.raw.zero));
+        List<DatabaseEntity> entities = LaunchActivity.cloneDanceRD.dataDao().getHallOfFame(String.valueOf(R.raw.zero));
 
         String info = "";
 
