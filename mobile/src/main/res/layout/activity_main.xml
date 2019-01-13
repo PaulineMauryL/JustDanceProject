@@ -97,7 +97,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:onClick="ChooseCreuse"
-                        app:srcCompat="@drawable/bt_creuse" />
+                        app:srcCompat="@drawable/sun" />
 
                     <Space
                         android:layout_width="10dp"
@@ -109,7 +109,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:onClick="ChooseMusicalinette"
-                        app:srcCompat="@drawable/bt_musicalinette" />
+                        app:srcCompat="@drawable/chantaje" />
                 </LinearLayout>
 
                 <TextView

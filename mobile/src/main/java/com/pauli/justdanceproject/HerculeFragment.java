@@ -88,7 +88,7 @@ public class HerculeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
             savedInstanceState) {
         // Inflate the layout for this fragment
-        fragmentView = inflater.inflate(R.layout.fragment_creuse, container, false);
+        fragmentView = inflater.inflate(R.layout.fragment_hercule, container, false);
 
         Intent intent = getActivity().getIntent();
         if (intent.hasExtra(LaunchActivity.USER_ID)) {

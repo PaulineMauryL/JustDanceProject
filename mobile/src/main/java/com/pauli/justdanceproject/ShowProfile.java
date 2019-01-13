@@ -11,9 +11,9 @@ public class ShowProfile extends AppCompatActivity implements MusicalinetteFragm
 
     private final String TAG = this.getClass().getSimpleName();
 
-    private MusicalinetteFragment perfFragment;
-    private CreuseFragment historyFragment;
-    private HerculeFragment levelFragment;
+    private MusicalinetteFragment chantajeFragment;
+    private CreuseFragment lalalandFragment;
+    private HerculeFragment herculeFragment;
     private SectionsStatePagerAdapter mSectionStatePagerAdapter;
 
     @Override
@@ -24,9 +24,9 @@ public class ShowProfile extends AppCompatActivity implements MusicalinetteFragm
         mSectionStatePagerAdapter = new SectionsStatePagerAdapter(getSupportFragmentManager());
 
         // Do this in case of detaching of Fragments
-        perfFragment = new MusicalinetteFragment();
-        historyFragment = new CreuseFragment();
-        levelFragment = new HerculeFragment();
+        chantajeFragment = new MusicalinetteFragment();
+        lalalandFragment = new CreuseFragment();
+        herculeFragment = new HerculeFragment();
 
         ViewPager mViewPager = findViewById(R.id.profileViewPager);
         setUpViewPager(mViewPager);
@@ -38,14 +38,13 @@ public class ShowProfile extends AppCompatActivity implements MusicalinetteFragm
 
 
     private void setUpViewPager(ViewPager mViewPager) {
-        mSectionStatePagerAdapter.addFragment(levelFragment,getString(R.string.HerculeName));
-        mSectionStatePagerAdapter.addFragment(perfFragment, getString(R.string.FrogPrincessName));
-        mSectionStatePagerAdapter.addFragment(historyFragment, getString(R.string.musicalinette));
+        mSectionStatePagerAdapter.addFragment(herculeFragment,getString(R.string.HerculeName));
+        mSectionStatePagerAdapter.addFragment(lalalandFragment, getString(R.string.LalalandName));
+        mSectionStatePagerAdapter.addFragment(chantajeFragment, getString(R.string.ShakiraName));
         mViewPager.setAdapter(mSectionStatePagerAdapter);
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
+        public void onFragmentInteraction(Uri uri) {
     }
-
 }
