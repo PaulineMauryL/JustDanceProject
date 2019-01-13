@@ -62,7 +62,7 @@ allprojects {
                 edit_activity_start: "edit_activity_start",
                 watchmain_activity_start: "watchmain_activity_start",
 
-                flag_watch_enable   : "false"
+                flag_watch_enable   : "true"
         ]
     }
 }

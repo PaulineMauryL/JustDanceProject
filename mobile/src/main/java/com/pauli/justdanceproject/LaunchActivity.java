@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
@@ -35,10 +36,11 @@ public class LaunchActivity extends AppCompatActivity {
     private Boolean isWatchPaired= false;
     private String userID;
     boolean notMember = true;
-    private CommunicationBroadcastReceiver communicationBroadcastReceiver;
+    private CommunicationBroadcastReceiver communicationBroadcastReceiver = null;
     private final String key_userId = "key_userId";
     private String username = null;
     public static CloneDanceRoomDatabase cloneDanceRD;
+    private Handler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,8 @@ public class LaunchActivity extends AppCompatActivity {
             LocalBroadcastManager.getInstance(this).registerReceiver(communicationBroadcastReceiver, new IntentFilter(WearService.ACTION_RECEIVE_MESSAGE));
         }
         cloneDanceRD = Room.databaseBuilder(getApplicationContext(), CloneDanceRoomDatabase.class, "db").allowMainThreadQueries().build();
+        mHandler = new Handler();
+        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){startSendingData();}
     }
 
     @Override
@@ -68,7 +72,6 @@ public class LaunchActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){testIfWatchPaired();}
     }
 
     @Override
@@ -82,8 +85,7 @@ public class LaunchActivity extends AppCompatActivity {
         super.onResume();
         if(communicationBroadcastReceiver == null){
             communicationBroadcastReceiver = new CommunicationBroadcastReceiver();
-            LocalBroadcastManager.getInstance(this).registerReceiver(communicationBroadcastReceiver, new IntentFilter(WearService.ACTION_RECEIVE_MESSAGE));
-        }
+            LocalBroadcastManager.getInstance(this).registerReceiver(communicationBroadcastReceiver, new IntentFilter(WearService.ACTION_RECEIVE_MESSAGE));}
     }
     public void begin_game(View view) {  //if button is clicked
 
@@ -108,8 +110,6 @@ public class LaunchActivity extends AppCompatActivity {
             // Check if the internet connection works
             DialogOk dialogOk = new DialogOk(LaunchActivity.this,getString(R.string.internet_connection_message));
             dialogOk.create();
-            // Test if the watch is paired
-            if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){testIfWatchPaired();}
         } else{
             // Begin fire base transaction
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -181,6 +181,17 @@ public class LaunchActivity extends AppCompatActivity {
         Communication.sendMessage(LaunchActivity.this,BuildConfig.W_test_isPaired);
         Log.d(TAG, "Message send");
     }
+
+    protected void startSendingData() {
+        mHandler.postDelayed(sendDataToBroadcast,500);
+    }
+
+    final Runnable sendDataToBroadcast = new Runnable() {
+        public void run() {
+            if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){testIfWatchPaired();}
+            if(!isWatchPaired){startSendingData();}
+        }
+    };
 
     private class CommunicationBroadcastReceiver extends BroadcastReceiver {
         @Override

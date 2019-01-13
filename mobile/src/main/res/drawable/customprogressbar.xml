@@ -18,8 +18,7 @@
     <clip>
         <shape>
             <gradient
-                android:startColor="@color/primary_text_material_dark"
-                android:centerColor="@color/button_color"
+                android:startColor="@color/button_color"
                 android:centerY="1.0"
                 android:endColor="@color/highlight_color_filter" />
             <corners

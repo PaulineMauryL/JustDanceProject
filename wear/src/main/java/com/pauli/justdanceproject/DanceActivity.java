@@ -18,12 +18,13 @@ import android.util.Log;
 public class DanceActivity extends WearableActivity implements SensorEventListener {
 
     private float[] accRate = new float[3];
-    private int error = 5;
+    private final int ERROR = 5;
     private int actualPosition;
 
     private final String TAG = this.getClass().getSimpleName();
     private Handler mHandler;
-    private int counter;
+    private int counter; // use for debug only
+    private int count;
     private Boolean isRunning;
     private DialogPause dialogPause;
 
@@ -32,6 +33,7 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
     private CommunicationBroadcastReceiver communicationBroadcastReceiver;
     private StartActivityBR startActivityBR;
 
+    private final int SENDING_TIME = 50; // Sending rate in miniseconds
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +41,7 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
 
         mHandler = new Handler();
         counter = 0;
+        count = 0;
         WearService.setToZero();
         /*Sensor SetUp*/
 
@@ -61,7 +64,7 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
     }
 
     protected void startSendingData() {
-        mHandler.postDelayed(sendDataToBroadcast,500);
+        mHandler.postDelayed(sendDataToBroadcast,SENDING_TIME);
     }
 
     final Runnable sendDataToBroadcast = new Runnable() {
@@ -69,18 +72,32 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
 
             //TextView[] mText = {findViewById(R.id.textView1),findViewById(R.id.textView2),findViewById(R.id.textView3)};
             counter ++;
-
-            if(Math.abs(accRate[0])<error) {
+            // Averaged value
+            for (int i = 0; i < accRate.length; i++){
+                accRate[i] = (count>0?accRate[i]/count:accRate[i]);
+            }
+            Log.v(TAG, "sendDataToBroadcast : count : " + count);
+            // Classifier
+            if((accRate[0] == 0) && (accRate[1] == 0) && (accRate[2] == 0)){
+                // send the previous value
+            }
+            else if(Math.abs(accRate[2])>7) {
                 actualPosition = 2;
-            } else if(Math.abs(accRate[1])<error && Math.abs(accRate[2])<error && accRate[0]>0){
+            } else if(Math.abs(accRate[0])>4  && accRate[0]>0){
                 actualPosition = 1;
-            } else if(Math.abs(accRate[1])<error && Math.abs(accRate[2])<error && accRate[0]<0) {
+            } else if(Math.abs(accRate[0])>4  && accRate[0]<0) {
                 actualPosition = 3;
             } else{
-                actualPosition = 0;
+                actualPosition = 4; // undefined
             }
-            /* Send Values */
-
+            Log.v(TAG, "sendDataToBroadcast : actualPosition : acc[0] " + accRate[0] + " acc[1] " + accRate[1] + " acc[2] " + accRate[2] );
+            Log.v(TAG, "sendDataToBroadcast : actualPosition : " + actualPosition);
+            // Set to zeros
+            for (int i = 0; i < accRate.length; i++){
+                accRate[i] = 0;
+            }
+            count = 0;
+            /* Send Result */
             Intent intent = new Intent(DanceActivity.this, WearService.class);
             intent.setAction(WearService.ACTION_SEND.COUNTER.name());
             intent.putExtra(WearService.COUNTER, actualPosition);
@@ -91,6 +108,7 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
             if(isRunning){startSendingData();}
         }
     };
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -124,8 +142,13 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        float sum = 0;
         for (int i = 0; i < event.values.length; i++) {
-            accRate[i] = event.values[i];
+            accRate[i] += event.values[i];
+            sum += accRate[i];
+        }
+        if(sum != 0){
+            count++;
         }
         Log.d(TAG,"Sensor test :"  +counter );
 
@@ -151,22 +174,25 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
                 Log.d(TAG, "PAUSE_START");
                 dialogPause = new DialogPause(DanceActivity.this);
                 dialogPause.create();
-                startSensor();
             }else if(s_message.equals(BuildConfig.W_pause_activity_stop)){
                 Log.d(TAG, "PAUSE_STOP");
                 if(dialogPause!=null && dialogPause.isOpen()){dialogPause.close();}
+                startSensor();
             }
         }
     }
 
     public void stopSensor(){
         sensorManager.unregisterListener(this);
+        Log.i(TAG, "Sensor test : unregister");
         isRunning = false;
     }
 
     public void startSensor(){
         sensorManager.registerListener(this, acc_sensor, SensorManager.SENSOR_DELAY_NORMAL);
+        Log.i(TAG, "Sensor test : register");
         isRunning = true;
+        startSendingData();
     }
 
     @Override

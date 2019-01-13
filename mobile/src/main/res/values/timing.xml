@@ -1,37 +1,195 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer-array name="hercule">
-        <item>2000</item>
+        <item>1800</item>
+        <item>2</item>
+        <item>3800</item>
         <item>1</item>
-        <item>2700</item>
+        <item>5700</item>
         <item>3</item>
-        <item>3500</item>
-        <item>2</item>
-        <item>4500</item>
-        <item>3</item>
-        <item>6000</item>
+        <item>7300</item>
         <item>1</item>
-        <item>6900</item>
+        <item>8300</item>
+        <item>0</item>
+        <item>9400</item>
         <item>2</item>
-        <item>8000</item>
+        <item>11000</item>
         <item>3</item>
-        <item>10000</item>
+        <item>12500</item>
+        <item>0</item>
+        <item>13700</item>
         <item>2</item>
-        <item>12000</item>
+        <item>15400</item>
         <item>1</item>
-        <item>14000</item>
+        <item>17200</item>
+        <item>3</item>
+        <item>19000</item>
         <item>2</item>
-        <item>16000</item>
+        <item>20300</item>
+        <item>3</item>
+        <item>22000</item>
+        <item>2</item>
+        <item>23100</item>
+        <item>3</item>
+        <item>24800</item>
         <item>1</item>
-        <item>18000</item>
-        <item>3</item>
-    </integer-array>
-    <integer-array name="frogprincess">
-        <item>2000</item>
-        <item>3</item>
-        <item>4000</item>
+        <item>25900</item>
+        <item>0</item>
+        <item>27400</item>
+        <item>1</item>
+        <item>28400</item>
         <item>2</item>
-        <item>5000</item>
+        <item>30300</item>
+        <item>0</item>
+        <item>31900</item>
+        <item>2</item>
+        <item>32900</item>
+        <item>3</item>
+        <item>34200</item>
+        <item>1</item>
+        <item>35800</item>
+        <item>3</item>
+        <item>37200</item>
+        <item>2</item>
+        <item>39200</item>
+        <item>0</item>
+        <item>40500</item>
+        <item>1</item>
+        <item>41900</item>
+        <item>2</item>
+        <item>43800</item>
+        <item>0</item>
+        <item>45000</item>
+        <item>2</item>
+        <item>46000</item>
+        <item>3</item>
+        <item>47400</item>
+        <item>2</item>
+        <item>49000</item>
+        <item>3</item>
+        <item>50400</item>
+        <item>1</item>
+        <item>51900</item>
+        <item>2</item>
+        <item>53700</item>
+        <item>1</item>
+        <item>55700</item>
+        <item>0</item>
+        <item>57700</item>
+        <item>2</item>
+        <item>58900</item>
+        <item>1</item>
+        <item>60700</item>
+        <item>0</item>
+        <item>62000</item>
+        <item>3</item>
+        <item>63100</item>
+        <item>2</item>
+        <item>64500</item>
+        <item>3</item>
+        <item>65700</item>
+        <item>1</item>
+        <item>67100</item>
+        <item>3</item>
+        <item>68200</item>
+        <item>2</item>
+        <item>69900</item>
+        <item>3</item>
+        <item>71200</item>
+        <item>2</item>
+        <item>73100</item>
+        <item>3</item>
+        <item>74300</item>
+        <item>0</item>
+        <item>75600</item>
+        <item>1</item>
+        <item>76600</item>
+        <item>3</item>
+        <item>78000</item>
+        <item>1</item>
+        <item>79300</item>
+        <item>2</item>
+        <item>81300</item>
+        <item>3</item>
+        <item>82700</item>
+        <item>2</item>
+        <item>84300</item>
+        <item>0</item>
+        <item>85500</item>
+        <item>3</item>
+        <item>86700</item>
+        <item>0</item>
+        <item>87700</item>
+        <item>1</item>
+        <item>89500</item>
+        <item>3</item>
+        <item>90600</item>
+        <item>0</item>
+        <item>92100</item>
+        <item>1</item>
+        <item>93700</item>
+        <item>0</item>
+        <item>95600</item>
+        <item>2</item>
+        <item>97000</item>
+        <item>1</item>
+        <item>98000</item>
+        <item>0</item>
+        <item>99100</item>
+        <item>2</item>
+        <item>100500</item>
+        <item>3</item>
+        <item>101500</item>
+        <item>0</item>
+        <item>102800</item>
+        <item>1</item>
+        <item>104300</item>
+        <item>0</item>
+        <item>105500</item>
+        <item>1</item>
+        <item>107500</item>
+        <item>3</item>
+        <item>108800</item>
+        <item>0</item>
+        <item>110700</item>
+        <item>1</item>
+        <item>111700</item>
+        <item>0</item>
+        <item>113600</item>
+        <item>1</item>
+        <item>114600</item>
+        <item>3</item>
+        <item>116200</item>
+        <item>2</item>
+        <item>117200</item>
+        <item>3</item>
+        <item>119200</item>
+        <item>0</item>
+        <item>120300</item>
+        <item>2</item>
+        <item>121500</item>
+        <item>0</item>
+        <item>123100</item>
+        <item>1</item>
+        <item>124900</item>
+        <item>0</item>
+        <item>126700</item>
+        <item>2</item>
+        <item>127700</item>
+        <item>3</item>
+        <item>129700</item>
+        <item>1</item>
+        <item>130800</item>
+        <item>0</item>
+        <item>132300</item>
+        <item>3</item>
+        <item>134100</item>
+        <item>1</item>
+        <item>135300</item>
+        <item>2</item>
+        <item>136900</item>
+        <item>3</item>
+        <item>138400</item>
         <item>1</item>
     </integer-array>
     <integer-array name="shortMusic">
@@ -48,10 +206,10 @@
         <item>12000</item>
         <item>1</item>
         <item>14000</item>
-        <item>1</item>
-        <item>16000</item>
-        <item>2</item>
+        <item>0</item>
         <item>18000</item>
-        <item>3</item>
+        <item>1</item>
+        <item>20000</item>
+        <item>2</item>
     </integer-array>
 </resources>
