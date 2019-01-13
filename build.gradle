@@ -62,6 +62,16 @@ allprojects {
                 edit_activity_start: "edit_activity_start",
                 watchmain_activity_start: "watchmain_activity_start",
 
+                musicalinette_music : "musicalinette_music",
+                hercule_music : "hercule_music",
+                creuse_music : "creuse_music",
+                locked1_music : "locked1_music",
+                locked2_music : "locked2_music",
+                locked3_music : "locked3_music",
+                locked4_music : "locked4_music",
+                locked5_music : "locked5_music",
+                locked6_music : "locked6_music",
+
                 flag_watch_enable   : "true"
         ]
     }

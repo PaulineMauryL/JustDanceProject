@@ -36,7 +36,6 @@ public class DanceActivity extends AppCompatActivity {
     static final String NUMBER_POINTS = "Number_points";  //Added by Pauline for finish activity
     static final String MUSIC_NAME = "Music_name";
     private final String TAG = this.getClass().getSimpleName();
-    private static final String PROGRESS_BAR_INCREMENT = "ProgressBarIncrementId";
     private static final String GRADE_DANCE = "GRADE_DANCE";
     public static final String RECEIVE_COUNTER = "RECEIVE_COUNTER";
     public static final String COUNTER = "COUNTER";
@@ -74,11 +73,7 @@ public class DanceActivity extends AppCompatActivity {
     Handler progressBarHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            // Get new score
-            int progress = msg.getData().getInt(PROGRESS_BAR_INCREMENT);
-            // Update the Progress bar
-            bar.incrementProgressBy(progress);
-
+            bar.setProgress((int) (score * MAX_BAR/MAX_POINTS));
             GradeDance gradeDance = (GradeDance) msg.getData().getSerializable(GRADE_DANCE);
            switch(gradeDance){
                case PERFECT:
@@ -93,8 +88,10 @@ public class DanceActivity extends AppCompatActivity {
                case NOPE:
                    goodOrBad.setImageResource(R.drawable.nope);
                    break;
+               case WAIT:
+                   goodOrBad.setImageResource(R.drawable.wait);
+                   break;
            }
-
            mText.setText(String.valueOf((int)score));
         }
     };
@@ -121,7 +118,7 @@ public class DanceActivity extends AppCompatActivity {
     private final String key_points = "key_points";
 
     private enum ButtonState{R0,R1,R2,R3}
-    private enum GradeDance{PERFECT,OK,NOPE,SUPER};
+    private enum GradeDance{PERFECT,OK,NOPE,SUPER,WAIT};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,7 +126,8 @@ public class DanceActivity extends AppCompatActivity {
         Log.d(TAG, "DanceActivity : here1");
         if(savedInstanceState != null){
             Log.d(TAG, "DanceActivity : here2");
-            initialize_variables();
+            musical = (MusicDance) savedInstanceState.getSerializable(key_musical);
+            setup_dance();
             userID = savedInstanceState.getString(key_userID);
             score = savedInstanceState.getFloat(key_score);
             counter = savedInstanceState.getInt(key_counter);
@@ -138,7 +136,6 @@ public class DanceActivity extends AppCompatActivity {
             askedPosition = savedInstanceState.getInt(key_askedPosition);
             actualPosition = savedInstanceState.getInt(key_actualPosition);
             buttonState = (ButtonState) savedInstanceState.getSerializable(key_buttonState);
-            musical = (MusicDance) savedInstanceState.getSerializable(key_musical);
             isPausingWatch = savedInstanceState.getBoolean(key_isPausingWatch);
             countGoodMovement = savedInstanceState.getInt(key_counterGoodMovement);
             points = savedInstanceState.getFloat(key_points);
@@ -153,11 +150,16 @@ public class DanceActivity extends AppCompatActivity {
                 music = bunble.getIntArray("musicchosen");
                 userID = bunble.getString(LaunchActivity.USER_ID);
                 Log.d(TAG, "DanceActivity : here4");
-                setup_dance(music);
+                if(music!=null) {
+                    musical = new MusicDance(music, this);
+                    setup_dance();
+                }
             }
             Log.d(TAG, "DanceActivity : here5");
             startWatchDanceActivity();
-            points = (MAX_POINTS * TIME)/(float)(musical.getSound().getDuration()*POINTS_ON_TIMES);
+            points = (MAX_POINTS * TIME)/(float)(musical.getSound().getDuration()*POINTS_ON_TIMES)*(5/(float)3);
+            counter = 0;
+            countGoodMovement = 0;
         }
         if(communicationBroadcastReceiver == null) {
             Log.d(TAG, "DanceActivity : On Creat : New Local BroadCastManager for mesage");
@@ -171,11 +173,11 @@ public class DanceActivity extends AppCompatActivity {
             LocalBroadcastManager.getInstance(this).registerReceiver(accRateBroadcastReceiver, new
                     IntentFilter(RECEIVE_COUNTER));
         }
-        // Temp Hugo: DEBUG __________________________________NEED TO REMOVE AT THE END
         mText = findViewById(R.id.textViewMovements);
-        counter =0;
+        if(score != 0){
+            mText.setText(String.valueOf((int)score));
+        }
         WearService.setToZero();
-        // Temp Hugo: DEBUG __________________________________NEED TO REMOVE AT THE END
         ImageButton button = findViewById(R.id.pausebutton);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,7 +189,7 @@ public class DanceActivity extends AppCompatActivity {
         if(isPausing.get()) {
             pause_dance();
         }else{
-            mHandler.postDelayed(start_dance, 500);
+            mHandler.postDelayed(start_dance, 200);
         }
     }
 
@@ -332,30 +334,27 @@ public class DanceActivity extends AppCompatActivity {
         dialog.show();
     }
 //--------------------------------------------------------------------------------------------------
-    private void setup_dance(int[] music){
+    private void setup_dance(){
         Log.d(TAG, "DanceActivity : setup_dance");
-        if(music!=null) {
-            musical = new MusicDance( music, this);
-            musical.getSound().setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
-                public void onCompletion(MediaPlayer mp){
-                    // Store the score on the data base
-                    profileGetRef.child(userID).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            String user_db = dataSnapshot.child("username").getValue(String.class);
-                            store_data_roomDB(user_db);
-                        }
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            System.out.println("The read failed: " + databaseError.getCode());
-                        }
-                    });
-                    // Start Finish Activity
-                    start_finish_activity();
-                }
-            });
-           initialize_variables();
-        }
+        musical.getSound().setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
+            public void onCompletion(MediaPlayer mp){
+                // Store the score on the data base
+                profileGetRef.child(userID).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        String user_db = dataSnapshot.child("username").getValue(String.class);
+                        store_data_roomDB(user_db);
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        System.out.println("The read failed: " + databaseError.getCode());
+                    }
+                });
+                // Start Finish Activity
+                start_finish_activity();
+            }
+        });
+       initialize_variables();
     }
 
     private void initialize_variables(){
@@ -376,7 +375,7 @@ public class DanceActivity extends AppCompatActivity {
         isRunning.set(true);                              // Thread enable
         background.start();
         isPausingWatch = false;
-        Log.d(TAG,"duration : " + musical.getSound().getDuration());
+        Log.d(TAG,"Dance Activity : duration : " + musical.getSound().getDuration());
     }
 
     private void pause_dance(){
@@ -422,6 +421,7 @@ public class DanceActivity extends AppCompatActivity {
         // Start Finish Activity
         Intent intentFinishDance = new Intent(DanceActivity.this, FinishActivity.class);
         intentFinishDance.putExtra(LaunchActivity.USER_ID, userID);
+        Log.e(TAG,"DanceActivity : start_finish_activity : score : " + score);
         intentFinishDance.putExtra(NUMBER_POINTS, score);
         intentFinishDance.putExtra(MUSIC_NAME, musical.getName());
         // Stop the Thread
@@ -539,29 +539,28 @@ private Runnable progressRunnable = new Runnable() {
                 Log.d(TAG,"DanceActivity : progressRunnable : ratio_norm " + ratio_norm);
                 countGoodMovement = (ratio_norm>0? (int) (countGoodMovement/ratio_norm): countGoodMovement);
                 Log.d(TAG, "DanceActivity : progressRunnable : ratio in % " + countGoodMovement);
-                float point_bar = MAX_BAR*points/MAX_POINTS;
+                float point_bar = MAX_BAR/MAX_POINTS;
                 // Increment the score
                 if(countGoodMovement>75){
                     grade_dance = GradeDance.PERFECT;
-                    messageBundle.putInt(PROGRESS_BAR_INCREMENT,(int)(score + 3*point_bar) - (int)(score));
                     score += 3 * points;
                     Log.d(TAG,"DanceActivity : progressRunnable : Perfect");
                 }else if (countGoodMovement>50) {
                     grade_dance = GradeDance.SUPER;
-                    messageBundle.putInt(PROGRESS_BAR_INCREMENT,(int)(score + 2*point_bar) - (int)(score));
                     score += 2 * points;
                     Log.d(TAG,"DanceActivity : progressRunnable : Super");
-                }else if (countGoodMovement<25) {
-                    messageBundle.putInt(PROGRESS_BAR_INCREMENT,(int)(score + point_bar) - (int)(score));
+                }else if (countGoodMovement>25) {
                     grade_dance = GradeDance.OK;
                     score += points;
                     Log.d(TAG,"DanceActivity : progressRunnable : OK");
-                }else{
+                }else if (askedPosition== 0) {
+                    grade_dance = GradeDance.WAIT;
+                    Log.d(TAG,"DanceActivity : progressRunnable : Wait");
+                }else {
                     grade_dance = GradeDance.NOPE;
                     Log.d(TAG,"DanceActivity : progressRunnable : Nope");
                 }
                 Log.d(TAG,"DanceActivity : progressRunnable : increment " + MAX_BAR*points/MAX_POINTS);
-
                 // Update progressBar
                 messageBundle.putSerializable(GRADE_DANCE,grade_dance);
                 myMessage.setData(messageBundle);
@@ -581,16 +580,19 @@ private Runnable progressRunnable = new Runnable() {
             Log.d(TAG, "DanceActivity : AccRate -> onReceive");
             // Show AR in a TextView
             actualPosition = intent.getIntExtra(COUNTER,0);
-            if(actualPosition == askedPosition){
+            if( actualPosition == askedPosition){
                 countGoodMovement += POINTS_ON_TIMES;
+                counter++;
             }else if(actualPosition == nextPosition){
                 countGoodMovement += POINTS_IN_ADVANCE;
+                counter++;
+            }else if(askedPosition != 0){
+                counter++;
             }
-            Log.d(TAG, "DanceActivity : move : " + actualPosition + " askedPosition : " + askedPosition);
-            Log.d(TAG, "DanceActivity : countGoodMovement : " + countGoodMovement);
-            counter++;
+            Log.e(TAG, "DanceActivity : move : " + actualPosition + " askedPosition : " + askedPosition + " nextPosition : " + nextPosition);
+            Log.e(TAG, "DanceActivity : countGoodMovement : " + countGoodMovement);
             //mText.setText("mode: " + actualPosition+"\n" +"counter: " + counter +"\n score : " + score);
-            Log.d(TAG, "DanceActivity : counter : "+ counter + "Wearservice counter : " + WearService.getCount());
+            Log.e(TAG, "DanceActivity : counter : "+ counter + "Wearservice counter : " + WearService.getCount());
         }
     }
 // Custom Communication BroadcastReceiver

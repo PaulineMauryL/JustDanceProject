@@ -108,6 +108,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:onClick="ChooseMusicalinette"
                         app:srcCompat="@drawable/bt_musicalinette" />
                 </LinearLayout>
 
@@ -140,7 +141,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:onClick="lockedClicked"
+                        android:onClick="locked1Clicked"
                         app:srcCompat="@drawable/bt_locked1" />
 
                     <Space
@@ -152,7 +153,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:onClick="lockedClicked"
+                        android:onClick="locked2Clicked"
                         app:srcCompat="@drawable/bt_locked2" />
 
                     <Space
@@ -164,7 +165,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:onClick="lockedClicked"
+                        android:onClick="locked3Clicked"
                         app:srcCompat="@drawable/bt_locked3" />
                 </LinearLayout>
 
@@ -197,7 +198,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:onClick="lockedClicked"
+                        android:onClick="locked4Clicked"
                         app:srcCompat="@drawable/bt_locked4" />
 
                     <Space
@@ -209,7 +210,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:onClick="lockedClicked"
+                        android:onClick="locked5Clicked"
                         app:srcCompat="@drawable/bt_locked5" />
 
                     <Space
@@ -221,7 +222,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:onClick="lockedClicked"
+                        android:onClick="locked6Clicked"
                         app:srcCompat="@drawable/bt_locked6" />
                 </LinearLayout>
             </LinearLayout>

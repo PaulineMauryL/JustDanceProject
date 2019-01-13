@@ -29,4 +29,12 @@ public class Communication {
         intent.putExtra(WearService.ACTIVITY_TO_START, path);
         context_application.startService(intent);
     }
+    public static void changeImage(Context context_application, String message) {
+        Intent intent = new Intent(context_application, WearService.class);
+        intent.setAction(WearService.ACTION_SEND.MESSAGE.name());
+        intent.putExtra(WearService.MESSAGE, message);
+        intent.putExtra(WearService.PATH, BuildConfig.W_path_message);
+        context_application.startService(intent);
+        Log.d(TAG, "CHANGE IMAGE : " + message);
+    }
 }

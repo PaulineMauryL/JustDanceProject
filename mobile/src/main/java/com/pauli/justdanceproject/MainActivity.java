@@ -66,15 +66,74 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void ChooseCreuse(View view) {
-        chosenMusic = new int[]{R.raw.musicalinette, R.array.shortMusic};
+        chosenMusic = new int[]{R.raw.lalaland, R.array.lalaland};
         musicSelected = true;
+        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+            // Change the image on Watch
+            Communication.changeImage(MainActivity.this,BuildConfig.W_creuse_music);}
     }
     public void ChooseHercule(View view) {
         chosenMusic = new int[]{R.raw.zero,R.array.hercule};
         musicSelected = true;
+        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+            // Change the image on Watch
+            Communication.changeImage(MainActivity.this,BuildConfig.W_hercule_music);
+        }
+    }
+    public void ChooseMusicalinette(View view) {
+        chosenMusic = new int[]{R.raw.shakira,R.array.shakira};
+        musicSelected = true;
+        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+            // Change the image on Watch
+            Communication.changeImage(MainActivity.this,BuildConfig.W_musicalinette_music);
+        }
+    }
+    public void locked1Clicked(View view) {
+        message_locked();
+        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+            // Change the image on Watch
+            Communication.changeImage(MainActivity.this,BuildConfig.W_locked1_music);
+        }
+    }
+    public void locked2Clicked(View view) {
+        message_locked();
+        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+            // Change the image on Watch
+            Communication.changeImage(MainActivity.this,BuildConfig.W_locked2_music);
+        }
+    }
+    public void locked3Clicked(View view) {
+        message_locked();
+        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+            // Change the image on Watch
+            Communication.changeImage(MainActivity.this,BuildConfig.W_locked3_music);
+        }
+    }
+    public void locked4Clicked(View view) {
+        message_locked();
+        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+            // Change the image on Watch
+            Communication.changeImage(MainActivity.this,BuildConfig.W_locked4_music);
+        }
+    }
+    public void locked5Clicked(View view) {
+        message_locked();
+        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+            // Change the image on Watch
+            Communication.changeImage(MainActivity.this,BuildConfig.W_locked5_music);
+        }
+    }
+    public void locked6Clicked(View view) {
+        message_locked();
+        if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
+            // Change the image on Watch
+            Communication.changeImage(MainActivity.this,BuildConfig.W_locked6_music);
+        }
     }
 
-
+    private void message_locked(){
+        Toast.makeText(getApplicationContext(),"You have not unlocked this song yet. Keep trying !", Toast.LENGTH_SHORT).show();
+    }
 
 
     //Added by Pauline
@@ -117,7 +176,5 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void lockedClicked(View view) {
-        Toast.makeText(getApplicationContext(),"You have not unlocked this song yet. Keep trying !", Toast.LENGTH_SHORT).show();
-    }
+
 }

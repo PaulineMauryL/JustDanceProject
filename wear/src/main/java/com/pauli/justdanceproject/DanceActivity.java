@@ -11,6 +11,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
@@ -32,6 +33,10 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
     private Sensor acc_sensor;
     private CommunicationBroadcastReceiver communicationBroadcastReceiver;
     private StartActivityBR startActivityBR;
+
+    private Vibrator mVibrator;
+    private final int indexInPatternToRepeat = -1;
+    private final long[] vibrationPatternPause = {0, 300};
 
     private final int SENDING_TIME = 50; // Sending rate in miniseconds
     @Override
@@ -57,6 +62,7 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
         startActivityBR = new StartActivityBR();
         startActivityBR.setCurrentContext(DanceActivity.this);
         LocalBroadcastManager.getInstance(this).registerReceiver(startActivityBR, new IntentFilter(WearService.ACTIVITY_TO_START));
+        mVibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
         setAmbientEnabled();
         isRunning = true;
@@ -83,9 +89,9 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
             }
             else if(Math.abs(accRate[2])>7) {
                 actualPosition = 2;
-            } else if(Math.abs(accRate[0])>4  && accRate[0]>0){
+            } else if(Math.abs(accRate[0])>5  && accRate[0]>0){
                 actualPosition = 1;
-            } else if(Math.abs(accRate[0])>4  && accRate[0]<0) {
+            } else if(Math.abs(accRate[0])>5  && accRate[0]<0) {
                 actualPosition = 3;
             } else{
                 actualPosition = 4; // undefined
@@ -161,6 +167,7 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
 
     public void stopActivity(){
         sensorManager.unregisterListener(DanceActivity.this);
+        if(dialogPause != null){dialogPause.close();}
         isRunning = false;
         finish();
     }
@@ -186,6 +193,7 @@ public class DanceActivity extends WearableActivity implements SensorEventListen
         sensorManager.unregisterListener(this);
         Log.i(TAG, "Sensor test : unregister");
         isRunning = false;
+        mVibrator.vibrate(vibrationPatternPause, indexInPatternToRepeat);
     }
 
     public void startSensor(){

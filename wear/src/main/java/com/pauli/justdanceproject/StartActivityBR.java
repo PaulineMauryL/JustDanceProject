@@ -45,7 +45,6 @@ public class StartActivityBR extends BroadcastReceiver {
             activity.startActivity(itStart);
             if(activity.getClass().equals(DanceActivity.class)){
                 ((DanceActivity)activity).stopActivity();
-                activity.finish();
             }else {
                 activity.finish();
             }

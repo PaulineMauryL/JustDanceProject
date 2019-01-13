@@ -3,6 +3,7 @@ package com.pauli.justdanceproject;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,9 +13,10 @@ import java.util.List;
 
 public class FinishActivity extends AppCompatActivity {
 
-    private String key_userID = "key_userID";
-    private String key_music_name = "key_music_name";
-    private String key_score = "key_score";
+    private final String key_userID = "key_userID";
+    private final String key_music_name = "key_music_name";
+    private final String key_score = "key_score";
+    private final String TAG = this.getClass().getSimpleName();
     private String userID;
     private String music_name;
     private int score;
@@ -33,11 +35,12 @@ public class FinishActivity extends AppCompatActivity {
             Intent intent = getIntent();
             userID = intent.getStringExtra(LaunchActivity.USER_ID);
             music_name = intent.getStringExtra(DanceActivity.MUSIC_NAME);
-            score = intent.getIntExtra(DanceActivity.NUMBER_POINTS, 0);
+            score = (int) intent.getFloatExtra(DanceActivity.NUMBER_POINTS, 0);
+            Log.e(TAG,"FinishActivity : onCreat : score : " + score);
         }
 
         TextView view_nb_points = findViewById(R.id.txt_nb_points);
-        String points_number = "You have " + String.valueOf(score) + " points";
+        String points_number = "You have " + score + " points";
         view_nb_points.setText(points_number);
 
         TxtInfo = findViewById(R.id.txt_display_info);

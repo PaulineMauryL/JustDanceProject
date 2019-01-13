@@ -96,7 +96,7 @@ public class CreuseFragment extends Fragment {
             userID = intent.getStringExtra(LaunchActivity.USER_ID);
         }
         TxtInfo = fragmentView.findViewById(R.id.txt_display_info);
-        List<DatabaseEntity> entities = LaunchActivity.cloneDanceRD.dataDao().getHallOfFame(String.valueOf(R.raw.creuser));
+        List<DatabaseEntity> entities = LaunchActivity.cloneDanceRD.dataDao().getHallOfFame(String.valueOf(R.raw.lalaland));
 
         String info = "";
 
