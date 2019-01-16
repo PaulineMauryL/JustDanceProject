@@ -113,12 +113,12 @@ public class WatchMainActivity extends WearableActivity {
                     mVibrator.vibrate(vibrationPatternUnlocked, indexInPatternToRepeat);
                     break;
                 case BuildConfig.W_lalaland_music:
-                    mImageView.setImageResource(R.mipmap.locked1);
-                    mVibrator.vibrate(vibrationPatternLocked, indexInPatternToRepeat);
+                    mImageView.setImageResource(R.mipmap.watchlalaland);
+                    mVibrator.vibrate(vibrationPatternUnlocked, indexInPatternToRepeat);
                     break;
                 case BuildConfig.W_shakira_music:
-                    mImageView.setImageResource(R.mipmap.locked2);
-                    mVibrator.vibrate(vibrationPatternLocked, indexInPatternToRepeat);
+                    mImageView.setImageResource(R.mipmap.watchchantaje);
+                    mVibrator.vibrate(vibrationPatternUnlocked, indexInPatternToRepeat);
                     break;
                 case BuildConfig.W_locked3_music:
                     mImageView.setImageResource(R.mipmap.locked3);
