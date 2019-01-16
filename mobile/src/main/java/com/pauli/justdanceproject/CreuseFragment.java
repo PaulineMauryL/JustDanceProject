@@ -32,6 +32,7 @@ public class CreuseFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private View fragmentView;
     private String userID;
+    private String username;
     private TextView  TxtInfo;
 
     @Override
@@ -53,7 +54,8 @@ public class CreuseFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.txt_dance:
                 Intent intent_dance = new Intent(getActivity(), MainActivity.class);
-                intent_dance.putExtra(LaunchActivity.USER_ID, userID);
+                intent_dance.putExtra(MainActivity.USER_ID, userID);
+                intent_dance.putExtra(MainActivity.USERNAME,username);
                 startActivity(intent_dance);
                 if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
                     // Change to dance activity
@@ -63,7 +65,7 @@ public class CreuseFragment extends Fragment {
                 break;
             case R.id.txt_edit_profile:
                 Intent intent_edit = new Intent(getActivity(), EditUser.class);
-                intent_edit.putExtra(LaunchActivity.USER_ID, userID);
+                intent_edit.putExtra(MainActivity.USER_ID, userID);
                 intent_edit.putExtra(EditUser.ACTIVITY_NAME,MainActivity.ACTIVITY_NAME);
                 startActivity(intent_edit);
                 if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
@@ -92,8 +94,9 @@ public class CreuseFragment extends Fragment {
         fragmentView = inflater.inflate(R.layout.fragment_creuse, container, false);
 
         Intent intent = getActivity().getIntent();
-        if (intent.hasExtra(LaunchActivity.USER_ID)) {
-            userID = intent.getStringExtra(LaunchActivity.USER_ID);
+        if (intent.hasExtra(MainActivity.USER_ID)) {
+            userID = intent.getStringExtra(MainActivity.USER_ID);
+            username = intent.getStringExtra(MainActivity.USERNAME);
         }
         TxtInfo = fragmentView.findViewById(R.id.txt_display_info);
         List<DatabaseEntity> entities = LaunchActivity.cloneDanceRD.dataDao().getHallOfFame(String.valueOf(R.raw.lalaland));

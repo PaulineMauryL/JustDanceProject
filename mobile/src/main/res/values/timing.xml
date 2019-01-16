@@ -1,5 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <integer-array name="musicalinette">
+        <item>1800</item>
+        <item>2</item>
+        <item>3800</item>
+        <item>1</item>
+        <item>5700</item>
+        <item>3</item>
+        <item>7300</item>
+        <item>1</item>
+        <item>8300</item>
+        <item>0</item>
+        <item>9400</item>
+        <item>2</item>
+        <item>11000</item>
+        <item>3</item>
+        <item>12500</item>
+        <item>0</item>
+        <item>13700</item>
+        <item>2</item>
+        <item>15400</item>
+        <item>1</item>
+        <item>17200</item>
+        <item>3</item>
+        <item>19000</item>
+        <item>2</item>
+        <item>20300</item>
+        <item>3</item>
+        <item>22000</item>
+        <item>2</item>
+        <item>23100</item>
+        <item>3</item>
+        <item>24800</item>
+        <item>1</item>
+    </integer-array>
+    <integer-array name="creuse">
+        <item>1800</item>
+        <item>2</item>
+        <item>3800</item>
+        <item>1</item>
+        <item>5700</item>
+        <item>3</item>
+        <item>7300</item>
+        <item>1</item>
+        <item>8300</item>
+        <item>0</item>
+        <item>9400</item>
+        <item>2</item>
+        <item>11000</item>
+        <item>3</item>
+        <item>12500</item>
+        <item>0</item>
+        <item>13700</item>
+        <item>2</item>
+        <item>15400</item>
+        <item>1</item>
+        <item>17200</item>
+        <item>3</item>
+        <item>19000</item>
+        <item>2</item>
+        <item>20300</item>
+        <item>3</item>
+        <item>22000</item>
+        <item>2</item>
+        <item>23100</item>
+        <item>3</item>
+        <item>24800</item>
+        <item>1</item>
+    </integer-array>
     <integer-array name="hercule">
         <item>1800</item>
         <item>2</item>

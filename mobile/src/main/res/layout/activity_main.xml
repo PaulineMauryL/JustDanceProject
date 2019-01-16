@@ -97,7 +97,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:onClick="ChooseCreuse"
-                        app:srcCompat="@drawable/sun" />
+                        app:srcCompat="@drawable/bt_creuse" />
 
                     <Space
                         android:layout_width="10dp"
@@ -109,7 +109,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:onClick="ChooseMusicalinette"
-                        app:srcCompat="@drawable/chantaje" />
+                        app:srcCompat="@drawable/bt_musicalinette" />
                 </LinearLayout>
 
                 <TextView
@@ -141,8 +141,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:onClick="locked1Clicked"
-                        app:srcCompat="@drawable/bt_locked1" />
+                        android:onClick="ChooseLalaland"
+                        app:srcCompat="@drawable/bt_lalaland" />
 
                     <Space
                         android:layout_width="10dp"
@@ -153,8 +153,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:onClick="locked2Clicked"
-                        app:srcCompat="@drawable/bt_locked2" />
+                        android:onClick="ChooseShakira"
+                        app:srcCompat="@drawable/bt_chantaje" />
 
                     <Space
                         android:layout_width="10dp"

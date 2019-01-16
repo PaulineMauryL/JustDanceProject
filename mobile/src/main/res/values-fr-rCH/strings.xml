@@ -63,5 +63,11 @@
     <string name="yourScore">Tes résultats sur cette danse sont listés ci-dessous</string>
     <string name="error_message_bluetooth">Merci d\'activer ton bluetooth</string>
     <string name="error_message_pair_watch">Merci d\'apairer ta montre à la tablette</string>
+    <string name="point_sent1" translatable="false">"Tu as obtenu "</string>
+    <string name="point_sent2">points.</string>
+    <string name="user">Joueur :</string>
+    <string name="score">Score :</string>
+    <string name="players">Joueurs</string>
+    <string name="points">Points</string>
 
 </resources>

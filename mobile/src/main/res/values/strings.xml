@@ -175,4 +175,10 @@
     <string name="error_message_pair_watch">Please pair this device with your watch</string>
     <string name="good" translatable="false">GOOD !</string>
     <string name="ok" translatable="false">OK !</string>
+    <string name="point_sent1">You obtained</string>
+    <string name="point_sent2">points</string>
+    <string name="user">Player :</string>
+    <string name="score">Score :</string>
+    <string name="players">Players</string>
+    <string name="points">Points</string>
 </resources>

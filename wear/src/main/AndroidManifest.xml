@@ -56,18 +56,18 @@
         </service>
 
         <activity
-            android:name=".DanceActivity"
+            android:name=".WatchDanceActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".FinishActivity"
+            android:name=".WatchFinishActivity"
             android:label="@string/title_activity_finish"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".HallOfFameActivity"
+            android:name=".WatchHallOfFameActivity"
             android:label="@string/title_activity_hall_of_fame"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".EditProfileActivity"
+            android:name=".WatchEditProfileActivity"
             android:label="@string/title_activity_edit_profile"
             android:theme="@style/AppTheme" />
     </application>

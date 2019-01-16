@@ -26,6 +26,7 @@ public class MusicalinetteFragment extends Fragment {
     private CreuseFragment.OnFragmentInteractionListener mListener;
     private View fragmentView;
     private String userID;
+    private String username;
     private TextView TxtInfo;
 
     @Override
@@ -46,7 +47,8 @@ public class MusicalinetteFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.txt_dance:
                 Intent intent_dance = new Intent(getActivity(), MainActivity.class);
-                intent_dance.putExtra(LaunchActivity.USER_ID, userID);
+                intent_dance.putExtra(MainActivity.USER_ID, userID);
+                intent_dance.putExtra(MainActivity.USERNAME, username);
                 startActivity(intent_dance);
                 if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
                     // Change to dance activity
@@ -86,7 +88,8 @@ public class MusicalinetteFragment extends Fragment {
 
         Intent intent = getActivity().getIntent();
         if (intent.hasExtra(LaunchActivity.USER_ID)) {
-            userID = intent.getStringExtra(LaunchActivity.USER_ID);
+            userID = intent.getStringExtra(MainActivity.USER_ID);
+            username = intent.getStringExtra(MainActivity.USERNAME);
         }
         TxtInfo = fragmentView.findViewById(R.id.txt_display_info);
         List<DatabaseEntity> entities = LaunchActivity.cloneDanceRD.dataDao().getHallOfFame(String.valueOf(R.raw.shakira));
