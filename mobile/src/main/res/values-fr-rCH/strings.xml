@@ -69,5 +69,7 @@
     <string name="score">Score :</string>
     <string name="players">Joueurs</string>
     <string name="points">Points</string>
+    <string name="creusetitle">Princesse Grenouille - Creuse</string>
+    <string name="musicalinettetitle">Musique courte</string>
 
 </resources>

@@ -92,7 +92,7 @@ public class MusicalinetteFragment extends Fragment {
             username = intent.getStringExtra(MainActivity.USERNAME);
         }
         TxtInfo = fragmentView.findViewById(R.id.txt_display_info);
-        List<DatabaseEntity> entities = LaunchActivity.cloneDanceRD.dataDao().getHallOfFame(String.valueOf(R.raw.shakira));
+        List<DatabaseEntity> entities = LaunchActivity.cloneDanceRD.dataDao().getHallOfFame(String.valueOf(R.raw.musicalinette));
 
         String info = "";
         for(DatabaseEntity dbEnt : entities){

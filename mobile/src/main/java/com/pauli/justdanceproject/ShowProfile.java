@@ -11,8 +11,10 @@ public class ShowProfile extends AppCompatActivity implements MusicalinetteFragm
 
     private final String TAG = this.getClass().getSimpleName();
 
-    private MusicalinetteFragment chantajeFragment;
-    private CreuseFragment lalalandFragment;
+    private ChantajeFragment chantajeFragment;
+    private LalalandFragment lalalandFragment;
+    private MusicalinetteFragment musicalinetteFragment;
+    private CreuseFragment creuseFragment;
     private HerculeFragment herculeFragment;
     private SectionsStatePagerAdapter mSectionStatePagerAdapter;
 
@@ -24,8 +26,10 @@ public class ShowProfile extends AppCompatActivity implements MusicalinetteFragm
         mSectionStatePagerAdapter = new SectionsStatePagerAdapter(getSupportFragmentManager());
 
         // Do this in case of detaching of Fragments
-        chantajeFragment = new MusicalinetteFragment();
-        lalalandFragment = new CreuseFragment();
+        musicalinetteFragment = new MusicalinetteFragment();
+        creuseFragment = new CreuseFragment();
+        chantajeFragment = new ChantajeFragment();
+        lalalandFragment = new LalalandFragment();
         herculeFragment = new HerculeFragment();
 
         ViewPager mViewPager = findViewById(R.id.profileViewPager);
@@ -39,6 +43,8 @@ public class ShowProfile extends AppCompatActivity implements MusicalinetteFragm
 
     private void setUpViewPager(ViewPager mViewPager) {
         mSectionStatePagerAdapter.addFragment(herculeFragment,getString(R.string.HerculeName));
+        mSectionStatePagerAdapter.addFragment(creuseFragment, getString(R.string.creusetitle));
+        mSectionStatePagerAdapter.addFragment(musicalinetteFragment, getString(R.string.musicalinettetitle));
         mSectionStatePagerAdapter.addFragment(lalalandFragment, getString(R.string.LalalandName));
         mSectionStatePagerAdapter.addFragment(chantajeFragment, getString(R.string.ShakiraName));
         mViewPager.setAdapter(mSectionStatePagerAdapter);

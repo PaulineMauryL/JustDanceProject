@@ -74,7 +74,8 @@ public class FinishActivity extends AppCompatActivity {
 
     public void dance_again(View view) {
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(LaunchActivity.USER_ID, userID);
+        intent.putExtra(MainActivity.USER_ID, userID);
+        intent.putExtra(MainActivity.USERNAME,username);
         startActivity(intent);
         if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
             // Change to dance activity
