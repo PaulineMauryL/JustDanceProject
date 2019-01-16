@@ -27,7 +27,8 @@ public class MusicalinetteFragment extends Fragment {
     private View fragmentView;
     private String userID;
     private String username;
-    private TextView TxtInfo;
+    private TextView TxtPlayer;
+    private TextView TxtScore;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,16 +92,22 @@ public class MusicalinetteFragment extends Fragment {
             userID = intent.getStringExtra(MainActivity.USER_ID);
             username = intent.getStringExtra(MainActivity.USERNAME);
         }
-        TxtInfo = fragmentView.findViewById(R.id.txt_display_info);
+        TxtPlayer = fragmentView.findViewById(R.id.txt_display_user);
+        TxtScore = fragmentView.findViewById(R.id.txt_display_points);
         List<DatabaseEntity> entities = LaunchActivity.cloneDanceRD.dataDao().getHallOfFame(String.valueOf(R.raw.musicalinette));
 
-        String info = "";
+        String player = "";
+        String point = "";
+
         for(DatabaseEntity dbEnt : entities){
             String user_name = dbEnt.getUser_name();
             int score = dbEnt.getScore();
-            info = info + "User :" + user_name + " Score :" + score + "\n";
+            player = player + user_name +"\n";
+            point = point + score +"\n";
         }
-        TxtInfo.setText(info);
+
+        TxtPlayer.setText(player);
+        TxtScore.setText(point);
 
         return fragmentView;
     }
