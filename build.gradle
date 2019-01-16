@@ -72,7 +72,7 @@ allprojects {
                 locked5_music : "locked5_music",
                 locked6_music : "locked6_music",
 
-                flag_watch_enable   : "false"
+                flag_watch_enable   : "true"
         ]
     }
 }
