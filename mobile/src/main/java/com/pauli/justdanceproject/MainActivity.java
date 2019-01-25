@@ -182,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.txt_edit_profile:
                 Intent intent_edit = new Intent(this, EditUser.class);
                 intent_edit.putExtra(MainActivity.USER_ID, userID);
+                intent_edit.putExtra(MainActivity.USERNAME,username);
                 intent_edit.putExtra(EditUser.ACTIVITY_NAME,ACTIVITY_NAME);
                 startActivity(intent_edit);
                 if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){

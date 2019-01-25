@@ -63,13 +63,13 @@ public class EditUser extends AppCompatActivity {
         TextView edit_username = findViewById(R.id.editUsername);
 
         Intent intent = getIntent();
-
+        if (intent.hasExtra(MainActivity.USERNAME)) {
+            username = intent.getStringExtra(MainActivity.USERNAME);
+            edit_username.setText(username);
+        }
         if (intent.hasExtra(MainActivity.USER_ID)) {
             userID = intent.getStringExtra(MainActivity.USER_ID);
             fetchDataFromFirebase();
-        } else if (intent.hasExtra(MainActivity.USERNAME)) {
-            username = intent.getStringExtra(MainActivity.USERNAME);
-            edit_username.setText(username);
         }
     }
 
@@ -90,12 +90,7 @@ public class EditUser extends AppCompatActivity {
                 userProfile.photoPath = imageFile.getPath();
             }
 
-            if(getIntent().getStringExtra(ACTIVITY_NAME).equals(LaunchActivity.ACTIVITY_NAME)){
-
-                addProfileToFirebaseDB();
-            } else if(getIntent().getStringExtra(ACTIVITY_NAME).equals(MainActivity.ACTIVITY_NAME)){
-                // Create Intent
-            }
+            addProfileToFirebaseDB();
         }
     }
     private boolean checkProfile(boolean checked) {
