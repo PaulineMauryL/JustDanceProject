@@ -20,7 +20,9 @@ public class FinishActivity extends AppCompatActivity {
     private String userID;
     private String music_name;
     private int score;
-    private TextView  TxtInfo;
+    private String username;
+    private TextView TxtPlayer;
+    private TextView TxtScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,27 +36,32 @@ public class FinishActivity extends AppCompatActivity {
         } else {
             Intent intent = getIntent();
             userID = intent.getStringExtra(LaunchActivity.USER_ID);
+            username=intent.getStringExtra(MainActivity.USERNAME);
             music_name = intent.getStringExtra(DanceActivity.MUSIC_NAME);
             score = (int) intent.getFloatExtra(DanceActivity.NUMBER_POINTS, 0);
             Log.e(TAG,"FinishActivity : onCreat : score : " + score);
         }
 
         TextView view_nb_points = findViewById(R.id.txt_nb_points);
-        String points_number = "You have " + score + " points";
+        String points_number = getString(R.string.point_sent1) + " "+score +" "+ getString(R.string.point_sent2);
         view_nb_points.setText(points_number);
 
-        TxtInfo = findViewById(R.id.txt_display_info);
+        TxtPlayer = findViewById(R.id.txt_display_user);
+        TxtScore = findViewById(R.id.txt_display_points);
         List<DatabaseEntity> entities = LaunchActivity.cloneDanceRD.dataDao().getHallOfFame(music_name);
 
-        String info = "";
+        String player = "";
+        String point = "";
 
         for(DatabaseEntity dbEnt : entities){
             String user_name = dbEnt.getUser_name();
             int score = dbEnt.getScore();
-            info = info + "User :" + user_name + " Score :" + score + "\n";
+            player = player + user_name +"\n";
+            point = point + score +"\n";
         }
 
-        TxtInfo.setText(info);
+        TxtPlayer.setText(player);
+        TxtScore.setText(point);
     }
 
     @Override
@@ -67,7 +74,8 @@ public class FinishActivity extends AppCompatActivity {
 
     public void dance_again(View view) {
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(LaunchActivity.USER_ID, userID);
+        intent.putExtra(MainActivity.USER_ID, userID);
+        intent.putExtra(MainActivity.USERNAME,username);
         startActivity(intent);
         if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
             // Change to dance activity
@@ -78,7 +86,8 @@ public class FinishActivity extends AppCompatActivity {
 
     public void see_profile(View view) {
         Intent intent = new Intent(this, ShowProfile.class);
-        intent.putExtra(LaunchActivity.USER_ID, userID);
+        intent.putExtra(MainActivity.USER_ID, userID);
+        intent.putExtra(MainActivity.USERNAME,username);
         startActivity(intent);
         if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
             // Change to dance activity

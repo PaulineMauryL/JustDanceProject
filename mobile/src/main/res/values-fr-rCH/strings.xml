@@ -57,9 +57,19 @@
     <string name="no_saving">Pas d\'enregistrement</string>
     <string name="quit_without_save">Es-tu sûr de vouloir quitter sans sauver ?</string>
     <string name="HerculeName">Hercule - De Zéro en Héros</string>
+    <string name="LalalandName">La La Land - Another Day of Sun</string>
+    <string name="ShakiraName">Shakira - Chantaje</string>
     <string name="FrogPrincessName">La Princesse et la Grenouille - Creuse</string>
     <string name="yourScore">Tes résultats sur cette danse sont listés ci-dessous</string>
     <string name="error_message_bluetooth">Merci d\'activer ton bluetooth</string>
     <string name="error_message_pair_watch">Merci d\'apairer ta montre à la tablette</string>
+    <string name="point_sent1" translatable="false">"Tu as obtenu "</string>
+    <string name="point_sent2">points.</string>
+    <string name="user">Joueur :</string>
+    <string name="score">Score :</string>
+    <string name="players">Joueurs</string>
+    <string name="points">Points</string>
+    <string name="creusetitle">Princesse Grenouille - Creuse</string>
+    <string name="musicalinettetitle">Musique courte</string>
 
 </resources>

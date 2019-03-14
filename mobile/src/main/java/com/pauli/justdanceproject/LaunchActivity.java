@@ -27,12 +27,9 @@ import com.google.firebase.database.ValueEventListener;
 public class LaunchActivity extends AppCompatActivity {
 
     private final String TAG = this.getClass().getSimpleName();
+    public static final String USER_ID = "USER_ID";
 
     public static final String ACTIVITY_NAME = "launch_activity";
-    public static final String USER_ID = "USER_ID";
-    public static final String USERNAME = "username";
-    private Translation translation = new Translation();
-    private String language;
     private Boolean isWatchPaired= false;
     private String userID;
     boolean notMember = true;
@@ -49,7 +46,7 @@ public class LaunchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_launch);
 
         if(savedInstanceState != null){
-            username = savedInstanceState.getString(USERNAME);
+            username = savedInstanceState.getString(MainActivity.USERNAME);
         }
 
         Log.d(TAG, "test :" + Boolean.parseBoolean(BuildConfig.W_flag_watch_enable));
@@ -66,7 +63,7 @@ public class LaunchActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(USERNAME,username);
+        outState.putString(MainActivity.USERNAME,username);
     }
 
     @Override
@@ -122,7 +119,6 @@ public class LaunchActivity extends AppCompatActivity {
                     for (final DataSnapshot user : dataSnapshot.getChildren()) {
 
                         String usernameDatabase = user.child("username").getValue(String.class);
-                        language = user.child("language").getValue(String.class);
 
                         if (username.equals(usernameDatabase)) {
                             userID = user.getKey();
@@ -133,7 +129,7 @@ public class LaunchActivity extends AppCompatActivity {
                     if (notMember) {       // go to edit user to create a new profile
                         Toast.makeText(LaunchActivity.this, getString(R.string.welcome) + username + getString(R.string.createProfile), Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(LaunchActivity.this, EditUser.class);
-                        intent.putExtra(USERNAME, username);
+                        intent.putExtra(MainActivity.USERNAME, username);
                         intent.putExtra(EditUser.ACTIVITY_NAME,ACTIVITY_NAME);
                         startActivity(intent);
                         if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
@@ -142,9 +138,9 @@ public class LaunchActivity extends AppCompatActivity {
                         }
                         finish();
                     } else {              // user exist, go to mainActivity to select a dance
-                        translation.changeLanguage(getBaseContext(),language,userID);
                         Intent intent = new Intent(LaunchActivity.this, MainActivity.class);
-                        intent.putExtra(USER_ID, userID);
+                        intent.putExtra(MainActivity.USER_ID, userID);
+                        intent.putExtra(MainActivity.USERNAME,username);
                         startActivity(intent);
                         if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
                             // Change to dance activity

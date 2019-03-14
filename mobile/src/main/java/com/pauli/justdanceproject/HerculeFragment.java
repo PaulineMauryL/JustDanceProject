@@ -32,7 +32,9 @@ public class HerculeFragment extends Fragment {
     private CreuseFragment.OnFragmentInteractionListener mListener;
     private View fragmentView;
     private String userID;
-    private TextView TxtInfo;
+    private String username;
+    private TextView TxtPlayer;
+    private TextView TxtScore;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,7 +54,9 @@ public class HerculeFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.txt_dance:
                 Intent intent_dance = new Intent(getActivity(), MainActivity.class);
-                intent_dance.putExtra(LaunchActivity.USER_ID, userID);
+                intent_dance.putExtra(MainActivity.USER_ID, userID);
+                intent_dance.putExtra(MainActivity.USERNAME, username);
+
                 startActivity(intent_dance);
                 if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
                     // Change to dance activity
@@ -88,24 +92,29 @@ public class HerculeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
             savedInstanceState) {
         // Inflate the layout for this fragment
-        fragmentView = inflater.inflate(R.layout.fragment_creuse, container, false);
+        fragmentView = inflater.inflate(R.layout.fragment_hercule, container, false);
 
         Intent intent = getActivity().getIntent();
         if (intent.hasExtra(LaunchActivity.USER_ID)) {
-            userID = intent.getStringExtra(LaunchActivity.USER_ID);
+            userID = intent.getStringExtra(MainActivity.USER_ID);
+            username = intent.getStringExtra(MainActivity.USERNAME);
         }
-        TxtInfo = fragmentView.findViewById(R.id.txt_display_info);
+        TxtPlayer = fragmentView.findViewById(R.id.txt_display_user);
+        TxtScore = fragmentView.findViewById(R.id.txt_display_points);
         List<DatabaseEntity> entities = LaunchActivity.cloneDanceRD.dataDao().getHallOfFame(String.valueOf(R.raw.zero));
 
-        String info = "";
+        String player = "";
+        String point = "";
 
         for(DatabaseEntity dbEnt : entities){
             String user_name = dbEnt.getUser_name();
             int score = dbEnt.getScore();
-            info = info + "User: " + user_name + " Score: " + score + "\n";
+            player = player + user_name +"\n";
+            point = point + score +"\n";
         }
 
-        TxtInfo.setText(info);
+        TxtPlayer.setText(player);
+        TxtScore.setText(point);
 
         return fragmentView;
     }

@@ -2,7 +2,9 @@ package com.pauli.justdanceproject;
 
 import android.content.res.Configuration;
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,7 +22,8 @@ public class Translation {
     private static DatabaseReference profileRef = profileGetRef.push();
     private String language_db;
 
-    public void changeLanguage(Context context,String languageFromUser,String userID){
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+    public void changeLanguage(Context context, String languageFromUser, String userID){
         if(languageFromUser == null) {
             fetchDataFromFirebase(userID);
         } else {
@@ -30,8 +33,13 @@ public class Translation {
             Locale locale = new Locale(languageToLoad);
             Locale.setDefault(locale);
             Configuration config = new Configuration();
-            config.locale = locale;
-            context.getResources().updateConfiguration(config,context.getResources().getDisplayMetrics());
+            config.setLocale(locale);
+            if(languageToLoad=="en") {
+                context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
+            }else
+            {
+                context.createConfigurationContext(config);
+            }
         }
 
     }

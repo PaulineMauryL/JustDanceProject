@@ -166,6 +166,8 @@
     <string name="no_saving">No saving</string>
     <string name="quit_without_save">Are you sure you want to quit without saving ?</string>
     <string name="HerculeName">Hercule - From Zero to Hero</string>
+    <string name="LalalandName">La La Land - Another Day of Sun</string>
+    <string name="ShakiraName">Shakira - Chantaje</string>
     <string name="FrogPrincessName">The Princess Frog - Digging</string>
     <string name="musicalinette" translatable="false">Musicalinette</string>
     <string name="yourScore">Your scores on this song are listed below</string>
@@ -173,4 +175,12 @@
     <string name="error_message_pair_watch">Please pair this device with your watch</string>
     <string name="good" translatable="false">GOOD !</string>
     <string name="ok" translatable="false">OK !</string>
+    <string name="point_sent1">You obtained</string>
+    <string name="point_sent2">points</string>
+    <string name="user">Player :</string>
+    <string name="score">Score :</string>
+    <string name="players">Players</string>
+    <string name="points">Points</string>
+    <string name="creusetitle">Princess Frog - Dig</string>
+    <string name="musicalinettetitle">Short music</string>
 </resources>

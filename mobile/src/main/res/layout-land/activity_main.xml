@@ -28,13 +28,14 @@
         <TextView
             android:id="@+id/selectSong"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginBottom="2dp"
+            android:layout_weight="2"
             android:text="@string/select_a_song"
             android:textColor="@color/colorAccent"
             android:textSize="40sp"
@@ -45,199 +46,200 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="-15dp"
-            android:layout_marginRight="64dp"
-            android:layout_marginBottom="-10dp"
-            android:orientation="horizontal">
+            android:layout_height="0dp"
+            android:layout_weight="6">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="75dp"
+                    android:orientation="horizontal">
 
 
-            <TextView
-                android:id="@+id/textView_easy"
-                android:layout_width="90dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="40dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginRight="5dp"
-                android:text="@string/easy_land"
-                android:textColor="@color/colorAccent"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:fontFamily="@font/simplehandwrittingregular"
-                app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/textView_easy"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/easy_land"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:fontFamily="@font/simplehandwrittingregular"
+                        app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/HerculeButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="ChooseHercule"
-                app:srcCompat="@drawable/bt_hercule" />
+                    <ImageView
+                        android:id="@+id/HerculeButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:onClick="ChooseHercule"
+                        app:srcCompat="@drawable/bt_hercule" />
 
-            <Space
-                android:layout_width="80dp"
-                android:layout_height="wrap_content" />
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
 
-            <ImageView
-                android:id="@+id/CreuserButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="ChooseCreuse"
-                app:srcCompat="@drawable/bt_creuse" />
+                    <ImageView
+                        android:id="@+id/CreuserButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:onClick="ChooseCreuse"
+                        app:srcCompat="@drawable/bt_creuse" />
 
-            <Space
-                android:layout_width="80dp"
-                android:layout_height="wrap_content" />
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
 
-            <ImageView
-                android:id="@+id/MusicalinetteButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="ChooseMusicalinette"
-                app:srcCompat="@drawable/bt_musicalinette" />
-        </LinearLayout>
+                    <ImageView
+                        android:id="@+id/MusicalinetteButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:onClick="ChooseMusicalinette"
+                        app:srcCompat="@drawable/bt_musicalinette" />
+                </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="-15dp"
-            android:layout_marginRight="64dp"
-            android:layout_marginBottom="-10dp"
-            android:orientation="horizontal">
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
 
-            <TextView
-                android:id="@+id/textView_medium"
-                android:layout_width="90dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="40dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginRight="5dp"
-                android:text="@string/medium_land"
-                android:textColor="@color/colorAccent"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:fontFamily="@font/simplehandwrittingregular"
-                app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="75dp"
+                    android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/imageView5"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="locked1Clicked"
-                app:srcCompat="@drawable/bt_locked1" />
+                    <TextView
+                        android:id="@+id/textView_medium"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/medium_land"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:fontFamily="@font/simplehandwrittingregular"
+                        app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-            <Space
-                android:layout_width="80dp"
-                android:layout_height="wrap_content" />
+                    <ImageView
+                        android:id="@+id/imageView5"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:onClick="ChooseLalaland"
+                        app:srcCompat="@drawable/bt_lalaland" />
 
-            <ImageView
-                android:id="@+id/imageView6"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="locked2Clicked"
-                app:srcCompat="@drawable/bt_locked2" />
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
 
-            <Space
-                android:layout_width="80dp"
-                android:layout_height="wrap_content" />
+                    <ImageView
+                        android:id="@+id/imageView6"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:onClick="ChooseShakira"
+                        app:srcCompat="@drawable/bt_chantaje" />
 
-            <ImageView
-                android:id="@+id/imageView7"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="locked3Clicked"
-                app:srcCompat="@drawable/bt_locked3" />
-        </LinearLayout>
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="-15dp"
-            android:layout_marginRight="64dp"
-            android:layout_marginBottom="0dp"
-            android:orientation="horizontal">
+                    <ImageView
+                        android:id="@+id/imageView7"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:onClick="locked3Clicked"
+                        app:srcCompat="@drawable/bt_locked3" />
+                </LinearLayout>
 
-            <TextView
-                android:id="@+id/textView_hard"
-                android:layout_width="90dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="40dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginRight="5dp"
-                android:text="@string/hard_land"
-                android:textColor="@color/colorAccent"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:fontFamily="@font/simplehandwrittingregular"
-                app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
 
-            <ImageView
-                android:id="@+id/imageView8"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="locked4Clicked"
-                app:srcCompat="@drawable/bt_locked4" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="75dp"
+                    android:orientation="horizontal">
 
-            <Space
-                android:layout_width="80dp"
-                android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/textView_hard"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/hard_land"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:fontFamily="@font/simplehandwrittingregular"
+                        app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/imageView9"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="locked5Clicked"
-                app:srcCompat="@drawable/bt_locked5" />
+                    <ImageView
+                        android:id="@+id/imageView8"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:onClick="locked4Clicked"
+                        app:srcCompat="@drawable/bt_locked4" />
 
-            <Space
-                android:layout_width="80dp"
-                android:layout_height="wrap_content" />
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
 
-            <ImageView
-                android:id="@+id/imageView10"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="locked6Clicked"
-                app:srcCompat="@drawable/bt_locked6" />
+                    <ImageView
+                        android:id="@+id/imageView9"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:onClick="locked5Clicked"
+                        app:srcCompat="@drawable/bt_locked5" />
 
-        </LinearLayout>
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <ImageView
+                        android:id="@+id/imageView10"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:onClick="locked6Clicked"
+                        app:srcCompat="@drawable/bt_locked6" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
 
         <Space
-            android:layout_width="300dp"
-            android:layout_height="wrap_content" />
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5" />
 
         <TextView
             android:id="@+id/StartDanceText"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
             android:textColor="@color/colorAccent"
             android:textSize="20sp"
             app:fontFamily="@font/simplehandwrittingregular"
@@ -249,12 +251,8 @@
         <Button
             android:id="@+id/StartDance"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_height="0dp"
+            android:layout_weight="1.5"
             android:background="@drawable/round_shape"
             android:onClick="StartDance"
             android:text="@string/start_dance"

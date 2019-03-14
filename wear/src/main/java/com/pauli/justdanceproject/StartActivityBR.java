@@ -1,7 +1,6 @@
 package com.pauli.justdanceproject;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -24,27 +23,27 @@ public class StartActivityBR extends BroadcastReceiver {
         Intent itStart = null;
         switch(s_message){
             case BuildConfig.W_dance_activity_start:
-                itStart = new Intent(current_context, DanceActivity.class);
+                itStart = new Intent(current_context, WatchDanceActivity.class);
                 break;
             case BuildConfig.W_finish_activity_start:
-                itStart = new Intent(current_context, FinishActivity.class);
+                itStart = new Intent(current_context, WatchFinishActivity.class);
                 break;
             case BuildConfig.W_hall_activity_start:
-                itStart = new Intent(current_context, HallOfFameActivity.class);
+                itStart = new Intent(current_context, WatchHallOfFameActivity.class);
                 break;
             case BuildConfig.W_watchmain_activity_start:
                 itStart = new Intent(current_context, WatchMainActivity.class);
                 break;
             case BuildConfig.W_edit_activity_start:
-                itStart = new Intent(current_context, EditProfileActivity.class);
+                itStart = new Intent(current_context, WatchEditProfileActivity.class);
                 break;
         }
         if(itStart != null) {
             Log.v(TAG,"Start Activity : " + s_message);
             Log.v(TAG, "Stop Activity : " + activity.getClass());
             activity.startActivity(itStart);
-            if(activity.getClass().equals(DanceActivity.class)){
-                ((DanceActivity)activity).stopActivity();
+            if(activity.getClass().equals(WatchDanceActivity.class)){
+                ((WatchDanceActivity)activity).stopActivity();
             }else {
                 activity.finish();
             }

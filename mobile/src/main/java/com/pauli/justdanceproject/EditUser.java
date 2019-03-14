@@ -42,24 +42,13 @@ import java.io.OutputStream;
 
 public class EditUser extends AppCompatActivity {
 
-    private final String TAG = this.getClass().getSimpleName();
-
     public static final String ACTIVITY_NAME = "activity_name";
-
-    private TextView edit_username;
-    private String languageString;  //default languageString
-    private Translation lang = new Translation();
-
-    private Switch s_english;
-    private Switch s_french;
-    private Switch s_spanish;
-    private Switch s_german;
 
     private static final int PICK_IMAGE = 1;
     private File imageFile;
     private Profile userProfile;
     private String userID;
-    private Uri savedImageUri;
+    private String username;
 
 
     private static final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -71,105 +60,17 @@ public class EditUser extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_user);
 
-        edit_username = findViewById(R.id.editUsername);
-
-        s_english = findViewById(R.id.switch_english);
-        s_french = findViewById(R.id.switch_french);
-        s_spanish = findViewById(R.id.switch_spanish);
-        s_german = findViewById(R.id.switch_deutsch);
-
-        s_english.setChecked(true);
-        s_french.setChecked(false);
-        s_spanish.setChecked(false);
-        s_german.setChecked(false);
-
-        languageString = getString(R.string.english);
-        if(savedInstanceState != null){
-            userID = savedInstanceState.getString(LaunchActivity.USER_ID);
-        }
+        TextView edit_username = findViewById(R.id.editUsername);
 
         Intent intent = getIntent();
-
-        if (intent.hasExtra(LaunchActivity.USER_ID)) {
-            userID = intent.getStringExtra(LaunchActivity.USER_ID);
-            fetchDataFromFirebase();
-        } else if (intent.hasExtra(LaunchActivity.USERNAME)) {
-            String username = intent.getStringExtra(LaunchActivity.USERNAME);
+        if (intent.hasExtra(MainActivity.USERNAME)) {
+            username = intent.getStringExtra(MainActivity.USERNAME);
             edit_username.setText(username);
         }
-
-        if (savedInstanceState != null) {
-            savedImageUri = savedInstanceState.getParcelable("ImageUri");
-            if (savedImageUri != null) {
-                try {
-                    InputStream imageStream = getContentResolver().openInputStream(savedImageUri);
-                    final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                    ImageView imageView = findViewById(R.id.userImage);
-                    imageView.setImageBitmap(selectedImage);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
+        if (intent.hasExtra(MainActivity.USER_ID)) {
+            userID = intent.getStringExtra(MainActivity.USER_ID);
+            fetchDataFromFirebase();
         }
-
-        s_english.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    languageString = getString(R.string.english);
-                    s_french.setChecked(false);
-                    s_spanish.setChecked(false);
-                    s_german.setChecked(false);
-                    lang.changeLanguage(getBaseContext(),languageString,userID);
-                } else {
-                    s_english.setChecked(false);
-                }
-            }
-        });
-
-        s_french.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    languageString = getString(R.string.french);
-                    s_english.setChecked(false);
-                    s_spanish.setChecked(false);
-                    s_german.setChecked(false);
-                    lang.changeLanguage(getBaseContext(),languageString,userID);
-                } else {
-                    s_french.setChecked(false);
-                }
-            }
-        });
-
-        s_spanish.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    Toast.makeText(getApplicationContext(), R.string.NoSpanish, Toast.LENGTH_SHORT).show();
-                    s_spanish.setChecked(false);
-                } else {
-                    s_spanish.setChecked(false);
-                }
-            }
-        });
-
-        s_german.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    Toast.makeText(getApplicationContext(), R.string.NoGerman, Toast.LENGTH_SHORT).show();
-                    s_german.setChecked(false);
-                } else {
-                    s_german.setChecked(false);
-                }
-            }
-        });
-    }
-
-
-    // To keep image and user id after config change
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable("ImageUri", savedImageUri);
-        outState.putString(LaunchActivity.USER_ID,userID);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////
@@ -180,36 +81,26 @@ public class EditUser extends AppCompatActivity {
         boolean checked = false;
         checked = checkProfile(checked);
         if(checked) {
-            editUser();
+            TextView username = findViewById(R.id.editUsername);
+            userProfile = new Profile(username.getText().toString());
+
+            if (imageFile == null) {
+                userProfile.photoPath = "";
+            } else {
+                userProfile.photoPath = imageFile.getPath();
+            }
+
             addProfileToFirebaseDB();
         }
     }
-
     private boolean checkProfile(boolean checked) {
         final String username = ((EditText) findViewById(R.id.editUsername)).getText().toString();
         if(username.equals("")) {           //if no name then not ok
             Toast.makeText(this, R.string.nameEmpty, Toast.LENGTH_SHORT).show();
-        } else if (s_english.isChecked() == s_french.isChecked()) {  // (!XOR) to check only 1 languageString selected
-            Toast.makeText(this, R.string.noSelectedLanguages, Toast.LENGTH_SHORT).show();
-        } else {
-            checked = true;
         }
-
+        else { checked = true; }
         return checked;
     }
-
-    private void editUser() {
-        TextView username = findViewById(R.id.editUsername);
-
-        userProfile = new Profile(username.getText().toString(), languageString);
-
-        if (imageFile == null) {
-            userProfile.photoPath = "";
-        } else {
-            userProfile.photoPath = imageFile.getPath();
-        }
-    }
-
     private void addProfileToFirebaseDB() {
         BitmapDrawable bitmapDrawable = (BitmapDrawable) ((ImageView) findViewById(R.id
                 .userImage)).getDrawable();
@@ -234,7 +125,6 @@ public class EditUser extends AppCompatActivity {
             }
         }).addOnSuccessListener(new PhotoUploadSuccessListener());
     }
-
     private class PhotoUploadSuccessListener implements OnSuccessListener<UploadTask.TaskSnapshot> {
         @Override
         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -242,19 +132,18 @@ public class EditUser extends AppCompatActivity {
                 @Override
                 public void onSuccess(final Uri uri) {
                     userProfile.photoPath = uri.toString();
+                    userID=profileRef.getKey();
                     profileRef.runTransaction(new ProfileDataUploadHandler());
                 }
             });
         }
     }
-
     private class ProfileDataUploadHandler implements Transaction.Handler {
         @NonNull
         @Override
         public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
             mutableData.child("username").setValue(userProfile.username);
             mutableData.child("photo").setValue(userProfile.photoPath);
-            mutableData.child("language").setValue(userProfile.language);
             return Transaction.success(mutableData);
         }
 
@@ -265,7 +154,8 @@ public class EditUser extends AppCompatActivity {
                 Toast.makeText(EditUser.this, R.string.registrationSuccessful, Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.putExtra(LaunchActivity.USER_ID, userID);
+                intent.putExtra(MainActivity.USER_ID, userID);
+                intent.putExtra(MainActivity.USERNAME,username);
                 startActivity(intent);
                 if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
                     // Change to dance activity
@@ -279,19 +169,18 @@ public class EditUser extends AppCompatActivity {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////// Return to launch, nothing kept /////////////////////////////////
+    ///////////////////// Return to launch or main, nothing kept ///////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////
-    public void do_not_edit(View view) {  //return to launch activity
-        // Check if user really wants to change
+    public void do_not_edit(View view) {  // Check if user really wants to change
         if(getIntent().getStringExtra(ACTIVITY_NAME).equals(LaunchActivity.ACTIVITY_NAME)){
 
             DialogueYesNo dialogueYesNo = new DialogueYesNo(DialogueYesNo.SAVE,this, getString(R.string.quit_without_save));
             dialogueYesNo.create("", "");
         } else if(getIntent().getStringExtra(ACTIVITY_NAME).equals(MainActivity.ACTIVITY_NAME)){
-
             // Create Intent
             Intent intent = new Intent(EditUser.this, MainActivity.class);
-            intent.putExtra(LaunchActivity.USER_ID, userID);
+            intent.putExtra(MainActivity.USER_ID, userID);
+            intent.putExtra(MainActivity.USERNAME,username);
 
             DialogueYesNo dialogueYesNo = new DialogueYesNo(DialogueYesNo.SAVE2MAIN,this, getString(R.string.quit_without_save),intent);
             dialogueYesNo.create("", "");
@@ -325,7 +214,7 @@ public class EditUser extends AppCompatActivity {
             }
             final InputStream imageStream;
             try {
-                savedImageUri = Uri.fromFile(imageFile);
+                Uri savedImageUri = Uri.fromFile(imageFile);
                 imageStream = getContentResolver().openInputStream(Uri.fromFile(imageFile));
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                 ImageView imageView = findViewById(R.id.userImage);
@@ -335,7 +224,6 @@ public class EditUser extends AppCompatActivity {
             }
         }
     }
-
     private void copyImage(Uri uriInput, File fileOutput) throws IOException {
         InputStream in = null;
         OutputStream out = null;
@@ -369,15 +257,8 @@ public class EditUser extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String user_db = dataSnapshot.child("username").getValue(String.class);
                 String photo_db = dataSnapshot.child("photo").getValue(String.class);
-                String language_db = dataSnapshot.child("language").getValue(String.class);
 
                 usernameTextView.setText(user_db);
-
-                if(language_db.equals(getString(R.string.english))) {
-                    s_english.setChecked(true);
-                } else if (language_db.equals(getString(R.string.french))) {
-                    s_french.setChecked(true);
-                }
 
                 //  Reference to an image file in Firebase Storage
                 StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(photo_db);

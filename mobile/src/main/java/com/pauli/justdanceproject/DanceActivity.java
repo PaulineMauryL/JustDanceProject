@@ -21,11 +21,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.util.Log;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import android.util.Log;
 
@@ -99,8 +94,6 @@ public class DanceActivity extends AppCompatActivity {
     private AccRateBroadcastReceiver accRateBroadcastReceiver;
     private CommunicationBroadcastReceiver communicationBroadcastReceiver;
 
-    private static final FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private static final DatabaseReference profileGetRef = database.getReference("profiles");
     private Dialog dialog;
 
     private final int TIME = 1000; // in milisecond
@@ -116,12 +109,15 @@ public class DanceActivity extends AppCompatActivity {
     private final String key_isPausingWatch = "key_isPausingWatch";
     private final String key_counterGoodMovement = "key_counterGoodMovement";
     private final String key_points = "key_points";
+    private String username = null;
 
     private enum ButtonState{R0,R1,R2,R3}
     private enum GradeDance{PERFECT,OK,NOPE,SUPER,WAIT};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_dance);
         Log.d(TAG, "DanceActivity : here1");
         if(savedInstanceState != null){
@@ -148,7 +144,8 @@ public class DanceActivity extends AppCompatActivity {
             Bundle bunble = getIntent().getExtras();
             if (bunble!=null){
                 music = bunble.getIntArray("musicchosen");
-                userID = bunble.getString(LaunchActivity.USER_ID);
+                userID = bunble.getString(MainActivity.USER_ID);
+                username=bunble.getString(MainActivity.USERNAME);
                 Log.d(TAG, "DanceActivity : here4");
                 if(music!=null) {
                     musical = new MusicDance(music, this);
@@ -335,26 +332,14 @@ public class DanceActivity extends AppCompatActivity {
     }
 //--------------------------------------------------------------------------------------------------
     private void setup_dance(){
-        Log.d(TAG, "DanceActivity : setup_dance");
         musical.getSound().setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
             public void onCompletion(MediaPlayer mp){
                 // Store the score on the data base
-                profileGetRef.child(userID).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        String user_db = dataSnapshot.child("username").getValue(String.class);
-                        store_data_roomDB(user_db);
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        System.out.println("The read failed: " + databaseError.getCode());
-                    }
-                });
-                // Start Finish Activity
+                store_data_roomDB(username);
                 start_finish_activity();
             }
         });
-       initialize_variables();
+        initialize_variables();
     }
 
     private void initialize_variables(){
@@ -405,7 +390,7 @@ public class DanceActivity extends AppCompatActivity {
         musical.getSound().release();
         // Leave
         Intent intent_change = new Intent(getApplication(), MainActivity.class);
-        intent_change.putExtra(LaunchActivity.USER_ID,userID);
+        intent_change.putExtra(MainActivity.USER_ID,userID);
         startActivity(intent_change);
         if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
             // Change to dance activity
@@ -420,7 +405,8 @@ public class DanceActivity extends AppCompatActivity {
         musical.getSound().release();
         // Start Finish Activity
         Intent intentFinishDance = new Intent(DanceActivity.this, FinishActivity.class);
-        intentFinishDance.putExtra(LaunchActivity.USER_ID, userID);
+        intentFinishDance.putExtra(MainActivity.USER_ID, userID);
+        intentFinishDance.putExtra(MainActivity.USERNAME,getIntent().getStringExtra(MainActivity.USERNAME));
         Log.e(TAG,"DanceActivity : start_finish_activity : score : " + score);
         intentFinishDance.putExtra(NUMBER_POINTS, score);
         intentFinishDance.putExtra(MUSIC_NAME, musical.getName());

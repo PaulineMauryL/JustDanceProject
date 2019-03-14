@@ -1,7 +1,6 @@
 package com.pauli.justdanceproject;
 
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,39 +8,58 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+
 public class MainActivity extends AppCompatActivity {
 
-    private String key_userID = "key_userID";
     public static final String ACTIVITY_NAME = "main_activity";
+    public static final String USER_ID = "USER_ID";
+    public static final String USERNAME = "username";
+
+    private String key_userID = "key_userID";
+    private String key_music = "key_music";
+    private String key_username = "key_username";
+
     public static final String RECORDING_ID = "recording_id";  //added by Pauline
     private String userID;
     private static final int PICK_MUSIC = 1;
     private int[] chosenMusic = null;
     boolean musicSelected = false;
+    private String username = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         musicSelected = false;
+        Intent intent = getIntent();
 
-        if (savedInstanceState != null) {
-            userID = savedInstanceState.getString(key_userID);
-        } else {
-            Intent intent = getIntent();
-            if (intent.hasExtra(LaunchActivity.USER_ID)) {
-                userID = intent.getStringExtra(LaunchActivity.USER_ID);
+        if (intent != null) {
+            if (intent.hasExtra(MainActivity.USER_ID)) {
+                userID = intent.getStringExtra(MainActivity.USER_ID);
+                username = intent.getStringExtra(MainActivity.USERNAME);
             } else {
                 Toast.makeText(this, "error no id", Toast.LENGTH_SHORT).show();
             }
         }
+        if(savedInstanceState != null) {
+            userID = savedInstanceState.getString(key_userID);
+            chosenMusic = savedInstanceState.getIntArray(key_music);
+            username = savedInstanceState.getString(key_username);
+            if (chosenMusic != null) {
+                musicSelected = true;
+            }
+        }
+        setContentView(R.layout.activity_main);
+
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(key_userID,userID);
+        outState.putIntArray(key_music,chosenMusic);
+        outState.putString(key_username,username);
     }
 
     public void StartDance(View view) {
@@ -54,8 +72,10 @@ public class MainActivity extends AppCompatActivity {
             // Start the dance Activity
             Intent intentStartDance = new Intent(MainActivity.this, DanceActivity.class);
             intentStartDance.putExtra("musicchosen", chosenMusic);
-            intentStartDance.putExtra(LaunchActivity.USER_ID, userID);
+            intentStartDance.putExtra(MainActivity.USER_ID, userID);
+            intentStartDance.putExtra(MainActivity.USERNAME,username);
             startActivity(intentStartDance);
+
             if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
                 // Change to dance activity
                 Communication.changeWatchActivity(MainActivity.this,BuildConfig.W_dance_activity_start);
@@ -66,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void ChooseCreuse(View view) {
-        chosenMusic = new int[]{R.raw.lalaland, R.array.lalaland};
+        chosenMusic = new int[]{R.raw.creuse, R.array.creuse};
         musicSelected = true;
         if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
             // Change the image on Watch
@@ -81,25 +101,27 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     public void ChooseMusicalinette(View view) {
-        chosenMusic = new int[]{R.raw.shakira,R.array.shakira};
+        chosenMusic = new int[]{R.raw.musicalinette,R.array.musicalinette};
         musicSelected = true;
         if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
             // Change the image on Watch
             Communication.changeImage(MainActivity.this,BuildConfig.W_musicalinette_music);
         }
     }
-    public void locked1Clicked(View view) {
-        message_locked();
+    public void ChooseLalaland(View view) {
+        chosenMusic = new int[]{R.raw.lalaland,R.array.lalaland};
+        musicSelected = true;
         if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
             // Change the image on Watch
-            Communication.changeImage(MainActivity.this,BuildConfig.W_locked1_music);
+            Communication.changeImage(MainActivity.this,BuildConfig.W_shakira_music);
         }
     }
-    public void locked2Clicked(View view) {
-        message_locked();
+    public void ChooseShakira(View view) {
+        chosenMusic = new int[]{R.raw.shakira,R.array.shakira};
+        musicSelected = true;
         if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
             // Change the image on Watch
-            Communication.changeImage(MainActivity.this,BuildConfig.W_locked2_music);
+            Communication.changeImage(MainActivity.this,BuildConfig.W_lalaland_music);
         }
     }
     public void locked3Clicked(View view) {
@@ -135,7 +157,6 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(),"You have not unlocked this song yet. Keep trying !", Toast.LENGTH_SHORT).show();
     }
 
-
     //Added by Pauline
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -149,7 +170,8 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.txt_show_profile:
                 Intent intent_show = new Intent(this, ShowProfile.class);
-                intent_show.putExtra(LaunchActivity.USER_ID, userID);
+                intent_show.putExtra(MainActivity.USER_ID, userID);
+                intent_show.putExtra(MainActivity.USERNAME, username);
                 startActivity(intent_show);
                 if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
                     // Change to dance activity
@@ -159,7 +181,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.txt_edit_profile:
                 Intent intent_edit = new Intent(this, EditUser.class);
-                intent_edit.putExtra(LaunchActivity.USER_ID, userID);
+                intent_edit.putExtra(MainActivity.USER_ID, userID);
+                intent_edit.putExtra(MainActivity.USERNAME,username);
                 intent_edit.putExtra(EditUser.ACTIVITY_NAME,ACTIVITY_NAME);
                 startActivity(intent_edit);
                 if(Boolean.parseBoolean(BuildConfig.W_flag_watch_enable)){
